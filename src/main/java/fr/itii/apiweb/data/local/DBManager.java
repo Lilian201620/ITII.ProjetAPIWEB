@@ -54,6 +54,7 @@ public class DBManager implements DataRepository {
                             "Nom VARCHAR(256)," +
                             "CodeCommune VARCHAR(5)," +
                             "CodeDepartement VARCHAR(256)," +
+                            "CodePostal VARCHAR(16)," +
                             "CodeRegion VARCHAR(2)," +
                             "population BIGINT);";
         Statement _stmt = _con.createStatement();
@@ -69,10 +70,11 @@ public class DBManager implements DataRepository {
         while(_iterator.hasNext()) {
             Commune _commune =  _iterator.next();
             System.out.println(_commune.toString());
-            String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodeRegion, population) VALUES ('" +
+            String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodePostal, CodeRegion, population) VALUES ('" +
                     _commune.getNom().replace("'", "''") + "', '" +
                     _commune.getCodeCommune().replace("'", "''") + "', '" +
                     _commune.getCodeDepartement().replace("'", "''") + "', '" +
+                    _commune.getCodePostal().replace("'", "''") + "', '" +
                     _commune.getCodeRegion().replace("'", "''") + "', " +
                     _commune.getPopulation().toString() + ");";
             _stmt.executeUpdate(request);
@@ -95,24 +97,22 @@ public class DBManager implements DataRepository {
 
     @Override
     public List<Commune> getByName(String Name) throws SQLException{
-        String request = "SELECT * " +
-                "FROM Communes" +
-                "WHERE Name LIKE '* " + Name + "*' ;";
+        String request = "SELECT * FROM Communes WHERE Nom ILIKE ?";
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        ResultSet results = _stmt.executeQuery(request);
+        PreparedStatement _stmt =  _con.prepareStatement(request);
+        _stmt.setString(1, Name);
+        ResultSet results = _stmt.executeQuery();
         this.disconnect(_con);
         return this.getListFromRs(results);
     }
 
     @Override
     public List<Commune> getByCodeCommune(String CodeCommune) throws SQLException {
-        String request = "SELECT * " +
-                "FROM Communes" +
-                "WHERE Name LIKE '* " + CodeCommune + "*' ;";
+        String request = "SELECT * FROM Communes WHERE Nom ILIKE ?";
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        ResultSet results = _stmt.executeQuery(request);
+        PreparedStatement _stmt = _con.prepareStatement(request);
+        _stmt.setString(1, CodeCommune);
+        ResultSet results = _stmt.executeQuery();
         this.disconnect(_con);
         return this.getListFromRs(results);
     }
@@ -122,7 +122,7 @@ public class DBManager implements DataRepository {
         Connection _con = _instance.connect();
         Statement _stmt = _con.createStatement();
         String request = "DELETE FROM Communes WHERE Nom='" + Name.replace("'", "''") + "';";
-        _stmt.executeQuery(request);
+        _stmt.executeUpdate(request);
     }
 
     @Override
@@ -130,18 +130,19 @@ public class DBManager implements DataRepository {
         Connection _con = _instance.connect();
         Statement _stmt = _con.createStatement();
         String request = "DELETE FROM Communes WHERE CodeCommune='" + CodeCommune.replace("'", "''") + "';";
-        _stmt.executeQuery(request);
+        _stmt.executeUpdate(request);
     }
 
     private List<Commune> getListFromRs(ResultSet results) throws SQLException {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
             Commune.Builder _tempComBuilder = new Commune.Builder();
-            _tempComBuilder.setNom(results.getString(1));
-            _tempComBuilder.setCodeCommune(results.getString(2));
-            _tempComBuilder.setCodeDepartement(results.getString(3));
-            _tempComBuilder.setCodeRegion(results.getString(4));
-            _tempComBuilder.setPopulation(results.getInt(5));
+            _tempComBuilder.setNom(results.getString(2));
+            _tempComBuilder.setCodeCommune(results.getString(3));
+            _tempComBuilder.setCodeDepartement(results.getString(4));
+            _tempComBuilder.setCodePostal(results.getString(5));
+            _tempComBuilder.setCodeRegion(results.getString(6));
+            _tempComBuilder.setPopulation(results.getInt(7));
             Commune _tempCom = _tempComBuilder.build();
             _communes.add(_tempCom);
         }
