@@ -15,7 +15,7 @@ public class DBManager implements DataRepository {
     private static DBManager _instance;
 
     private DBManager(String url, String user, String pass, String port, String dbName) {
-        _url = "jdbc:postgresql://" + url + ":" + port + "/";
+        _url = "jdbc:postgresql://" + url + ":" + port + "/" + dbName;
         _username = user;
         _password = pass;
         try {
@@ -27,7 +27,7 @@ public class DBManager implements DataRepository {
     }
     public static DBManager getInstance() {
         if (_instance == null) {
-            _instance = new DBManager("localhost", "apiwebtoolUser", "RVomy#$@CE76#t!yNkPr", "ApiWebToolDB", "5432");
+            _instance = new DBManager("localhost", "apiwebtoolUser", "RVomy#$@CE76#t!yNkPr", "5432", "ApiWebToolDB");
             try {
                 _instance.createTable();
             } catch (SQLException e) {
@@ -39,10 +39,13 @@ public class DBManager implements DataRepository {
     }
 
     private Connection connect() throws SQLException {
-        Connection con = null;
-        con = DriverManager.getConnection(_url, _username, _password);
-        return con;
+        return DriverManager.getConnection(_url, _username, _password);
     }
+
+    private void disconnect(Connection _con) throws SQLException {
+        _con.close();
+    }
+
     private void createTable() throws SQLException {
         Connection _con = _instance.connect();
         String request = "CREATE TABLE IF NOT EXISTS Communes (" +
@@ -54,6 +57,7 @@ public class DBManager implements DataRepository {
                             "population BIGINT);";
         Statement _stmt = _con.createStatement();
         _stmt.executeUpdate(request);
+        this.disconnect(_con);
     }
 
     @Override
@@ -70,17 +74,48 @@ public class DBManager implements DataRepository {
                     _iterator.next().getPopulation() + ");";
             _stmt.executeUpdate(request);
         }
+        this.disconnect(_con);
     }
 
     @Override
     public List<Commune> getAll() throws SQLException {
-        List<Commune> _communes = new ArrayList<Commune>();
+
         String request = "SELECT * " +
                             "FROM Communes;";
 
         Connection _con = _instance.connect();
         Statement _stmt = _con.createStatement();
         ResultSet results = _stmt.executeQuery(request);
+        this.disconnect(_con);
+        return this.getListFromRs(results);
+    }
+
+    @Override
+    public List<Commune> getByName(String Name) throws SQLException{
+        String request = "SELECT * " +
+                "FROM Communes" +
+                "WHERE Name LIKE '* " + Name + "*' ;";
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        ResultSet results = _stmt.executeQuery(request);
+        this.disconnect(_con);
+        return this.getListFromRs(results);
+    }
+
+    @Override
+    public List<Commune> getByCodeCommune(String CodeCommune) throws SQLException {
+        String request = "SELECT * " +
+                "FROM Communes" +
+                "WHERE Name LIKE '* " + CodeCommune + "*' ;";
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        ResultSet results = _stmt.executeQuery(request);
+        this.disconnect(_con);
+        return this.getListFromRs(results);
+    }
+
+    private List<Commune> getListFromRs(ResultSet results) throws SQLException {
+        List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
             Commune.Builder _tempComBuilder = new Commune.Builder();
             _tempComBuilder.setNom(results.getString(1));
@@ -92,15 +127,5 @@ public class DBManager implements DataRepository {
             _communes.add(_tempCom);
         }
         return _communes;
-    }
-
-    @Override
-    public List<Commune> getByName() {
-        return null;
-    }
-
-    @Override
-    public List<Commune> getByCodeCommune() {
-        return null;
     }
 }
