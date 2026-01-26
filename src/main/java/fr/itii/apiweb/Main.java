@@ -19,5 +19,7 @@ public class Main {
         // Lancement du terminal (interface utilisateur)
         Terminal terminal = new Terminal(apiCaller, serializer, dbManager);
         terminal.start();
+
+
     }
 }
