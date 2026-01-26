@@ -84,7 +84,7 @@ public class DBManager implements DataRepository {
     public List<Commune> getAll() throws SQLException {
 
         String request = "SELECT * " +
-                            "FROM Communes;";
+                            "FROM communes;";
 
         Connection _con = _instance.connect();
         Statement _stmt = _con.createStatement();

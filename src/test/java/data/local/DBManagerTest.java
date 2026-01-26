@@ -11,7 +11,7 @@ public class DBManagerTest {
     @Test
     public void initDBManager() throws SQLException {
         DBManager _db = DBManager.getInstance();
-        _db.getAll();
+        System.out.println(_db.getAll().toString());
     }
 
     @Test
@@ -29,5 +29,12 @@ public class DBManagerTest {
         List<Commune> _communes = new ArrayList<Commune>();
         _communes.add(_commune);
         _db.save(_communes);
+    }
+
+    @Test
+    public void getCity() throws SQLException {
+        DBManager _db = DBManager.getInstance();
+        _db.getByName("Paris");
+
     }
 }
