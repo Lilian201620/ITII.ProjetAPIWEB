@@ -64,7 +64,8 @@ public class Terminal {
         JsonNode json = apiCaller.getCommunesByName(name);
 
         // 2. JSON -> Objets Commune
-        List<Commune> communes = serializer.convertJsonToList(json);
+        List<Commune> communes = serializer.toCommunes(json);
+
 
         // 3. Affichage (output)
         display(communes);
