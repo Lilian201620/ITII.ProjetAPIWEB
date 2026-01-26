@@ -1,4 +1,4 @@
-package fr.itii.apiweb.terminal;
+package fr.itii.apiweb.ui;
 
 import fr.itii.apiweb.model.Commune;
 import java.util.List;

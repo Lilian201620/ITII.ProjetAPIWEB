@@ -1,4 +1,4 @@
-package fr.itii.apiweb.dbmanager;
+package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.model.Commune;
 import java.util.List;

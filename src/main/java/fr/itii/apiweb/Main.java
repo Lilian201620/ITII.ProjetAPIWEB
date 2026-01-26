@@ -1,4 +1,4 @@
-package fr.itii.apiweb.Main;
+package fr.itii.apiweb;
 
 import fr.itii.apiweb.api.APICaller;
 import fr.itii.apiweb.db.DBManager;

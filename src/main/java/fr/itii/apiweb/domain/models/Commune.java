@@ -1,4 +1,4 @@
-package fr.itii.apiweb.commune;
+package fr.itii.apiweb.domain.models;
 
 public class Commune {
     private String nom;
