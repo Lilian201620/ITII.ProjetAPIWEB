@@ -9,6 +9,8 @@ import fr.itii.apiweb.domain.tools.JSONSerializer;
 import java.util.List;
 import java.util.Scanner;
 
+
+//Terminal qui regroupe tout
 public class Terminal {
 
     private final APICaller apiCaller;
