@@ -96,22 +96,30 @@ public class DBManager implements DataRepository {
     }
 
     @Override
-    public List<Commune> getByName(String Name) throws SQLException{
-        String request = "SELECT * FROM Communes WHERE Nom ILIKE ?";
+    public List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) throws SQLException{
+        String request = "SELECT * FROM Communes WHERE nom ILIKE ?";
         Connection _con = _instance.connect();
         PreparedStatement _stmt =  _con.prepareStatement(request);
-        _stmt.setString(1, Name);
+        if (OnlyExplicitCaracters) {
+            _stmt.setString(1, Name);
+        } else {
+            _stmt.setString(1, "%" + Name + "%");
+        }
         ResultSet results = _stmt.executeQuery();
         this.disconnect(_con);
         return this.getListFromRs(results);
     }
 
     @Override
-    public List<Commune> getByCodeCommune(String CodeCommune) throws SQLException {
-        String request = "SELECT * FROM Communes WHERE Nom ILIKE ?";
+    public List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) throws SQLException {
+        String request = "SELECT * FROM Communes WHERE codecommune ILIKE ?";
         Connection _con = _instance.connect();
         PreparedStatement _stmt = _con.prepareStatement(request);
-        _stmt.setString(1, CodeCommune);
+        if (OnlyExplicitCaracters) {
+            _stmt.setString(1, CodeCommune);
+        } else {
+            _stmt.setString(1, "%" + CodeCommune + "%");
+        }
         ResultSet results = _stmt.executeQuery();
         this.disconnect(_con);
         return this.getListFromRs(results);

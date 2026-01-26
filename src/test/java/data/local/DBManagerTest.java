@@ -42,9 +42,18 @@ public class DBManagerTest {
     }
 
     @Test
-    public void getCity() throws SQLException {
+    public void getCityExplicit() throws SQLException {
         DBManager _db = DBManager.getInstance();
-        List<Commune> _communes = _db.getByName("Paris");
+        List<Commune> _communes = _db.getByName("Paris", true);
+        for (Commune _commune : _communes) {
+            System.out.println(_commune.toString());
+        }
+    }
+
+    @Test
+    public void getCityImplicite() throws SQLException {
+        DBManager _db = DBManager.getInstance();
+        List<Commune> _communes = _db.getByName("Paris", false);
         for (Commune _commune : _communes) {
             System.out.println(_commune.toString());
         }
