@@ -6,6 +6,8 @@ public class Commune {
     private String nom;
     private String codeCommune;
     private String codeDepartement;
+    private String siren;
+    private String codeEpci;
     private String codeRegion;
     private String codePostal;
     private Integer population;
@@ -14,55 +16,70 @@ public class Commune {
     private static Integer countId = 0;
 
     //Constructeur
-    public Commune(String nom, String codeCommune, String codeDepartement, String codeRegion, String codePostal, Integer population) {
-        this.nom = nom;
-        this.codeCommune = codeCommune;
-        this.codeDepartement = codeDepartement;
-        this.codeRegion = codeRegion;
-        this.codePostal = codePostal;
-        this.population = population;
-
+    public Commune() {
         this.id = countId;
         countId++;
     }
 
+    public Commune(String nom, String codeCommune, String codeDepartement, String siren, String codeEpci, String codeRegion, String codePostal, Integer population) {
+        this.nom = nom;
+        this.codeCommune = codeCommune;
+        this.codeDepartement = codeDepartement;
+        this.siren = siren;
+        this.codeEpci = codeEpci;
+        this.codeRegion = codeRegion;
+        this.codePostal = codePostal;
+        this.population = population;
+
+        this();
+    }
+
     //Builder
-    public static class Builder{
+    public static class Builder {
         private String nom;
         private String codeCommune;
+        private String codeDepartement;
+        private String siren;
+        private String codeEpci;
+        private String codeRegion;
         private String codePostal;
         private Integer population;
-        private String codeRegion;
-        private String codeDepartement;
 
-        public Builder setNom(String nom){
+        public Builder setNom(String nom) {
             this.nom = nom;
             return this;
         }
-        public Builder setCodeCommune(String codeCommune){
+        public Builder setCodeCommune(String codeCommune) {
             this.codeCommune = codeCommune;
             return this;
         }
-        public Builder setCodeDepartement(String codeDepartement){
+        public Builder setCodeDepartement(String codeDepartement) {
             this.codeDepartement = codeDepartement;
             return this;
         }
-        public Builder setCodeRegion(String codeRegion){
+        public Builder setSiren(String siren) {
+            this.siren = siren;
+            return this;
+        }
+        public  Builder setCodeEpci(String codeEpci) {
+            this.codeEpci = codeEpci;
+            return this;
+        }
+        public Builder setCodeRegion(String codeRegion) {
             this.codeRegion = codeRegion;
             return this;
         }
-        public Builder setCodePostal(String codePostal){
+        public Builder setCodePostal(String codePostal) {
             this.codePostal = codePostal;
             return this;
         }
-        public Builder setPopulation(Integer population){
+        public Builder setPopulation(Integer population) {
             this.population = population;
             return this;
         }
-        public Commune build(){
-            return new Commune(nom, codeCommune, codeDepartement, codeRegion, codePostal, population);
+        public Commune build() {
+            return new Commune(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population);
         }
-
     }
 
     //Setters
@@ -75,10 +92,11 @@ public class Commune {
     public void setCodeDepartement(String codeDepartement){
         this.codeDepartement = codeDepartement;
     }
+    public void setSiren(String siren){ this.siren = siren; }
+    public void setCodeEpci(String codeEpci){this.codeEpci = codeEpci;}
     public void setCodeRegion(String codeRegion){
         this.codeRegion = codeRegion;
     }
-
     public void setCodePostal(String codePostal){
         this.codePostal = codePostal;
     }
@@ -99,6 +117,8 @@ public class Commune {
     public String getCodeDepartement() {
         return codeDepartement;
     }
+    public String getSiren() { return siren; }
+    public String getCodeEpci() { return codeEpci; }
     public String getCodeRegion() {
         return codeRegion;
     }
