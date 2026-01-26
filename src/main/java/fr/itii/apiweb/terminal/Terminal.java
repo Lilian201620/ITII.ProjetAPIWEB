@@ -8,4 +8,5 @@ public class Terminal {
         System.out.println("Affichage du terminal :");
         System.out.println(communes); // Affiche null pour l'instant
     }
+    //
 }

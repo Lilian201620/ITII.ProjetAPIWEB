@@ -16,7 +16,7 @@ public class Main {
         String dbUrl = "jdbc:postgresql://localhost:5432/maBase";
         String dbUser = "user";
         String dbPass = "password";
-
+//
         // Initialisation des classes
         APICaller apiCaller = new APICaller(apiUrl);
         JSONSerializer serializer = new JSONSerializer();

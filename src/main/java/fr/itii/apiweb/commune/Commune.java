@@ -15,6 +15,7 @@ public class Commune {
         this.codeInsee = codeInsee;
         this.population = population;
         this.centre = centre;
+        //
     }
 
     @Override

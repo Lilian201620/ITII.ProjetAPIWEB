@@ -6,7 +6,7 @@ import java.util.List;
 public class DBManager {
     public DBManager(String url, String user, String pass) {
     }
-
+//
     public boolean saveAll(List<Commune> communes) {
         return false; // Pour l'instant
     }
