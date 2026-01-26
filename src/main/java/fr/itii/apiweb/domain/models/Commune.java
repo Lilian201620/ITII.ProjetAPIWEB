@@ -22,6 +22,8 @@ public class Commune {
     }
 
     public Commune(String nom, String codeCommune, String codeDepartement, String siren, String codeEpci, String codeRegion, String codePostal, Integer population) {
+        this();
+
         this.nom = nom;
         this.codeCommune = codeCommune;
         this.codeDepartement = codeDepartement;
@@ -30,8 +32,6 @@ public class Commune {
         this.codeRegion = codeRegion;
         this.codePostal = codePostal;
         this.population = population;
-
-        this();
     }
 
     //Builder

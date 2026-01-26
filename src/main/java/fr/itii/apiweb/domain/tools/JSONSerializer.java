@@ -1,4 +1,5 @@
 package fr.itii.apiweb.domain.tools;
+import fr.itii.apiweb.models.*
 
 import java.lang.reflect.Array;
 import java.net.http.HttpResponse;
@@ -9,31 +10,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import fr.itii.apiweb.models.*
-
 public class JSONSerializer {
-        //ObjectMapper mapper = new ObjectMapper();
-        //JsonNode json = mapper.readTree(response.body());
-        //System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json));
 
-        //JsonNode	    Manipuler un JSON comme un arbre
-        //JsonParser	Lire un JSON en streaming (bas niveau)
-        //ObjectMapper	Conversion JSON ↔ Java
-        //ObjectReader	Lire du JSON optimisé et thread-safe
-        //ObjectWriter	Écrire du JSON optimisé et thread-safe
-
-        public List<Commune> convertJsonToList(HttpResponse<String> response) {
-            try{
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode json = mapper.readTree(response.body());
-                convertJsonToList(json)
-            } catch (JsonProcessingException e) {
-                System.err.println(e);
-                return null;
-            }
+    public List<Commune> convertJsonToList(HttpResponse<String> response) {
+        try{
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode json = mapper.readTree(response.body());
+            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json));
+            return convertJsonToList(json);
+        } catch (JsonProcessingException e) {
+            System.err.println(e);
+            return null;
         }
+    }
 
-        public List<Commune> convertJsonToList(JsonNode json) {
+    public List<Commune> convertJsonToList(JsonNode json) {
 //          {
 //              "nom" : "Beauvais",
 //              "code" : "60057",
@@ -45,40 +36,41 @@ public class JSONSerializer {
 //              "population" : 55550
 //          }
 
-            ArrayList villes = new ArrayList();
+        ArrayList villes = new ArrayList();
 
-            for (int i = 0; i < json.size(); i++) {
-                String nom = json.path("nom").asText();
-                String codeCommune = json.path("code").asText();
-                String codeDepartement = json.path("codeDepartement").asText();
-                String codeRegion = json.path("codeRegion").asText();
-                String codePostal = json.path("codePostal").asText();
-                Integer population = json.path("population").asInt();
+        for (int i = 0; i < json.size(); i++) {
+            JsonNode node = json.get(i);
+            String nom = node.path("nom").asText();
+            String codeCommune = node.path("code").asText();
+            String codeDepartement = node.path("codeDepartement").asText();
+            String siren = node.path("siren").asText();
+            String codeEpci = node.path("codeEpci").asText();
+            String codeRegion = node.path("codeRegion").asText();
+            String codePostal = node.path("codesPostaux").asText();
+            Integer population = node.path("population").asInt();
 
-                Commune ville = new Commune(nom, codeCommune, codeDepartement, codeRegion, codePostal, population);
-                villes.add(ville);
-            }
-            return villes;
+            Commune ville = new Commune(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population);
+            villes.add(ville);
         }
-
-        public Commune getCommuneById(List<Communes> communeList, Commune idCommune){
-            for (int i = 0; i < communeList.size(); i++) {
-                Commune ville = communeList.get(i);
-                if(ville.getId() == idCommune){
-                    return ville;
-                }
-            }
-            return null;
-        }
-        public Commune getCommuneByName(List<Communes> communeList, String nomCommune){
-            for (int i = 0; i < communeList.size(); i++) {
-                Commune ville = communeList.get(i);
-                if(ville.getNom() == nomCommune){
-                    return ville;
-                }
-            }
-            return null;
-        }
+        return villes;
     }
 
+    public Commune getCommuneById(List<Commune> communeList, Integer idCommune){
+        for (int i = 0; i < communeList.size(); i++) {
+            Commune ville = communeList.get(i);
+            if(ville.getId() == idCommune){
+                return ville;
+            }
+        }
+        return null;
+    }
+    public Commune getCommuneByNom(List<Commune> communeList, String nomCommune){
+        for (int i = 0; i < communeList.size(); i++) {
+            Commune ville = communeList.get(i);
+            if(ville.getNom() == nomCommune){
+                return ville;
+            }
+        }
+        return null;
+    }
 }
