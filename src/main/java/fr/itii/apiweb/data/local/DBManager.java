@@ -1,17 +1,60 @@
 package fr.itii.apiweb.data.local;
 
-import fr.itii.apiweb.model.Commune;
+import fr.itii.apiweb.domain.models.Commune;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
-public class DBManager {
-    public DBManager(String url, String user, String pass) {
+public class DBManager implements DataRepository {
+    private final String _url;
+    private final String _username;
+    private final String _password;
+
+    public DBManager(String url, String user, String pass, String port, String dbName) {
+        _url = "jdbc:postgresql://" + url + ":" + port + "/";
+        _username = user;
+        _password = pass;
+        try {
+            String _driverName = "org.postgresql.Driver";
+            Class.forName(_driverName);
+        } catch (ClassNotFoundException e) {
+            System.out.println("Erreur, impossible de charger le driver pour : " + _url);
+        }
     }
-//
-    public boolean saveAll(List<Commune> communes) {
+
+    public DBManager(String url, String user, String pass, String dbName) {
+        this(url, user, pass, "5432", dbName);
+    }
+
+    public DBManager(String url, String user, String pass) {
+        this(url, user, pass, "5432", "APIWebDB");
+    }
+
+    private Connection connect() {
+        Connection con = null;
+        try {
+            con = DriverManager.getConnection(_url, _username, _password);
+        } catch (SQLException e) {
+            System.out.println("Impossible de se connecter à la DB : " + e.getMessage());
+        }
+        return con;
+    };
+    //
+    public boolean save(List<Commune> communes) {
         return false; // Pour l'instant
     }
 
     public List<Commune> getAll() {
         return null; // Pour l'instant
+    }
+
+    public List<Commune> getByName() {
+        return null;
+    }
+
+    public List<Commune> getByInsee() {
+        return null;
     }
 }
