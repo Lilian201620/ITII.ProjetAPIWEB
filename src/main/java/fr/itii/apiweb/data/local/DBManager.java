@@ -49,7 +49,7 @@ public class DBManager implements DataRepository {
     private void createTable() throws SQLException {
         Connection _con = _instance.connect();
         String request = "CREATE TABLE IF NOT EXISTS Communes (" +
-                            "Id BIGINT PRIMARY KEY SERIAL, " +
+                            "Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
                             "Nom VARCHAR(256)," +
                             "CodeCommune VARCHAR(5)," +
                             "CodeDepartement VARCHAR(256)," +
