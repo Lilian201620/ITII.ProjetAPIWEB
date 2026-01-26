@@ -5,6 +5,7 @@ import fr.itii.apiweb.domain.models.Commune;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 public class DBManager implements DataRepository {
@@ -28,20 +29,34 @@ public class DBManager implements DataRepository {
     public DBManager getInstance(String url, String user, String pass, String dbName, String port) {
         if (_instance == null) {
             _instance = new DBManager(url, user, pass, port, dbName);
+            try {
+                _instance.createTable();
+            } catch (SQLException e) {
+                System.out.println("Impossible de créer l'instance : ");
+                e.printStackTrace();
+            }
         }
         return _instance;
     }
 
-    private Connection connect() {
+    private Connection connect() throws SQLException {
         Connection con = null;
-        try {
-            con = DriverManager.getConnection(_url, _username, _password);
-        } catch (SQLException e) {
-            System.out.println("Impossible de se connecter à la DB : " + e.getMessage());
-        }
+        con = DriverManager.getConnection(_url, _username, _password);
         return con;
-    };
-    //
+    }
+
+    private void createTable() throws SQLException {
+        Connection _con = _instance.connect();
+        String request = "CREATE TABLE IF NOT EXISTS Communes (" +
+                            "Nom VARCHAR(256), " +
+                            "Code VARCHAR(5), " +
+                            "CodeRegion VARCHAR(2)" +
+                            "population BIGINT);";
+        Statement _stmt = null;
+        _stmt = _con.createStatement();
+        _stmt.executeUpdate(request);
+    }
+
     public boolean save(List<Commune> communes) {
         return false; // Pour l'instant
     }
