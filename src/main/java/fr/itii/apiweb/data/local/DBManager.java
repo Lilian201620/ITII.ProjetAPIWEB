@@ -2,10 +2,8 @@ package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,8 +46,10 @@ public class DBManager implements DataRepository {
     private void createTable() throws SQLException {
         Connection _con = _instance.connect();
         String request = "CREATE TABLE IF NOT EXISTS Communes (" +
+                            "Id BIGINT PRIMARY KEY AUTO_INCREMENT, " +
                             "Nom VARCHAR(256)," +
                             "CodeCommune VARCHAR(5)," +
+                            "CodeDepartement VARCHAR(256)," +
                             "CodeRegion VARCHAR(2)," +
                             "population BIGINT);";
         Statement _stmt = _con.createStatement();
@@ -62,9 +62,10 @@ public class DBManager implements DataRepository {
         Statement _stmt = _con.createStatement();
         Iterator<Commune> _iterator = communes.iterator();
         while(_iterator.hasNext()) {
-            String request = "INSERT INTO Communes VALUES (" +
+            String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodeRegion, population) VALUES (" +
                     _iterator.next().getNom() + ", " +
                     _iterator.next().getCodeCommune() + ", " +
+                    _iterator.next().getCodeDepartement() + ", " +
                     _iterator.next().getCodeRegion() + ", " +
                     _iterator.next().getPopulation() + ");";
             _stmt.executeUpdate(request);
@@ -72,8 +73,25 @@ public class DBManager implements DataRepository {
     }
 
     @Override
-    public List<Commune> getAll() {
-        return null; // Pour l'instant
+    public List<Commune> getAll() throws SQLException {
+        List<Commune> _communes = new ArrayList<Commune>();
+        String request = "SELECT * " +
+                            "FROM Communes;";
+
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        ResultSet results = _stmt.executeQuery(request);
+        while(results.next()) {
+            Commune.Builder _tempComBuilder = new Commune.Builder();
+            _tempComBuilder.setNom(results.getString(1));
+            _tempComBuilder.setCodeCommune(results.getString(2));
+            _tempComBuilder.setCodeDepartement(results.getString(3));
+            _tempComBuilder.setCodeRegion(results.getString(4));
+            _tempComBuilder.setPopulation(results.getInt(5));
+            Commune _tempCom = _tempComBuilder.build();
+            _communes.add(_tempCom);
+        }
+        return _communes;
     }
 
     @Override
@@ -82,7 +100,7 @@ public class DBManager implements DataRepository {
     }
 
     @Override
-    public List<Commune> getByInsee() {
+    public List<Commune> getByCodeCommune() {
         return null;
     }
 }
