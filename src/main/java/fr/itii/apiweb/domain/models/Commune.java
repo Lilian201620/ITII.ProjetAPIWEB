@@ -134,11 +134,12 @@ public class Commune {
 
     @Override
     public String toString() {
-        return "nom='" + nom + '\'' +
-                ", codeCommune='" + codeCommune + '\'' +
-                ", codeDepartement='" + codeDepartement + '\'' +
-                ", codeRegion='" + codeRegion + '\'' +
-                ", codePostal='" + codePostal + '\'' +
-                ", population=" + population;
+        return  "\n id= " + id +
+                ",\t nom= " + nom +
+                ",\t commune= " + codeCommune +
+                ",\t departement= " + codeDepartement +
+                ",\t region= " + codeRegion +
+                ",\t postal= " + codePostal +
+                ",\t population= " + population;
     }
 }

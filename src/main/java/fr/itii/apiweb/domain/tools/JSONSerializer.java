@@ -16,7 +16,7 @@ public class JSONSerializer {
         try{
             ObjectMapper mapper = new ObjectMapper();
             JsonNode json = mapper.readTree(response.body());
-            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json));
+            //System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json));
             return convertJsonToList(json);
         } catch (JsonProcessingException e) {
             System.err.println(e);
@@ -64,6 +64,7 @@ public class JSONSerializer {
         }
         return null;
     }
+
     public Commune getCommuneByNom(List<Commune> communeList, String nomCommune){
         for (int i = 0; i < communeList.size(); i++) {
             Commune ville = communeList.get(i);
