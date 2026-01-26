@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DataRepository {
     void save(List<Commune> communes) throws SQLException;
-    List<Commune> getAll();
-    List<Commune> getByName();
-    List<Commune> getByInsee();
+    List<Commune> getAll() throws SQLException;
+    List<Commune> getByName() throws SQLException;
+    List<Commune> getByCodeCommune() throws SQLException;
 }
