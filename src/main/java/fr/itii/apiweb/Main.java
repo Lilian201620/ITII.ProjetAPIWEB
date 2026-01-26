@@ -1,9 +1,14 @@
 package fr.itii.apiweb.main;
 
+package fr.itii.apiweb;
+
 import fr.itii.apiweb.api.APICaller;
 import fr.itii.apiweb.db.DBManager;
 import fr.itii.apiweb.serializer.JSONSerializer;
+import fr.itii.apiweb.model.Commune;
 import fr.itii.apiweb.terminal.Terminal;
+
+import java.util.List;
 
 public class Main {
 
