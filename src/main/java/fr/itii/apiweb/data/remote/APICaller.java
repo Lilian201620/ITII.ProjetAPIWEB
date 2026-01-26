@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class APICaller {
-    private final String API_URL = "https://geo.api.gouv/communes";
+    private final String API_URL = "https://geo.api.gouv.fr/communes";
     public APICaller() {
     }
 
