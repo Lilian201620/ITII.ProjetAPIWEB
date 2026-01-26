@@ -12,7 +12,9 @@ public class DBManager implements DataRepository {
     private final String _username;
     private final String _password;
 
-    public DBManager(String url, String user, String pass, String port, String dbName) {
+    private static DBManager _instance;
+
+    private DBManager(String url, String user, String pass, String port, String dbName) {
         _url = "jdbc:postgresql://" + url + ":" + port + "/";
         _username = user;
         _password = pass;
@@ -23,13 +25,11 @@ public class DBManager implements DataRepository {
             System.out.println("Erreur, impossible de charger le driver pour : " + _url);
         }
     }
-
-    public DBManager(String url, String user, String pass, String dbName) {
-        this(url, user, pass, "5432", dbName);
-    }
-
-    public DBManager(String url, String user, String pass) {
-        this(url, user, pass, "5432", "APIWebDB");
+    public DBManager getInstance(String url, String user, String pass, String dbName, String port) {
+        if (_instance == null) {
+            _instance = new DBManager(url, user, pass, port, dbName);
+        }
+        return _instance;
     }
 
     private Connection connect() {
