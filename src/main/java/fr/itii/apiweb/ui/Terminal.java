@@ -1,39 +1,49 @@
 package fr.itii.apiweb.ui;
 
-import fr.itii.apiweb.api.APICaller;
-import fr.itii.apiweb.model.Commune;
-import fr.itii.apiweb.serializer.JSONSerializer;
-
 import java.util.List;
 import java.util.Scanner;
+
+import com.fasterxml.jackson.databind.JsonNode;
+
+import fr.itii.apiweb.data.remote.APICaller;
+import fr.itii.apiweb.domain.models.Commune;
+import fr.itii.apiweb.domain.tools.JSONSerializer;
+import fr.itii.apiweb.data.local.DBManager;
 
 public class Terminal {
 
     private final APICaller apiCaller;
     private final JSONSerializer serializer;
+    private final DBManager dbManager;
 
-    public Terminal(APICaller apiCaller, JSONSerializer serializer) {
+    public Terminal(APICaller apiCaller,
+                    JSONSerializer serializer,
+                    DBManager dbManager) {
         this.apiCaller = apiCaller;
         this.serializer = serializer;
+        this.dbManager = dbManager;
     }
 
+    /**
+     * Lancement du terminal (interface utilisateur)
+     */
     public void start() {
+
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
         while (running) {
+
             System.out.println("\n=== Projet APIWeb ===");
-            System.out.println("1. Rechercher une commune par nom");
-            System.out.println("2. Rechercher une commune par code INSEE");
-            System.out.println("3. Quitter");
-            System.out.print("Votre choix : ");
+            System.out.println("1 - Rechercher une commune par nom");
+            System.out.println("2 - Quitter");
+            System.out.print("Choix : ");
 
             String choice = scanner.nextLine();
 
             switch (choice) {
                 case "1" -> searchByName(scanner);
-                case "2" -> searchByInsee(scanner);
-                case "3" -> {
+                case "2" -> {
                     running = false;
                     System.out.println("Fin du programme.");
                 }
@@ -42,38 +52,37 @@ public class Terminal {
         }
     }
 
+    /**
+     * Recherche par nom de commune
+     */
     private void searchByName(Scanner scanner) {
+
         System.out.print("Nom de la commune : ");
-        String name = scanner.nextLine();
+        String name = scanner.nextLine().trim();
 
-        String json = apiCaller.getCommuneByName(name);
-        List<Commune> communes = serializer.serializeCityResult(json);
+        // 1. Appel API
+        JsonNode json = apiCaller.getCommunesByName(name);
 
+        // 2. JSON -> Objets Commune
+        List<Commune> communes = serializer.convertJsonToList(json);
+
+        // 3. Affichage (output)
         display(communes);
     }
 
-    private void searchByInsee(Scanner scanner) {
-        System.out.print("Code INSEE : ");
-        String insee = scanner.nextLine();
-
-        String json = apiCaller.getCommuneByInsee(insee);
-        List<Commune> communes = serializer.serializeCityResult(json);
-
-        display(communes);
-    }
-
+    /**
+     * Affichage des communes
+     */
     private void display(List<Commune> communes) {
+
         if (communes == null || communes.isEmpty()) {
-            System.out.println("Aucun résultat.");
+            System.out.println("Aucune commune trouvée.");
             return;
         }
 
-        for (Commune c : communes) {
-            System.out.println("--------------------");
-            System.out.println("Nom : " + c.getNom());
-            System.out.println("Code INSEE : " + c.getCodeInsee());
-            System.out.println("Population : " + c.getPopulation());
-            System.out.println("Centre : " + c.getCentre());
+        System.out.println("\n--- Résultats (" + communes.size() + ") ---");
+        for (Commune commune : communes) {
+            System.out.println(commune.toString());
         }
     }
 }
