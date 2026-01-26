@@ -16,14 +16,17 @@ public class Commune {
     private static Integer countId = 0;
 
     //Constructeur
-    public Commune() {
-        this.id = countId;
-        countId++;
-    }
-
-    public Commune(String nom, String codeCommune, String codeDepartement, String siren, String codeEpci, String codeRegion, String codePostal, Integer population) {
-        this();
-
+    public Commune(
+            String nom,
+            String codeCommune,
+            String codeDepartement,
+            String siren,
+            String codeEpci,
+            String codeRegion,
+            String codePostal,
+            Integer population,
+            Integer id
+    ) {
         this.nom = nom;
         this.codeCommune = codeCommune;
         this.codeDepartement = codeDepartement;
@@ -32,6 +35,20 @@ public class Commune {
         this.codeRegion = codeRegion;
         this.codePostal = codePostal;
         this.population = population;
+        this.id = id;
+    }
+
+    public Commune(
+            String nom,
+            String codeCommune,
+            String codeDepartement,
+            String siren,
+            String codeEpci,
+            String codeRegion,
+            String codePostal,
+            Integer population
+    ) {
+        this(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, 0);
     }
 
     //Builder
@@ -44,6 +61,7 @@ public class Commune {
         private String codeRegion;
         private String codePostal;
         private Integer population;
+        private Integer id;
 
         public Builder setNom(String nom) {
             this.nom = nom;
@@ -77,8 +95,11 @@ public class Commune {
             this.population = population;
             return this;
         }
+        public Builder setId(Integer id) {
+            this.id = id;
+        }
         public Commune build() {
-            return new Commune(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population);
+            return new Commune(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, id);
         }
     }
 
