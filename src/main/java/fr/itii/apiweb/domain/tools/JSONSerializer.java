@@ -12,19 +12,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSONSerializer {
 
-    public List<Commune> convertJsonToList(HttpResponse<String> response) {
+    public List<Commune> toCommunes(HttpResponse<String> response) {
         try{
             ObjectMapper mapper = new ObjectMapper();
             JsonNode json = mapper.readTree(response.body());
             //System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json));
-            return convertJsonToList(json);
+            return toCommunes(json);
         } catch (JsonProcessingException e) {
             System.err.println(e);
             return null;
         }
     }
 
-    public List<Commune> convertJsonToList(JsonNode json) {
+    public List<Commune> toCommunes(JsonNode json) {
 //          {
 //              "nom" : "Beauvais",
 //              "code" : "60057",
