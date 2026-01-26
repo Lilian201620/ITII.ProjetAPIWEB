@@ -10,4 +10,6 @@ public interface DataRepository {
     List<Commune> getAll() throws SQLException;
     List<Commune> getByName(String Name) throws SQLException;
     List<Commune> getByCodeCommune(String CodeCommune) throws SQLException;
+    void deleteByName(String Name) throws SQLException;
+    void deleteByCodeCommune(String CodeCommune) throws SQLException;
 }

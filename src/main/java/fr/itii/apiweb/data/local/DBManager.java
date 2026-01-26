@@ -2,6 +2,7 @@ package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -116,6 +117,22 @@ public class DBManager implements DataRepository {
         return this.getListFromRs(results);
     }
 
+    @Override
+    public void deleteByName(String Name) throws SQLException{
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        String request = "DELETE FROM Communes WHERE Nom='" + Name.replace("'", "''") + "';";
+        _stmt.executeQuery(request);
+    }
+
+    @Override
+    public void deleteByCodeCommune(String CodeCommune) throws SQLException{
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        String request = "DELETE FROM Communes WHERE CodeCommune='" + CodeCommune.replace("'", "''") + "';";
+        _stmt.executeQuery(request);
+    }
+
     private List<Commune> getListFromRs(ResultSet results) throws SQLException {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
@@ -130,4 +147,5 @@ public class DBManager implements DataRepository {
         }
         return _communes;
     }
+
 }
