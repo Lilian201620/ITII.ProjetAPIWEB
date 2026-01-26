@@ -7,7 +7,7 @@ import fr.itii.apiweb.ui.Terminal;
 
 public class Main {
 
-    //MAIN LILIAN
+    //MAIN LILIAN11
     public static void main(String[] args) {
         APICaller apiCaller = new APICaller();
         JSONSerializer serializer = new JSONSerializer();
