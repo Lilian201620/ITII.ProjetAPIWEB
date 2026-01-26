@@ -11,19 +11,39 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class APICaller {
+
+
     private final String API_URL = "https://geo.api.gouv.fr/communes";
+
+    HttpClient client = HttpClient.newHttpClient();
+    ObjectMapper objectMapper = new ObjectMapper();
+
     public APICaller() {
     }
 
     public JsonNode getCommunesByName(String commune){
         ObjectMapper objectMapper = new ObjectMapper();
-        HttpClient client = HttpClient.newHttpClient();
         String encodedCommune = URLEncoder.encode(commune, StandardCharsets.UTF_8);
         String url = API_URL
                 + "?nom=" + encodedCommune
                 + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
                 + "&limit=10";
 
+        return sendRequest(url);
+    }
+
+
+    public JsonNode getCommunesByCodePostal(String codePostal){
+        String encodedCodePostal = URLEncoder.encode(codePostal, StandardCharsets.UTF_8);
+        String url = API_URL
+                + "?codePostal=" + encodedCodePostal
+                + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
+                + "&limit=10";
+
+        return sendRequest(url);
+    }
+
+    private JsonNode sendRequest(String url){
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
@@ -37,4 +57,5 @@ public class APICaller {
             throw new RuntimeException(e);
         }
     }
+
 }
