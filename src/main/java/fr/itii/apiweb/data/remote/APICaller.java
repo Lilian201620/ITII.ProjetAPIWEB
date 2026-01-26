@@ -1,4 +1,4 @@
-package fr.itii.apiweb.apicaller;
+package fr.itii.apiweb.data.remote;
 
 public class APICaller {
     private final String apiUrl;

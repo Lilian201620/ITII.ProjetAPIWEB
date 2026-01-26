@@ -1,4 +1,4 @@
-package fr.itii.apiweb.serializer;
+package fr.itii.apiweb.domain.tools;
 
 import fr.itii.apiweb.model.Commune;
 import java.util.List;
