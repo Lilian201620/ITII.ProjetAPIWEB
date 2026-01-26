@@ -46,7 +46,7 @@ public class JSONSerializer {
             String siren = node.path("siren").asText();
             String codeEpci = node.path("codeEpci").asText();
             String codeRegion = node.path("codeRegion").asText();
-            String codePostal = node.path("codesPostaux").getFirst().asText();
+            String codePostal = node.path("codesPostaux").get(0).asText();
             Integer population = node.path("population").asInt();
 
             Commune ville = new Commune(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population);
