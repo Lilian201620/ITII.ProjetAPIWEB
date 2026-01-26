@@ -1,4 +1,4 @@
-package option2;
+package fr.itii.apiweb.domain.models;
 
 import java.util.ArrayList;
 
@@ -119,7 +119,6 @@ public class Commune {
                 ", codeDepartement='" + codeDepartement + '\'' +
                 ", codeRegion='" + codeRegion + '\'' +
                 ", codePostal='" + codePostal + '\'' +
-                ", population=" + population +
-                '}';
+                ", population=" + population;
     }
 }
