@@ -97,6 +97,7 @@ public class Commune {
         }
         public Builder setId(Integer id) {
             this.id = id;
+            return this;
         }
         public Commune build() {
             return new Commune(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, id);
