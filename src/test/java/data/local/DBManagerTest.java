@@ -1,22 +1,31 @@
 package data.local;
 import fr.itii.apiweb.data.local.DBManager;
 import fr.itii.apiweb.domain.models.Commune;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 public class DBManagerTest {
+
     @Test
-    public void initDBManager() throws SQLException {
+    public void deleteAllEntries() throws SQLException {
         DBManager _db = DBManager.getInstance();
-        System.out.println(_db.getAll().toString());
+        List<Commune> _emptyList = new ArrayList<>();
+        _db.deleteAll();
+        assertEquals(_emptyList, _db.getAll());
     }
 
     @Test
     public void saveCity() throws SQLException {
         DBManager _db = DBManager.getInstance();
+        _db.deleteAll();
         Commune.Builder c = new Commune.Builder();
         c.setNom("Paris");
         c.setCodeCommune("001");
@@ -39,15 +48,31 @@ public class DBManagerTest {
         _communes.add(_commune);
         _communes.add(_commune2);
         _db.save(_communes);
+        assertEquals(_communes, _db.getAll());
     }
 
     @Test
     public void getCityExplicit() throws SQLException {
         DBManager _db = DBManager.getInstance();
-        List<Commune> _communes = _db.getByName("Paris", true);
-        for (Commune _commune : _communes) {
-            System.out.println(_commune.toString());
-        }
+        _db.deleteAll();
+        Commune.Builder c = new Commune.Builder();
+        c.setNom("Paris");
+        c.setCodeCommune("001");
+        c.setPopulation(55000);
+        c.setCodeDepartement("60");
+        c.setCodeRegion("66");
+        c.setCodePostal("60250");
+        Commune _commune = c.build();
+        List<Commune> _communes = new ArrayList<Commune>();
+        _communes.add(_commune);
+        _db.save(_communes);
+        List<Commune> _dbResult = _db.getByName("Paris", true);
+        assertEquals(_communes.getFirst().getNom(), _dbResult.getFirst().getNom());
+        assertEquals(_communes.getFirst().getCodeCommune(), _dbResult.getFirst().getCodeCommune());
+        assertEquals(_communes.getFirst().getPopulation(), _dbResult.getFirst().getPopulation());
+        assertEquals(_communes.getFirst().getCodeDepartement(), _dbResult.getFirst().getCodeDepartement());
+        assertEquals(_communes.getFirst().getCodeRegion(), _dbResult.getFirst().getCodeRegion());
+        assertEquals(_communes.getFirst().getCodePostal(), _dbResult.getFirst().getCodePostal());
     }
 
     @Test

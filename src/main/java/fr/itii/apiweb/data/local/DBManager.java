@@ -141,6 +141,13 @@ public class DBManager implements DataRepository {
         _stmt.executeUpdate(request);
     }
 
+    public void deleteAll() throws SQLException{
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        String request = "DELETE FROM Communes;";
+        _stmt.executeUpdate(request);
+    }
+
     private List<Commune> getListFromRs(ResultSet results) throws SQLException {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
