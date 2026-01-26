@@ -50,7 +50,7 @@ public class DBManager implements DataRepository {
         String request = "CREATE TABLE IF NOT EXISTS Communes (" +
                             "Nom VARCHAR(256), " +
                             "Code VARCHAR(5), " +
-                            "CodeRegion VARCHAR(2)" +
+                            "CodeRegion VARCHAR(2)," +
                             "population BIGINT);";
         Statement _stmt = null;
         _stmt = _con.createStatement();
