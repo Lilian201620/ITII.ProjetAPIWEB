@@ -2,6 +2,7 @@ package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -53,6 +54,7 @@ public class DBManager implements DataRepository {
                             "Nom VARCHAR(256)," +
                             "CodeCommune VARCHAR(5)," +
                             "CodeDepartement VARCHAR(256)," +
+                            "CodePostal VARCHAR(16)," +
                             "CodeRegion VARCHAR(2)," +
                             "population BIGINT);";
         Statement _stmt = _con.createStatement();
@@ -66,12 +68,15 @@ public class DBManager implements DataRepository {
         Statement _stmt = _con.createStatement();
         Iterator<Commune> _iterator = communes.iterator();
         while(_iterator.hasNext()) {
-            String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodeRegion, population) VALUES (" +
-                    _iterator.next().getNom() + ", " +
-                    _iterator.next().getCodeCommune() + ", " +
-                    _iterator.next().getCodeDepartement() + ", " +
-                    _iterator.next().getCodeRegion() + ", " +
-                    _iterator.next().getPopulation() + ");";
+            Commune _commune =  _iterator.next();
+            System.out.println(_commune.toString());
+            String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodePostal, CodeRegion, population) VALUES ('" +
+                    _commune.getNom().replace("'", "''") + "', '" +
+                    _commune.getCodeCommune().replace("'", "''") + "', '" +
+                    _commune.getCodeDepartement().replace("'", "''") + "', '" +
+                    _commune.getCodePostal().replace("'", "''") + "', '" +
+                    _commune.getCodeRegion().replace("'", "''") + "', " +
+                    _commune.getPopulation().toString() + ");";
             _stmt.executeUpdate(request);
         }
         this.disconnect(_con);
@@ -81,7 +86,7 @@ public class DBManager implements DataRepository {
     public List<Commune> getAll() throws SQLException {
 
         String request = "SELECT * " +
-                            "FROM Communes;";
+                            "FROM communes;";
 
         Connection _con = _instance.connect();
         Statement _stmt = _con.createStatement();
@@ -91,41 +96,65 @@ public class DBManager implements DataRepository {
     }
 
     @Override
-    public List<Commune> getByName(String Name) throws SQLException{
-        String request = "SELECT * " +
-                "FROM Communes" +
-                "WHERE Name LIKE '* " + Name + "*' ;";
+    public List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) throws SQLException{
+        String request = "SELECT * FROM Communes WHERE nom ILIKE ?";
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        ResultSet results = _stmt.executeQuery(request);
+        PreparedStatement _stmt =  _con.prepareStatement(request);
+        if (OnlyExplicitCaracters) {
+            _stmt.setString(1, Name);
+        } else {
+            _stmt.setString(1, "%" + Name + "%");
+        }
+        ResultSet results = _stmt.executeQuery();
         this.disconnect(_con);
         return this.getListFromRs(results);
     }
 
     @Override
-    public List<Commune> getByCodeCommune(String CodeCommune) throws SQLException {
-        String request = "SELECT * " +
-                "FROM Communes" +
-                "WHERE Name LIKE '* " + CodeCommune + "*' ;";
+    public List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) throws SQLException {
+        String request = "SELECT * FROM Communes WHERE codecommune ILIKE ?";
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        ResultSet results = _stmt.executeQuery(request);
+        PreparedStatement _stmt = _con.prepareStatement(request);
+        if (OnlyExplicitCaracters) {
+            _stmt.setString(1, CodeCommune);
+        } else {
+            _stmt.setString(1, "%" + CodeCommune + "%");
+        }
+        ResultSet results = _stmt.executeQuery();
         this.disconnect(_con);
         return this.getListFromRs(results);
+    }
+
+    @Override
+    public void deleteByName(String Name) throws SQLException{
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        String request = "DELETE FROM Communes WHERE Nom='" + Name.replace("'", "''") + "';";
+        _stmt.executeUpdate(request);
+    }
+
+    @Override
+    public void deleteByCodeCommune(String CodeCommune) throws SQLException{
+        Connection _con = _instance.connect();
+        Statement _stmt = _con.createStatement();
+        String request = "DELETE FROM Communes WHERE CodeCommune='" + CodeCommune.replace("'", "''") + "';";
+        _stmt.executeUpdate(request);
     }
 
     private List<Commune> getListFromRs(ResultSet results) throws SQLException {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
             Commune.Builder _tempComBuilder = new Commune.Builder();
-            _tempComBuilder.setNom(results.getString(1));
-            _tempComBuilder.setCodeCommune(results.getString(2));
-            _tempComBuilder.setCodeDepartement(results.getString(3));
-            _tempComBuilder.setCodeRegion(results.getString(4));
-            _tempComBuilder.setPopulation(results.getInt(5));
+            _tempComBuilder.setNom(results.getString(2));
+            _tempComBuilder.setCodeCommune(results.getString(3));
+            _tempComBuilder.setCodeDepartement(results.getString(4));
+            _tempComBuilder.setCodePostal(results.getString(5));
+            _tempComBuilder.setCodeRegion(results.getString(6));
+            _tempComBuilder.setPopulation(results.getInt(7));
             Commune _tempCom = _tempComBuilder.build();
             _communes.add(_tempCom);
         }
         return _communes;
     }
+
 }
