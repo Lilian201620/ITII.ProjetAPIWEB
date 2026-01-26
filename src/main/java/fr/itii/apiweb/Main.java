@@ -1,48 +1,23 @@
-package fr.itii.apiweb.main;
-
 package fr.itii.apiweb;
 
-import fr.itii.apiweb.api.APICaller;
-import fr.itii.apiweb.db.DBManager;
-import fr.itii.apiweb.serializer.JSONSerializer;
-import fr.itii.apiweb.model.Commune;
-import fr.itii.apiweb.terminal.Terminal;
-
-import java.util.List;
+import fr.itii.apiweb.data.remote.APICaller;
+import fr.itii.apiweb.domain.tools.JSONSerializer;
+import fr.itii.apiweb.data.local.DBManager;
+import fr.itii.apiweb.ui.Terminal;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        /* =====================
-           Configuration
-        ===================== */
+        // Initialisation des briques
+        APICaller apiCaller = new APICaller();
+        JSONSerializer serializer = new JSONSerializer();
 
-        String apiUrl = "https://geo.api.gouv.fr/decoupage-administratif/communes";
+        // DBManager en singleton (Nathan)
+        DBManager dbManager = DBManager.getInstance();
 
-        String dbUrl = "jdbc:postgresql://localhost";
-        String dbUser = "user";
-        String dbPass = "password";
-        String dbPort = "5432";
-
-        /* =====================
-           Initialisation
-        ===================== */
-
-        APICaller apiCaller = new APICaller(apiUrl);
-        JSONSerializer jsonSerializer = new JSONSerializer();
-        DBManager dbManager = new DBManager(dbUrl, dbUser, dbPass, dbPort);
-
-        /* =====================
-           Lancement du terminal
-        ===================== */
-
-        Terminal terminal = new Terminal(
-                apiCaller,
-                jsonSerializer,
-                dbManager
-        );
-
+        // Lancement du terminal (interface utilisateur)
+        Terminal terminal = new Terminal(apiCaller, serializer, dbManager);
         terminal.start();
     }
 }
