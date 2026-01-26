@@ -36,6 +36,7 @@ public class Commune {
         this.codePostal = codePostal;
         this.population = population;
         this.id = id;
+
     }
 
     public Commune(
