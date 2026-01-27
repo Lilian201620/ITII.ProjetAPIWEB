@@ -11,7 +11,10 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 
 public class EtablissementApiCaller {
-    private final String API_URL = "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-annuaire-education/records?select=nom_etablissement%2Ctype_etablissement%2Ccode_commune%2Cnom_commune%2Cmail%2Cstatut_public_prive&where=";
+    private final String API_URL =
+            "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/" +
+            "fr-en-annuaire-education/records?select=nom_etablissement%2Ctype_etablissement%2Ccode_commune" +
+            "%2Cnom_commune%2Cmail%2Cstatut_public_prive&where=";
 
     HttpClient client = HttpClient.newHttpClient();
     ObjectMapper objectMapper = new ObjectMapper();
