@@ -1,21 +1,45 @@
 package fr.itii.apiweb.domain.models;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Commune {
+//    {
+//        "nom" : "Beauvais",
+//        "code" : "60057",
+//        "codeDepartement" : "60",
+//        "siren" : "216000562",
+//        "codeEpci" : "200067999",
+//        "codeRegion" : "32",
+//        "codesPostaux" : [ "60000" ],
+//        "population" : 55550
+//    }
+
+    //Variable JSON
     private String nom;
-    private String codeCommune;
+    private String code;
     private String codeDepartement;
     private String siren;
     private String codeEpci;
     private String codeRegion;
-    private String codePostal;
+    @JsonProperty("codesPostaux")
+    private List<String> codesPostaux;
     private Integer population;
+
+    //Autre variable
+    private String codePostal = null;
     private Integer id;
 
     private static Integer countId = 0;
 
     //Constructeur
+
+
+
     public Commune(
             String nom,
             String codeCommune,
@@ -28,7 +52,7 @@ public class Commune {
             Integer id
     ) {
         this.nom = nom;
-        this.codeCommune = codeCommune;
+        this.code = codeCommune;
         this.codeDepartement = codeDepartement;
         this.siren = siren;
         this.codeEpci = codeEpci;
@@ -51,6 +75,8 @@ public class Commune {
     ) {
         this(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, 0);
     }
+
+    public Commune(){}
 
     //Builder
     public static class Builder {
@@ -106,47 +132,55 @@ public class Commune {
     }
 
     //Setters
-    public void setNom(String nom){
+    public void setNom(String nom) {
         this.nom = nom;
     }
-    public void setCodeCommune(String codeCommune){
-        this.codeCommune = codeCommune;
+    public void setCodeCommune(String codeCommune) {
+        this.code = codeCommune;
     }
-    public void setCodeDepartement(String codeDepartement){
+    public void setCodeDepartement(String codeDepartement) {
         this.codeDepartement = codeDepartement;
     }
-    public void setSiren(String siren){ this.siren = siren; }
-    public void setCodeEpci(String codeEpci){this.codeEpci = codeEpci;}
-    public void setCodeRegion(String codeRegion){
+    public void setSiren(String siren) {
+        this.siren = siren;
+    }
+    public void setCodeEpci(String codeEpci) {
+        this.codeEpci = codeEpci;
+    }
+    public void setCodeRegion(String codeRegion) {
         this.codeRegion = codeRegion;
     }
-    public void setCodePostal(String codePostal){
+    public void setCodePostal(String codePostal) {
         this.codePostal = codePostal;
     }
-    public void setCodePostal(ArrayList<String> codePostal){
-        this.codePostal = codePostal.getFirst().toString();
+    public void setCodePostal(ArrayList<String> codePostal) {
+        this.codePostal = codePostal.get(0).toString();
     }
-    public void setPopulation(Integer population){
+    public void setPopulation(Integer population) {
         this.population = population;
     }
 
     //Getters
     public String getNom() {
-        return nom;
+        return this.nom;
     }
     public String getCodeCommune() {
-        return codeCommune;
+        return this.code;
     }
     public String getCodeDepartement() {
-        return codeDepartement;
+        return this.codeDepartement;
     }
-    public String getSiren() { return siren; }
-    public String getCodeEpci() { return codeEpci; }
+    public String getSiren() {
+        return this.siren;
+    }
+    public String getCodeEpci() {
+        return this.codeEpci;
+    }
     public String getCodeRegion() {
-        return codeRegion;
+        return this.codeRegion;
     }
     public String getCodePostal() {
-        return codePostal;
+        return this.codePostal ==  null ? this.codePostal : this.codesPostaux.get(0);
     }
     public Integer getPopulation() {
         return population;
@@ -158,10 +192,10 @@ public class Commune {
     @Override
     public String toString() {
         return  "nom= " + nom +
-                ",\t commune= " + codeCommune +
+                ",\t commune= " + code +
                 ",\t departement= " + codeDepartement +
                 ",\t region= " + codeRegion +
-                ",\t postal= " + codePostal +
+                ",\t postal= " + getCodePostal() +
                 ",\t population= " + population;
     }
 }

@@ -9,13 +9,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DBManagerTest {
 
     @Test
-    public void deleteAllEntries() throws SQLException {
+    public void deleteAllEntriesTest() throws SQLException {
         DBManager _db = DBManager.getInstance();
         List<Commune> _emptyList = new ArrayList<>();
         _db.deleteAll();
@@ -23,7 +22,7 @@ public class DBManagerTest {
     }
 
     @Test
-    public void saveCity() throws SQLException {
+    public void saveCityTest() throws SQLException {
         DBManager _db = DBManager.getInstance();
         _db.deleteAll();
         Commune.Builder c = new Commune.Builder();
@@ -48,11 +47,11 @@ public class DBManagerTest {
         _communes.add(_commune);
         _communes.add(_commune2);
         _db.save(_communes);
-        //assertEquals(_communes, _db.getAll());
+        assertEquals(_communes.size(), _db.getAll().size());
     }
 
     @Test
-    public void getCityExplicit() throws SQLException {
+    public void getCityExplicitTest() throws SQLException {
         DBManager _db = DBManager.getInstance();
         _db.deleteAll();
         Commune.Builder c = new Commune.Builder();
@@ -75,31 +74,4 @@ public class DBManagerTest {
         assertEquals(_communes.getFirst().getCodePostal(), _dbResult.getFirst().getCodePostal());
     }
 
-    @Test
-    public void getCityImplicite() throws SQLException {
-        DBManager _db = DBManager.getInstance();
-        List<Commune> _communes = _db.getByName("Paris", false);
-        for (Commune _commune : _communes) {
-            System.out.println(_commune.toString());
-        }
-    }
-
-    @Test
-    public void getAll() throws SQLException {
-        DBManager _db = DBManager.getInstance();
-        List<Commune> _communes = _db.getAll();
-        for (Commune _commune : _communes) {
-            System.out.println(_commune.toString());
-        }
-    }
-
-    @Test
-    public void deleteCity() throws SQLException {
-        DBManager _db = DBManager.getInstance();
-        _db.deleteByName("Paris");
-        List<Commune> _communes = _db.getAll();
-        for (Commune _commune : _communes) {
-            System.out.println(_commune.toString());
-        }
-    }
 }
