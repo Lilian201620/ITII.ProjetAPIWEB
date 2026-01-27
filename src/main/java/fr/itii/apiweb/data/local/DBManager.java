@@ -58,47 +58,38 @@ public class DBManager implements DataRepository {
      * Privé. Permet de se connecter à la base SQL et de renvoyer une connexion.
      * @return Connection à la base SQL.
      */
-    private Connection connect() {
-        try {
-            return DriverManager.getConnection(_url, _username, _password);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
-            return null;
-        }
+    private Connection connect() throws SQLException {
+        return DriverManager.getConnection(_url, _username, _password);
     }
 
     /**
      * Privé. Termine la connexion passée en paramètre.
      * @param _con Connexion à fermer.
      */
-    private void disconnect(Connection _con) {
-        try {
-            _con.close();
-        }
-        catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
-        }
+    private void disconnect(Connection _con) throws SQLException {
+        _con.close();
     }
 
     /**
      * Privé. Crée la table si elle n'existe pas.
      */
     private void createTable() {
-        Connection _con = _instance.connect();
-        String request = "CREATE TABLE IF NOT EXISTS Communes (" +
-                            "Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
-                            "Nom VARCHAR(256)," +
-                            "CodeCommune VARCHAR(5)," +
-                            "CodeDepartement VARCHAR(256)," +
-                            "CodePostal VARCHAR(16)," +
-                            "CodeRegion VARCHAR(2)," +
-                            "population BIGINT);";
         try {
+            Connection _con = _instance.connect();
+            String request = "CREATE TABLE IF NOT EXISTS Communes (" +
+                                "Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
+                                "Nom VARCHAR(256)," +
+                                "CodeCommune VARCHAR(5)," +
+                                "CodeDepartement VARCHAR(256)," +
+                                "CodePostal VARCHAR(16)," +
+                                "CodeRegion VARCHAR(2)," +
+                                "population BIGINT);";
+
             Statement _stmt = _con.createStatement();
             _stmt.executeUpdate(request);
             this.disconnect(_con);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
         }
 
     }
@@ -109,8 +100,8 @@ public class DBManager implements DataRepository {
      */
     @Override
     public void save(List<Commune> communes) {
-        Connection _con = _instance.connect();
         try {
+            Connection _con = _instance.connect();
             Statement _stmt = _con.createStatement();
             Iterator<Commune> _iterator = communes.iterator();
             while (_iterator.hasNext()) {
@@ -127,8 +118,8 @@ public class DBManager implements DataRepository {
             }
             this.disconnect(_con);
             System.out.println("Sauvegarde OK!");
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
         }
     }
 
@@ -141,15 +132,14 @@ public class DBManager implements DataRepository {
 
         String request = "SELECT * " +
                             "FROM communes;";
-
-        Connection _con = _instance.connect();
         try {
+        Connection _con = _instance.connect();
             Statement _stmt = _con.createStatement();
             ResultSet results = _stmt.executeQuery(request);
             this.disconnect(_con);
             return this.getListFromRs(results);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
             return new ArrayList<>();
         }
     }
@@ -164,8 +154,8 @@ public class DBManager implements DataRepository {
     @Override
     public List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) {
         String request = "SELECT * FROM Communes WHERE nom ILIKE ?";
-        Connection _con = _instance.connect();
         try {
+        Connection _con = _instance.connect();
             PreparedStatement _stmt = _con.prepareStatement(request);
             if (OnlyExplicitCaracters) {
                 _stmt.setString(1, Name);
@@ -175,8 +165,8 @@ public class DBManager implements DataRepository {
             ResultSet results = _stmt.executeQuery();
             this.disconnect(_con);
             return this.getListFromRs(results);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
             return new ArrayList<>();
         }
     }
@@ -190,8 +180,8 @@ public class DBManager implements DataRepository {
     @Override
     public List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) {
         String request = "SELECT * FROM Communes WHERE codecommune ILIKE ?";
-        Connection _con = _instance.connect();
         try {
+            Connection _con = _instance.connect();
             PreparedStatement _stmt = _con.prepareStatement(request);
             if (OnlyExplicitCaracters) {
                 _stmt.setString(1, CodeCommune);
@@ -201,8 +191,8 @@ public class DBManager implements DataRepository {
             ResultSet results = _stmt.executeQuery();
             this.disconnect(_con);
             return this.getListFromRs(results);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
             return new ArrayList<>();
         }
     }
@@ -213,13 +203,13 @@ public class DBManager implements DataRepository {
      */
     @Override
     public void deleteByName(String Name) {
-        Connection _con = _instance.connect();
         try {
+            Connection _con = _instance.connect();
             Statement _stmt = _con.createStatement();
             String request = "DELETE FROM Communes WHERE Nom='" + Name.replace("'", "''") + "';";
             _stmt.executeUpdate(request);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
         }
     }
 
@@ -229,14 +219,14 @@ public class DBManager implements DataRepository {
      */
     @Override
     public void deleteById(long id) {
-        Connection _con = _instance.connect();
         try {
+            Connection _con = _instance.connect();
             Statement _stmt = _con.createStatement();
             String request = "DELETE FROM Communes WHERE id='" + id + "';";
             _stmt.executeUpdate(request);
             this.disconnect(_con);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
         }
     }
 
@@ -246,13 +236,13 @@ public class DBManager implements DataRepository {
      */
     @Override
     public void deleteByCodeCommune(String CodeCommune) {
-        Connection _con = _instance.connect();
         try {
+            Connection _con = _instance.connect();
             Statement _stmt = _con.createStatement();
             String request = "DELETE FROM Communes WHERE CodeCommune='" + CodeCommune.replace("'", "''") + "';";
             _stmt.executeUpdate(request);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
         }
     }
 
@@ -260,13 +250,13 @@ public class DBManager implements DataRepository {
      * Suppprime toute la BDD
      */
     public void deleteAll() {
-        Connection _con = _instance.connect();
         try {
+            Connection _con = _instance.connect();
             Statement _stmt = _con.createStatement();
             String request = "DELETE FROM Communes;";
             _stmt.executeUpdate(request);
-        } catch (SQLException e) {
-            ExceptionsHandler.handleException(e);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
         }
     }
 
