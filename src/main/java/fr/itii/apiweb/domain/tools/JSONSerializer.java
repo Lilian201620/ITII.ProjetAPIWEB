@@ -1,7 +1,6 @@
 package fr.itii.apiweb.domain.tools;
 import fr.itii.apiweb.domain.models.*;
 
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,23 +9,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSONSerializer {
-    private ObjectMapper mapper = new ObjectMapper();
 
-    public List<Commune> toCommunes(HttpResponse<String> response) {
-        try {
-            JsonNode json = mapper.readTree(response.body());
-            return toCommunes(json);
-
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public List<Commune> toCommunes(JsonNode json) {
-        ArrayList villes = new ArrayList();
+        ObjectMapper mapper = new ObjectMapper();
+        List<Commune> villes = new ArrayList();
 
         try {
-            for(JsonNode node: json){
+            for(JsonNode node : json){
                 Commune ville = mapper.treeToValue(node, Commune.class);
                 villes.add(ville);
             }
@@ -37,6 +27,7 @@ public class JSONSerializer {
         }
     }
 
+    /*
     public Commune getCommuneById(List<Commune> communeList, Integer idCommune){
         return communeList.stream()
                 .filter(c -> c.getId() == idCommune)
@@ -50,4 +41,5 @@ public class JSONSerializer {
                 .findFirst()
                 .orElse(null);
     }
+    */
 }
