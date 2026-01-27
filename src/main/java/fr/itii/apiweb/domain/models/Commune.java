@@ -176,11 +176,17 @@ public class Commune {
 
     @Override
     public String toString() {
+        return String.format(
+                "nom: %-25s commune: %-10s departement: %-10s region: %-10s postal: %-10s population: %5d",
+                getNom(), getCodeCommune(), getCodeDepartement(), getCodeRegion(), getCodePostal(), getPopulation()
+        );
+    /*
         return  "nom: " + getNom() +
                 ",\t commune: " + getCodeCommune() +
                 ",\t departement: " + getCodeDepartement() +
                 ",\t region: " + getCodeRegion() +
                 ",\t postal: " + getCodePostal() +
                 ",\t population: " + getPopulation();
+                */
     }
 }
