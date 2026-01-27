@@ -126,6 +126,7 @@ public class DBManager implements DataRepository {
                 _stmt.executeUpdate(request);
             }
             this.disconnect(_con);
+            System.out.println("Sauvegarde OK!");
         } catch (SQLException e) {
             ExceptionsHandler.handleException(e);
         }
@@ -224,6 +225,23 @@ public class DBManager implements DataRepository {
 
     /**
      *
+     * @param id ID de la base de données à supprimer
+     */
+    @Override
+    public void deleteById(long id) {
+        Connection _con = _instance.connect();
+        try {
+            Statement _stmt = _con.createStatement();
+            String request = "DELETE FROM Communes WHERE id='" + id + "';";
+            _stmt.executeUpdate(request);
+            this.disconnect(_con);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+        }
+    }
+
+    /**
+     *
      * @param CodeCommune Code de la commune à supprimer dans la DB.
      */
     @Override
@@ -262,6 +280,7 @@ public class DBManager implements DataRepository {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
             Commune.Builder _tempComBuilder = new Commune.Builder();
+            _tempComBuilder.setId(results.getInt(1));
             _tempComBuilder.setNom(results.getString(2));
             _tempComBuilder.setCodeCommune(results.getString(3));
             _tempComBuilder.setCodeDepartement(results.getString(4));

@@ -11,10 +11,11 @@ import java.util.List;
  * @version 1.0.0
  */
 public interface DataRepository {
-    void save(List<Commune> communes) throws SQLException;
-    List<Commune> getAll() throws SQLException;
-    List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) throws SQLException;
-    List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) throws SQLException;
-    void deleteByName(String Name) throws SQLException;
-    void deleteByCodeCommune(String CodeCommune) throws SQLException;
+    void save(List<Commune> communes);
+    List<Commune> getAll();
+    List<Commune> getByName(String Name, boolean OnlyExplicitCaracters);
+    List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters);
+    void deleteByName(String Name);
+    void deleteById(long id);
+    void deleteByCodeCommune(String CodeCommune);
 }
