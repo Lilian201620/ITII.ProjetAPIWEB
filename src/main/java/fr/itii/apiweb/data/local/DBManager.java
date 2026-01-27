@@ -108,23 +108,27 @@ public class DBManager implements DataRepository {
      * @param communes Liste de communes à sauvegarder.
      */
     @Override
-    public void save(List<Commune> communes) throws SQLException {
+    public void save(List<Commune> communes) {
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        Iterator<Commune> _iterator = communes.iterator();
-        while(_iterator.hasNext()) {
-            Commune _commune =  _iterator.next();
-            System.out.println(_commune.toString());
-            String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodePostal, CodeRegion, population) VALUES ('" +
-                    _commune.getNom().replace("'", "''") + "', '" +
-                    _commune.getCodeCommune().replace("'", "''") + "', '" +
-                    _commune.getCodeDepartement().replace("'", "''") + "', '" +
-                    _commune.getCodePostal().replace("'", "''") + "', '" +
-                    _commune.getCodeRegion().replace("'", "''") + "', " +
-                    _commune.getPopulation().toString() + ");";
-            _stmt.executeUpdate(request);
+        try {
+            Statement _stmt = _con.createStatement();
+            Iterator<Commune> _iterator = communes.iterator();
+            while (_iterator.hasNext()) {
+                Commune _commune = _iterator.next();
+                System.out.println(_commune.toString());
+                String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodePostal, CodeRegion, population) VALUES ('" +
+                        _commune.getNom().replace("'", "''") + "', '" +
+                        _commune.getCodeCommune().replace("'", "''") + "', '" +
+                        _commune.getCodeDepartement().replace("'", "''") + "', '" +
+                        _commune.getCodePostal().replace("'", "''") + "', '" +
+                        _commune.getCodeRegion().replace("'", "''") + "', " +
+                        _commune.getPopulation().toString() + ");";
+                _stmt.executeUpdate(request);
+            }
+            this.disconnect(_con);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
         }
-        this.disconnect(_con);
     }
 
     /**
