@@ -147,7 +147,7 @@ public class Terminal {
             warn("Rien à sauvegarder.");
             return;
         }
-        System.out.println(GREEN + "Sauvegarde ...." + RESET);
+        System.out.println(YELLOW + "Sauvegarde ...." + RESET);
         dbManager.save(lastResults);
 
     }
