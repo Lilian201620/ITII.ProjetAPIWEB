@@ -22,10 +22,10 @@ public class Affichage {
 
     public String showMenu() {
         System.out.println("\n" + BOLD + RED + "==== Menu Principal ====" + RESET);
-        System.out.println(BOLD + "1. " + CYAN + "Recherche API" + RESET);
-        System.out.println(BOLD + "2. " + CYAN + "Recherche dans la DataBase" + RESET);
-        System.out.println(BOLD + "3. " + CYAN + "Supprimer la database" + RESET);
-        System.out.println(BOLD + "4. " + CYAN + "Quitter" + RESET);
+        System.out.println("1. " + CYAN + "Recherche API" + RESET);
+        System.out.println("2. " + CYAN + "Recherche dans la DataBase" + RESET);
+        System.out.println("3. " + CYAN + "Supprimer la database" + RESET);
+        System.out.println("4. " + CYAN + "Quitter" + RESET);
         System.out.print(">");
 
         return sc.nextLine().trim();
@@ -33,12 +33,12 @@ public class Affichage {
 
     public String showMenuSearchAPI() {
         System.out.println("\n" + BOLD + YELLOW + "==== Recherche API ====" + RESET);
-        System.out.println(BOLD + "1. " + CYAN + "Commune par nom" + RESET);  //Page suivante
-        System.out.println(BOLD + "2. " + CYAN + "Commune par code postal" + RESET);
-        System.out.println(BOLD + "3. " + CYAN + "Commune par departement" + RESET);
-        System.out.println(BOLD + "4. " + CYAN + "Etablissement par nom de commune" + RESET);
-        System.out.println(BOLD + "5. " + CYAN + "Etablissement par code postal" + RESET);
-        System.out.println(BOLD + "6. " + CYAN + "Etablissement par departement" + RESET);
+        System.out.println("1. " + CYAN + "Commune par nom" + RESET);  //Page suivante
+        System.out.println("2. " + CYAN + "Commune par code postal" + RESET);
+        System.out.println("3. " + CYAN + "Commune par departement" + RESET);
+        System.out.println("4. " + CYAN + "Etablissement par nom de commune" + RESET);
+        System.out.println("5. " + CYAN + "Etablissement par code postal" + RESET);
+        System.out.println("6. " + CYAN + "Etablissement par departement" + RESET);
         System.out.print(">");
 
         return sc.nextLine().trim();
@@ -46,11 +46,11 @@ public class Affichage {
 
     public String showMenuAPI() {
         System.out.println("\n" + BOLD + GREEN + "==== Action API ====" + RESET);
-        System.out.println(BOLD + "1. " + CYAN + "Page précédente" + RESET);  //Page suivante
-        System.out.println(BOLD + "2. " + CYAN + "Page suivante" + RESET);
-        System.out.println(BOLD + "3. " + CYAN + "Sauvegarder" + RESET);            //Save dans DB
-        System.out.println(BOLD + "4. " + CYAN + "Nouvelle recherche" + RESET);     //Nouvelle API
-        System.out.println(BOLD + "5. " + CYAN + "Retour" + RESET);                 //Retour au menu principal
+        System.out.println("1. " + CYAN + "Page précédente" + RESET);  //Page suivante
+        System.out.println("2. " + CYAN + "Page suivante" + RESET);
+        System.out.println("3. " + CYAN + "Sauvegarder" + RESET);            //Save dans DB
+        System.out.println("4. " + CYAN + "Nouvelle recherche" + RESET);     //Nouvelle API
+        System.out.println("5. " + CYAN + "Retour" + RESET);                 //Retour au menu principal
         System.out.print(">");
 
         String c;
@@ -78,6 +78,13 @@ public class Affichage {
         System.out.println(BOLD + "3. Nouvelle recherche" + RESET);     //Nouvelle API
         System.out.println(BOLD + "4. Retour" + RESET);                 //Retour au menu principal
         System.out.print(">");
+
+        return sc.nextLine().trim();
+    }
+
+    public String showConfig(String title, String msg){
+        System.out.println("\n" + BOLD + YELLOW + "==== "+ title + " ====" + RESET);
+        System.out.print(msg);
 
         return sc.nextLine().trim();
     }

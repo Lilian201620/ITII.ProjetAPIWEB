@@ -34,11 +34,12 @@ public class Backend {
     }
 
     public List<Etablissement> searchEtablissementFromAPI(String key, String value){
-        //JsonNode json = api.getEByName(value, "1000");
+        //a remplir
         return null;
     }
 
     public List<Etablissement> searchEtablissementFromDB(String key, String value){
+        //a remplir
         return null;
     }
 
@@ -47,14 +48,14 @@ public class Backend {
     }
 
     public void saveEtablissement(List<Etablissement> results) {
-        //db.save(results)
+        //a remplir
     }
 
-    public void deleteCommuneDB() {
+    public void deleteCommune() {
         db.deleteAll();
     }
 
-    public void deleteEtablissementDB() {
-        db.deleteAll();
+    public void deleteEtablissement() {
+        //a remplir
     }
 }
