@@ -86,7 +86,7 @@ public class Terminal {
         while (true) {
             System.out.println("\n" + BOLD + "1. Affiner recherche" + RESET);
             System.out.println(BOLD + "2. Sauvegarder" + RESET);
-            System.out.println(BOLD + "3. Nouvelle recherche" + RESET);
+            System.out.println(BOLD + "3. Menu Principal" + RESET);
             System.out.println(BOLD + "4. Quitter" + RESET);
             System.out.print(prompt());
 
