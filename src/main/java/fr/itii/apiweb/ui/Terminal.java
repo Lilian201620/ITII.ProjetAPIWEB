@@ -11,195 +11,170 @@ import java.util.Scanner;
 
 public class Terminal {
 
-    // ===== Styles ANSI =====
-    private static final String RESET = "\u001B[0m";
-    private static final String BOLD  = "\u001B[1m";
-    private static final String CYAN  = "\u001B[36m";
-    private static final String GREEN = "\u001B[32m";
-    private static final String YELLOW= "\u001B[33m";
-    private static final String RED   = "\u001B[31m";
-
+    private final Menu menu;                 // ✅ on UTILISE la classe Menu
     private final APICaller apiCaller;
     private final JSONSerializer serializer;
     private final DBManager dbManager;
 
+    private final Scanner sc = new Scanner(System.in);
+
+    // lastResult general
     private List<Commune> lastResults = null;
-    private Source lastSource = null;
 
-    private enum Source { API, DB }
+    // pagination
+    private int showIndex = 0;
+    private static final int PAGE_SIZE = 10;
 
-    public Terminal(APICaller apiCaller, JSONSerializer serializer, DBManager dbManager) {
+    public Terminal(Menu menu, APICaller apiCaller, JSONSerializer serializer, DBManager dbManager) {
+        this.menu = menu;
         this.apiCaller = apiCaller;
         this.serializer = serializer;
         this.dbManager = dbManager;
     }
 
-    public void start() {
-        Scanner sc = new Scanner(System.in);
-        header("Projet APIWeb");
-
+    /* =========================================================
+       RUN PRINCIPAL : utilise Menu.showMenu()
+       ========================================================= */
+    public void run() {
         while (true) {
-            // MENU SOURCE (demandé)
-            System.out.println("\n" + BOLD + "1. Rechercher API" + RESET);
-            System.out.println(BOLD + "2. Rechercher dans la DataBase" + RESET);
-            System.out.println(BOLD + "3. Supprimer database" + RESET);
-            System.out.println(BOLD + "4. Quitter" + RESET);
-            System.out.print(prompt());
-
-            String choice = sc.nextLine().trim();
+            String choice = menu.showMenu();
 
             switch (choice) {
-                case "1" -> searchApiFlow(sc);
-                case "2" -> searchDbFlow(sc);
-                case "3" -> {
-                    dbManager.deleteAll();
-                    System.out.println(RED + "Base de données vidée." + RESET);
-                    // revient sur ce menu automatiquement
-                }
-                case "4" -> {
-                    info("Fin.");
-                    return;
-                }
-                default -> warn("Choix invalide.");
+                case "1" -> flowAPI();
+                case "2" -> flowDB();
+                case "3" -> deleteDatabase();
+                case "4" -> System.exit(0);
+                default -> { /* on relance */ }
             }
         }
     }
 
-    // ====== API FLOW ======
-    private void searchApiFlow(Scanner sc) {
-        System.out.print(CYAN + "Nom de la commune : " + RESET);
+    /* =========================================================
+       FLOW API : API only + show + menu API
+       ========================================================= */
+    private void flowAPI() {
+        System.out.print("Nom de la commune : ");
         String name = sc.nextLine().trim();
 
+        searchAPI(name);
+        show(); // affiche 0..10
+
+        while (true) {
+            String choice = menu.showMenuAPI();
+
+            switch (choice) {
+                case "1" -> show();               // élargir (+10)
+                case "2" -> saveLastResults();    // save
+                case "3" -> { return; }           // nouvelle recherche
+                case "4" -> { return; }           // retour menu principal
+                default -> { /* re-affiche */ }
+            }
+        }
+    }
+
+    /* =========================================================
+       FLOW DB : DB only + show + menu DB + affinage DB
+       ========================================================= */
+    private void flowDB() {
+        // Selon ton besoin : soit tout, soit recherche par nom.
+        // Là je fais une recherche par nom si l'utilisateur tape quelque chose, sinon getAll.
+        System.out.print("Nom de la commune (vide = tout) : ");
+        String name = sc.nextLine().trim();
+
+        if (name.isEmpty()) {
+            searchDatabaseAll();
+        } else {
+            searchDatabaseByName(name);
+        }
+
+        show(); // affiche 0..10
+
+        while (true) {
+            String choice = menu.showMenuDB();
+
+            switch (choice) {
+                case "1" -> saveLastResults();   // sauvegarder
+                case "2" -> { return; }          // nouvelle recherche
+                case "3" -> { return; }          // retour menu principal
+                default -> { /* re-affiche */ }
+            }
+        }
+    }
+
+    /* =========================================================
+       JUSTE API search  --> HTTP
+       ========================================================= */
+    private void searchAPI(String name) {
         JsonNode json = apiCaller.getCommunesByName(name);
         lastResults = serializer.toCommunes(json);
-        lastSource = Source.API;
-
-        afterResultsMenu(sc);
+        resetShow();
     }
 
-    // ====== DB FLOW ======
-    private void searchDbFlow(Scanner sc) {
-        // Ici : "Rechercher dans la DB" = afficher tout
+    /* =========================================================
+       JUSTE DB search + affinage --> SQL
+       ========================================================= */
+    private void searchDatabaseAll() {
         lastResults = dbManager.getAll();
-        lastSource = Source.DB;
-
-        afterResultsMenu(sc);
+        resetShow();
     }
 
-    // ====== MENU APRÈS RÉSULTATS ======
-    private void afterResultsMenu(Scanner sc) {
-        display(lastResults);
-
-        if (lastResults == null || lastResults.isEmpty()) {
-            return;
-        }
-
-        while (true) {
-            System.out.println("\n" + BOLD + "1. Affiner recherche" + RESET);
-            System.out.println(BOLD + "2. Sauvegarder" + RESET);
-            System.out.println(BOLD + "3. Nouvelle recherche" + RESET);
-            System.out.println(BOLD + "4. Quitter" + RESET);
-            System.out.print(prompt());
-
-            String choice = sc.nextLine().trim();
-
-            switch (choice) {
-                case "1" -> {
-                    refineFlow(sc);
-                    return;
-                }
-                case "2" -> saveLastResults();
-                case "3" -> {
-                    return; // retour menu source
-                }
-                case "4" -> System.exit(0);
-                default -> warn("Choix invalide.");
-            }
-        }
+    private void searchDatabaseByName(String name) {
+        lastResults = dbManager.getByName(name, false);
+        resetShow();
     }
 
-    // ====== AFFINER (respecte la source) ======
-    private void refineFlow(Scanner sc) {
-        System.out.println(YELLOW + "Donnez un nom plus précis pour affiner la recherche :" + RESET);
-        System.out.print(prompt());
-        String refineName = sc.nextLine().trim();
-
-        if (refineName.isEmpty()) return;
-
-        // IMPORTANT : on affine selon la source
-        if (lastSource == Source.API) {
-            JsonNode json = apiCaller.getCommunesByName(refineName);
-            lastResults = serializer.toCommunes(json);
-        } else {
-            // Affinage DB -> DB ONLY
-            lastResults = dbManager.getByName(refineName, false);
-        }
-
-        display(lastResults);
-
-        if (lastResults == null || lastResults.isEmpty()) {
-            return;
-        }
-
-        while (true) {
-            System.out.println("\n" + BOLD + "1. Nouvelle recherche" + RESET);
-            System.out.println(BOLD + "2. Sauvegarder" + RESET);
-            System.out.println(BOLD + "3. Quitter" + RESET);
-            System.out.print(prompt());
-
-            String choice = sc.nextLine().trim();
-
-            switch (choice) {
-                case "1" -> {
-                    return; // retour menu source
-                }
-                case "2" -> saveLastResults();
-                case "3" -> System.exit(0);
-                default -> warn("Choix invalide.");
-            }
-        }
+    // si plus tard tes menus DB demandent "affiner"
+    private void refineDatabaseByName(String morePreciseName) {
+        lastResults = dbManager.getByName(morePreciseName, false);
+        resetShow();
     }
 
-    // ====== SAVE ======
+    /* =========================================================
+       DELETE BD
+       ========================================================= */
+    private void deleteDatabase() {
+        dbManager.deleteAll();
+        lastResults = null;
+        resetShow();
+        System.out.println("Base de données vidée.");
+    }
+
+    /* =========================================================
+       SAVE lastResults
+       ========================================================= */
     private void saveLastResults() {
         if (lastResults == null || lastResults.isEmpty()) {
-            warn("Rien à sauvegarder.");
+            System.out.println("Rien à sauvegarder.");
             return;
         }
-
         dbManager.save(lastResults);
-        System.out.println(GREEN + "Sauvegarde ...." + RESET);
+        System.out.println("Sauvegarde ....");
     }
 
-    // ====== DISPLAY ======
-    private void display(List<Commune> communes) {
-        if (communes == null || communes.isEmpty()) {
-            warn("Aucun résultat.");
+    /* =========================================================
+       SHOW paginé : 0..10 puis +10 à chaque appel
+       ========================================================= */
+    private void show() {
+        if (lastResults == null || lastResults.isEmpty()) {
+            System.out.println("Aucun résultat.");
             return;
         }
 
-        System.out.println(CYAN + "\n--- Résultats (" + communes.size() + ") ---" + RESET);
-        for (Commune c : communes) {
-            System.out.println(c);
+        int end = Math.min(showIndex + PAGE_SIZE, lastResults.size());
+
+        System.out.println("\n--- Résultats " + (showIndex + 1) + " à " + end + " / " + lastResults.size() + " ---");
+        for (int i = showIndex; i < end; i++) {
+            System.out.println("#" + (i + 1) + " " + lastResults.get(i));
+        }
+
+        showIndex = end;
+
+        if (showIndex >= lastResults.size()) {
+            System.out.println("Fin des résultats.");
         }
     }
 
-    // ====== UI helpers ======
-    private void header(String title) {
-        System.out.println(BOLD + CYAN + "========================================" + RESET);
-        System.out.println(BOLD + CYAN + " " + title + RESET);
-        System.out.println(BOLD + CYAN + "========================================" + RESET);
-    }
-
-    private String prompt() {
-        return BOLD + "> " + RESET;
-    }
-
-    private void info(String msg) {
-        System.out.println(CYAN + msg + RESET);
-    }
-
-    private void warn(String msg) {
-        System.out.println(YELLOW + msg + RESET);
+    private void resetShow() {
+        showIndex = 0;
     }
 }
