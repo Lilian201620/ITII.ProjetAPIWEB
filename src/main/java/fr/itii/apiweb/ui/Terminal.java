@@ -15,7 +15,7 @@ public class Terminal {
     private final JSONSerializer serializer;
     private final DBManager dbManager;
 
-    private List<Commune> lastResults = null; // pour .save
+    private List<Commune> lastResults = null;
 
     public Terminal(APICaller apiCaller, JSONSerializer serializer, DBManager dbManager) {
         this.apiCaller = apiCaller;
@@ -24,75 +24,123 @@ public class Terminal {
     }
 
     public void start() {
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
+        Scanner sc = new Scanner(System.in);
 
-        while (running) {
-            System.out.println("\n=== Projet APIWeb ===");
-            System.out.println("1 - Rechercher par nom");
-            System.out.println("2 - .save (sauvegarder la dernière recherche)");
-            System.out.println("3 - Quitter");
-            System.out.print("Choix : ");
+        while (true) {
+            // MENU 1
+            System.out.println("\n1. Rechercher");
+            System.out.println("2. Quitter");
+            System.out.print("> ");
 
-            String choice = scanner.nextLine().trim();
+            String choice = sc.nextLine().trim();
+
+            if (choice.equals("1")) {
+                doSearch(sc);
+            } else if (choice.equals("2")) {
+                System.out.println("Fin.");
+                return;
+            } else {
+                System.out.println("Choix invalide.");
+            }
+        }
+    }
+
+    private void doSearch(Scanner sc) {
+        System.out.print("Nom de la commune : ");
+        String name = sc.nextLine().trim();
+
+        lastResults = fetchByName(name);
+        display(lastResults);
+
+        if (lastResults == null || lastResults.isEmpty()) {
+            return; // retour menu principal
+        }
+
+        // MENU 2 (après résultats)
+        while (true) {
+            System.out.println("\n1. Affiner recherche");
+            System.out.println("2. Sauvegarder");
+            System.out.println("3. Nouvelle recherche");
+            System.out.println("4. Quitter");
+            System.out.print("> ");
+
+            String choice = sc.nextLine().trim();
 
             switch (choice) {
-                case "1" -> searchByName(scanner);
+                case "1" -> {
+                    doRefine(sc); // va ensuite au MENU 3
+                    return;       // revient au menu principal après MENU 3
+                }
                 case "2" -> saveLastResults();
-                case "3" -> running = false;
+                case "3" -> {
+                    doSearch(sc); // nouvelle recherche directe
+                    return;
+                }
+                case "4" -> {
+                    System.out.println("Fin.");
+                    System.exit(0);
+                }
                 default -> System.out.println("Choix invalide.");
             }
         }
-
-        System.out.println("Fin.");
     }
 
-    private void searchByName(Scanner scanner) {
-        System.out.print("Nom de la commune : ");
-        String name = scanner.nextLine().trim();
+    private void doRefine(Scanner sc) {
+        System.out.println("Donnez un nom plus précis pour affiner la recherche :");
+        System.out.print("> ");
+        String refineName = sc.nextLine().trim();
 
+        lastResults = fetchByName(refineName);
+        display(lastResults);
+
+        if (lastResults == null || lastResults.isEmpty()) {
+            return; // retour menu principal
+        }
+
+        // MENU 3 (après affinage)
+        while (true) {
+            System.out.println("\n1. Nouvelle recherche");
+            System.out.println("2. Sauvegarder");
+            System.out.println("3. Quitter");
+            System.out.print("> ");
+
+            String choice = sc.nextLine().trim();
+
+            switch (choice) {
+                case "1" -> {
+                    doSearch(sc);
+                    return;
+                }
+                case "2" -> saveLastResults();
+                case "3" -> {
+                    System.out.println("Fin.");
+                    System.exit(0);
+                }
+                default -> System.out.println("Choix invalide.");
+            }
+        }
+    }
+
+    private List<Commune> fetchByName(String name) {
         JsonNode json = apiCaller.getCommunesByName(name);
-        List<Commune> communes = serializer.toCommunes(json);
+        return serializer.toCommunes(json);
+    }
 
+    private void display(List<Commune> communes) {
         if (communes == null || communes.isEmpty()) {
             System.out.println("Aucun résultat.");
-            lastResults = null;
             return;
         }
 
         System.out.println("\n--- Résultats (" + communes.size() + ") ---");
         for (Commune c : communes) {
-            System.out.println(c);
-        }
-
-        // On garde en mémoire la dernière recherche pour .save
-        lastResults = communes;
-
-        System.out.println("\nDonnez un nom plus précise pour affiner la recherche (Entrée pour ignorer) :");
-        String refine = scanner.nextLine().trim();
-
-        if (!refine.isEmpty()) {
-            JsonNode json2 = apiCaller.getCommunesByName(refine);
-            List<Commune> refined = serializer.toCommunes(json2);
-
-            if (refined == null || refined.isEmpty()) {
-                System.out.println("Aucun résultat.");
-                lastResults = null;
-                return;
-            }
-
-            System.out.println("\n--- Résultats (" + refined.size() + ") ---");
-            for (Commune c : refined) {
-                System.out.println(c);
-            }
-
-            lastResults = refined;
+            System.out.println(c.toString());
         }
     }
 
     private void saveLastResults() {
         if (lastResults == null || lastResults.isEmpty()) {
-            System.out.println("Rien à sauvegarder. Faites une recherche avant.");
+            System.out.println("Rien à sauvegarder.");
             return;
         }
 
@@ -100,7 +148,7 @@ public class Terminal {
             dbManager.save(lastResults);
             System.out.println("Sauvegarde OK.");
         } catch (Exception e) {
-            System.out.println("Erreur pendant la sauvegarde : " + e.getMessage());
+            System.out.println("Erreur sauvegarde : " + e.getMessage());
         }
     }
 }
