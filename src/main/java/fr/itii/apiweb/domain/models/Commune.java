@@ -21,6 +21,7 @@ public class Commune {
 
     //Variable JSON
     private String nom;
+    @JsonProperty("code")
     private String code;
     private String codeDepartement;
     private String siren;
@@ -76,12 +77,14 @@ public class Commune {
         this(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, 0);
     }
 
-    public Commune(){}
+    public Commune(){
+
+    }
 
     //Builder
     public static class Builder {
         private String nom;
-        private String codeCommune;
+        private String code;
         private String codeDepartement;
         private String siren;
         private String codeEpci;
@@ -95,7 +98,7 @@ public class Commune {
             return this;
         }
         public Builder setCodeCommune(String codeCommune) {
-            this.codeCommune = codeCommune;
+            this.code = codeCommune;
             return this;
         }
         public Builder setCodeDepartement(String codeDepartement) {
@@ -127,7 +130,7 @@ public class Commune {
             return this;
         }
         public Commune build() {
-            return new Commune(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, id);
+            return new Commune(nom, code, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, id);
         }
     }
 
@@ -180,7 +183,12 @@ public class Commune {
         return this.codeRegion;
     }
     public String getCodePostal() {
-        return this.codePostal ==  null ? this.codePostal : this.codesPostaux.get(0);
+        if (this.codePostal != null) {
+            return this.code;
+        } else if (this.codesPostaux != null){
+            return this.codesPostaux.get(0);
+        }
+        return null;
     }
     public Integer getPopulation() {
         return population;
@@ -192,7 +200,7 @@ public class Commune {
     @Override
     public String toString() {
         return  "nom= " + nom +
-                ",\t commune= " + code +
+                ",\t commune= " + getCodeCommune() +
                 ",\t departement= " + codeDepartement +
                 ",\t region= " + codeRegion +
                 ",\t postal= " + getCodePostal() +
