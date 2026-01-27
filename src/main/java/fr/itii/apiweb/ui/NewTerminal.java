@@ -11,7 +11,6 @@ import java.util.Scanner;
 
 public class NewTerminal {
 
-
     private final APICaller api = new APICaller();
     private final JSONSerializer serializer = new JSONSerializer();
     private final DBManager db = DBManager.getInstance();
@@ -22,7 +21,6 @@ public class NewTerminal {
     // lastResult general
     private List<Commune> lastResults = null;
 
-
     // pagination
     private int showIndex = 0;
     private static final int PAGE_SIZE = 10;
@@ -32,14 +30,16 @@ public class NewTerminal {
        RUN PRINCIPAL : utilise Menu.showMenu()
        ========================================================= */
     public void run() {
-        while (true) {
-            switch (menu.showMenu()) {
-                case "1" -> flowAPI();
-                case "2" -> flowDB();
-                case "3" -> deleteDatabase();
-                case "4" -> System.exit(0);
-                default -> { /* on relance */ }
-            }
+        switch (menu.showMenu()) {
+            //Recherche API
+            case "1" -> flowAPI();
+            //Recherche DB
+            case "2" -> flowDB();
+            //Delete DB
+            case "3" -> deleteDatabase();
+            //Quitter
+            case "4" -> System.exit(0);
+            default -> run();
         }
     }
 
@@ -47,21 +47,27 @@ public class NewTerminal {
        FLOW API : API only + show + menu API
        ========================================================= */
     private void flowAPI() {
+        showIndex = 0;
         System.out.print("Nom de la commune : ");
         String name = sc.nextLine().trim();
 
         searchAPI(name);
-        // affiche 0..10
+        show(lastResults);
 
-        while (true) {
-            String choice = menu.showMenuAPI();
+        while(true){
+            switch (menu.showMenuAPI()) {
+                //Page précédente
+                case "1" -> show(lastResults, showIndex-20);
+                //Page suivante
+                case "2" -> show(lastResults);
+                //Save
+                case "3" -> saveLastResults();
+                // nouvelle recherche
+                case "4" -> flowAPI();
+                // retour menu principal
+                case "5" -> {run();}
 
-            switch (choice) {
-                case "1" -> show(lastResults, 10);               // élargir (+10)
-                case "2" -> saveLastResults();    // save
-                case "3" -> { return; }           // nouvelle recherche
-                case "4" -> { return; }           // retour menu principal
-                default -> { /* re-affiche */ }
+                default -> {}
             }
         }
     }
@@ -70,6 +76,7 @@ public class NewTerminal {
        FLOW DB : DB only + show + menu DB + affinage DB
        ========================================================= */
     private void flowDB() {
+        showIndex = 0;
         // Selon ton besoin : soit tout, soit recherche par nom.
         // Là je fais une recherche par nom si l'utilisateur tape quelque chose, sinon getAll.
         System.out.print("Nom de la commune (vide = tout) : ");
@@ -80,16 +87,19 @@ public class NewTerminal {
         } else {
             searchDatabaseByName(name);
         }
-        // affiche 0..10
 
-        while (true) {
-            String choice = menu.showMenuDB();
+        while(true){
+            switch (menu.showMenuDB()) {
+                //Page précédente
+                case "1" -> show(lastResults, showIndex-20);
+                //Page suivante
+                case "2" -> show(lastResults);
+                // nouvelle recherche
+                case "3" -> flowAPI();
+                // retour menu principal
+                case "4" -> {run();}
 
-            switch (choice) {
-                case "1" -> saveLastResults();   // sauvegarder
-                case "2" -> { return; }          // nouvelle recherche
-                case "3" -> { return; }          // retour menu principal
-                default -> { /* re-affiche */ }
+                default -> {}
             }
         }
     }
@@ -100,7 +110,6 @@ public class NewTerminal {
     private void searchAPI(String name) {
         JsonNode json = api.getCommunesByName(name, "50");
         lastResults = serializer.toCommunes(json);
-        show(lastResults, 0);
     }
 
     /* =========================================================
@@ -108,12 +117,10 @@ public class NewTerminal {
        ========================================================= */
     private void searchDatabaseAll() {
         lastResults = db.getAll();
-        show(lastResults, 0);
     }
 
     private void searchDatabaseByName(String name) {
         lastResults = db.get("nom", name,false);
-        show(lastResults, 0);
     }
 
     /* =========================================================
@@ -134,19 +141,24 @@ public class NewTerminal {
             return;
         }
         db.save(lastResults);
-        System.out.println("Sauvegarde ....");
+        System.out.println("Sauvegarde ...");
     }
 
     /* =========================================================
        SHOW par page
        ========================================================= */
+
+    private void show(List<Commune> results){
+        show(results, showIndex);
+    }
+
     private void show(List<Commune> results, int page) {
         if (results == null || results.isEmpty()) {
             System.out.println("Aucun résultat.");
             return;
         }
 
-        showIndex = page;
+        showIndex = Math.max(0, page);
 
         int end = Math.min(showIndex + PAGE_SIZE, results.size());
 
@@ -159,7 +171,6 @@ public class NewTerminal {
 
         if (showIndex >= results.size()) {
             System.out.println("Fin des résultats.");
-            showIndex = 0;
         }
     }
 }

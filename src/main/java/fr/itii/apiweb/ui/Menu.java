@@ -28,19 +28,21 @@ public class Menu {
     }
 
     public String showMenuAPI() {
-        System.out.println("\n" + BOLD + "1. Elargir la recherche" + RESET);   //Plus de ligne
-        System.out.println(BOLD + "2. Sauvegarder" + RESET);            //Save dans DB
-        System.out.println(BOLD + "3. Nouvelle recherche" + RESET);     //Nouvelle API
-        System.out.println(BOLD + "4. Retour" + RESET);                 //Retour au menu principal
+        System.out.println("\n" + BOLD + "1. Page précédente" + RESET);  //Page suivante
+        System.out.println(BOLD + "2. Page suivante" + RESET);
+        System.out.println(BOLD + "3. Sauvegarder" + RESET);            //Save dans DB
+        System.out.println(BOLD + "4. Nouvelle recherche" + RESET);     //Nouvelle API
+        System.out.println(BOLD + "5. Retour" + RESET);                 //Retour au menu principal
         System.out.print(">");
 
         return sc.nextLine().trim();
     }
 
     public String showMenuDB() {
-        System.out.println("\n" + BOLD + "1. Sauvegarder" + RESET);
-        System.out.println(BOLD + "2. Nouvelle recherche" + RESET);
-        System.out.println(BOLD + "3. Retour" + RESET);
+        System.out.println("\n" + BOLD + "1. Page précédente" + RESET);  //Page suivante
+        System.out.println(BOLD + "2. Page suivante" + RESET);
+        System.out.println(BOLD + "3. Nouvelle recherche" + RESET);     //Nouvelle API
+        System.out.println(BOLD + "4. Retour" + RESET);                 //Retour au menu principal
         System.out.print(">");
 
         return sc.nextLine().trim();
