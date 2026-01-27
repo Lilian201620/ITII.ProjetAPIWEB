@@ -3,7 +3,6 @@ package fr.itii.apiweb.domain.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -35,12 +34,7 @@ public class Commune {
     private String codePostal = null;
     private Integer id;
 
-    private static Integer countId = 0;
-
     //Constructeur
-
-
-
     public Commune(
             String nom,
             String codeCommune,
@@ -62,19 +56,7 @@ public class Commune {
         this.population = population;
         this.id = id;
 
-    }
-
-    public Commune(
-            String nom,
-            String codeCommune,
-            String codeDepartement,
-            String siren,
-            String codeEpci,
-            String codeRegion,
-            String codePostal,
-            Integer population
-    ) {
-        this(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, 0);
+        this.codePostal = codesPostaux.getFirst();
     }
 
     public Commune(){
@@ -156,9 +138,6 @@ public class Commune {
     public void setCodePostal(String codePostal) {
         this.codePostal = codePostal;
     }
-    public void setCodePostal(ArrayList<String> codePostal) {
-        this.codePostal = codePostal.get(0).toString();
-    }
     public void setPopulation(Integer population) {
         this.population = population;
     }
@@ -183,27 +162,22 @@ public class Commune {
         return this.codeRegion;
     }
     public String getCodePostal() {
-        if (this.codePostal != null) {
-            return this.code;
-        } else if (this.codesPostaux != null){
-            return this.codesPostaux.get(0);
-        }
-        return null;
+        return this.codePostal;
     }
     public Integer getPopulation() {
-        return population;
+        return this.population;
     }
     public Integer getId() {
-        return id;
+        return this.id;
     }
 
     @Override
     public String toString() {
-        return  "nom= " + nom +
+        return  "nom= " + getNom() +
                 ",\t commune= " + getCodeCommune() +
-                ",\t departement= " + codeDepartement +
-                ",\t region= " + codeRegion +
+                ",\t departement= " + getCodeDepartement() +
+                ",\t region= " + getCodeRegion() +
                 ",\t postal= " + getCodePostal() +
-                ",\t population= " + population;
+                ",\t population= " + getPopulation();
     }
 }
