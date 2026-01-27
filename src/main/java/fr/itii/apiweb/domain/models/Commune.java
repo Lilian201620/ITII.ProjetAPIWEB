@@ -1,8 +1,12 @@
 package fr.itii.apiweb.domain.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Commune {
 //    {
 //        "nom" : "Beauvais",
@@ -22,6 +26,7 @@ public class Commune {
     private String siren;
     private String codeEpci;
     private String codeRegion;
+    @JsonProperty("codesPostaux")
     private List<String> codesPostaux;
     private Integer population;
 
@@ -32,6 +37,9 @@ public class Commune {
     private static Integer countId = 0;
 
     //Constructeur
+
+
+
     public Commune(
             String nom,
             String codeCommune,
@@ -67,6 +75,8 @@ public class Commune {
     ) {
         this(nom, codeCommune, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, 0);
     }
+
+    public Commune(){}
 
     //Builder
     public static class Builder {
