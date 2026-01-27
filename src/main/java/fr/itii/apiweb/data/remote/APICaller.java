@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
 public class APICaller {
 
@@ -21,7 +22,7 @@ public class APICaller {
     public APICaller() {
     }
 
-    // Construction de la requête de recherche par nom
+    // Construction de l'URL de recherche par nom
     public JsonNode getCommunesByName(String commune){
         String encodedCommune = URLEncoder.encode(commune, StandardCharsets.UTF_8);
         String url = API_URL
@@ -31,7 +32,7 @@ public class APICaller {
         return sendRequest(url);
     }
 
-    // Construction de la requête de recherche par code Postal
+    // Construction de l'URL de recherche par code Postal
     public JsonNode getCommunesByCodePostal(String codePostal){
         String encodedCodePostal = URLEncoder.encode(codePostal, StandardCharsets.UTF_8);
         String url = API_URL
@@ -41,7 +42,7 @@ public class APICaller {
         return sendRequest(url);
     }
 
-    // Construction de la requête de recherche par code Postal
+    // Construction de l'URL de recherche par code Postal
     public JsonNode getCommunesByDepartement(String departement){
         String encodedDepartement = URLEncoder.encode(departement, StandardCharsets.UTF_8);
         String url = API_URL
@@ -63,7 +64,8 @@ public class APICaller {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return objectMapper.readTree(response.body());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ExceptionsHandler.handleException(e);
+            return objectMapper.createArrayNode();
         }
     }
 
