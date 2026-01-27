@@ -146,22 +146,43 @@ public class DBManager implements DataRepository {
 
     /**
      *
-     * @param Name Nom de commune à rechercher.
-     * @param OnlyExplicitCaracters S'il faut ajouter des jockers autour de l'entrée.
+     * @param col Colonne sur laquelle baser sa recherche.
+     * @param critere Critere que doit respecter l'élément.
+     * @param onlyExplicitCaracters S'il faut ajouter des jockers autour de l'entrée.
      * @return Liste des communes correspondents aux critères.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
     @Override
-    public List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) {
-        String request = "SELECT * FROM Communes WHERE nom ILIKE ?";
+    public List<Commune> get(String col, String critere, boolean onlyExplicitCaracters) {
+        String request = "SELECT * FROM Communes WHERE " + col + " ILIKE ?";
         try {
-        Connection _con = _instance.connect();
+            Connection _con = _instance.connect();
             PreparedStatement _stmt = _con.prepareStatement(request);
-            if (OnlyExplicitCaracters) {
-                _stmt.setString(1, Name);
+            if (onlyExplicitCaracters) {
+                _stmt.setString(1, critere);
             } else {
-                _stmt.setString(1, "%" + Name + "%");
+                _stmt.setString(1, "%" + critere + "%");
             }
+            ResultSet results = _stmt.executeQuery();
+            this.disconnect(_con);
+            return this.getListFromRs(results);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     *
+     * @param col Colonne sur laquelle baser la recherche.
+     * @param critere Critère que doit respecter l'élément.
+     * @return Liste de communes correspondant à la requête.
+     */
+    public List<Commune> get(String col, int critere) {
+        String request = "SELECT * FROM Communes WHERE " + col + " = ?";
+        try {
+            Connection _con = _instance.connect();
+            PreparedStatement _stmt = _con.prepareStatement(request);
+            _stmt.setLong(1, critere);
             ResultSet results = _stmt.executeQuery();
             this.disconnect(_con);
             return this.getListFromRs(results);

@@ -13,7 +13,7 @@ import java.util.List;
 public interface DataRepository {
     void save(List<Commune> communes);
     List<Commune> getAll();
-    List<Commune> getByName(String Name, boolean OnlyExplicitCaracters);
+    List<Commune> get(String col, String Name, boolean OnlyExplicitCaracters);
     List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters);
     void deleteByName(String Name);
     void deleteById(long id);

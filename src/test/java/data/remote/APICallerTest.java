@@ -12,7 +12,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByNameExpectsResponseNotEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByName("paris");
+        JsonNode response = apiCaller.getCommunesByName("paris", "10");
         assertNotEquals(0, response.size());
     }
 
@@ -20,7 +20,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByNameExpectsEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByName("zzzzz");
+        JsonNode response = apiCaller.getCommunesByName("zzzzz", "10");
         assertEquals(0, response.size());
     }
 
@@ -28,7 +28,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByCodePostalExpectsResponseNotEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByCodePostal("60130");
+        JsonNode response = apiCaller.getCommunesByCodePostal("60130", "10");
         assertNotEquals(0, response.size());
     }
 
@@ -36,7 +36,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByCodePostalExpectsEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByCodePostal("zzzzz");
+        JsonNode response = apiCaller.getCommunesByCodePostal("zzzzz", "10");
         assertEquals(0, response.size());
     }
 
@@ -44,7 +44,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByCodeDepartementExpectsResponseNotEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByDepartement("60");
+        JsonNode response = apiCaller.getCommunesByDepartement("60", "10");
         assertNotEquals(0, response.size());
     }
 
@@ -52,7 +52,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByCodeDepartementExpectsEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByDepartement("zzzzz");
+        JsonNode response = apiCaller.getCommunesByDepartement("zzzzz", "10");
         assertEquals(0, response.size());
     }
 

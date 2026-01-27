@@ -1,4 +1,5 @@
 FROM eclipse-temurin:25
 RUN mkdir /opt/app
-COPY "target/project-apiweb-1.0-SNAPSHOT.jar" /opt/app
-CMD ["java", "-jar", "/opt/app/projet-apiweb-1.0-SNAPSHOT.jar"]
+COPY "projet.jar" /opt/app
+RUN apt-get update && apt-get install -y bash
+ENTRYPOINT ["java", "-jar", "/opt/app/projet.jar"]
