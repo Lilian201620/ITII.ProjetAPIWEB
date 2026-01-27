@@ -159,19 +159,13 @@ public class Terminal {
 
         line();
     }
-
+//.save de la db
     private void saveLastResults() {
         if (lastResults == null || lastResults.isEmpty()) {
             warn("Rien à sauvegarder.");
             return;
         }
-
-        try {
-            dbManager.save(lastResults);
-            ok("Sauvegarde OK.");
-        } catch (Exception e) {
-            error("Erreur sauvegarde : " + e.getMessage());
-        }
+        dbManager.save(lastResults);
     }
 
     // Encadrement/style

@@ -64,8 +64,7 @@ public class APICaller {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return objectMapper.readTree(response.body());
         } catch (Exception e) {
-            ExceptionsHandler.handleException(e);
-            return objectMapper.createArrayNode();
+            throw new RuntimeException(e);
         }
     }
 
