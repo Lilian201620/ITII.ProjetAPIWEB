@@ -14,9 +14,7 @@ public class JSONSerializer {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    /* =========================================================
-       COMMUNES
-       ========================================================= */
+   //communes
     public List<Commune> toCommunes(JsonNode json) {
         List<Commune> communes = new ArrayList<>();
 
@@ -40,9 +38,7 @@ public class JSONSerializer {
                 .orElse(null);
     }
 
-    /* =========================================================
-       ETABLISSEMENTS
-       ========================================================= */
+ //etablissements
     public List<Etablissement> toEtablissements(JsonNode json) {
         List<Etablissement> etablissements = new ArrayList<>();
 
