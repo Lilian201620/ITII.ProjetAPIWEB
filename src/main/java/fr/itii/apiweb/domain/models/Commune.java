@@ -176,11 +176,11 @@ public class Commune {
 
     @Override
     public String toString() {
-        return  "nom= " + getNom() +
-                ",\t commune= " + getCodeCommune() +
-                ",\t departement= " + getCodeDepartement() +
-                ",\t region= " + getCodeRegion() +
-                ",\t postal= " + getCodePostal() +
-                ",\t population= " + getPopulation();
+        return  "nom: " + getNom() +
+                ",\t commune: " + getCodeCommune() +
+                ",\t departement: " + getCodeDepartement() +
+                ",\t region: " + getCodeRegion() +
+                ",\t postal: " + getCodePostal() +
+                ",\t population: " + getPopulation();
     }
 }
