@@ -102,6 +102,11 @@ public class Affichage {
             return;
         }
 
+        if(page > results.size()) {
+            showList(results, page - PAGE_SIZE);
+            return;
+        }
+
         showIndex = Math.max(0, page);
         int end = Math.min(showIndex + PAGE_SIZE, results.size());
 
@@ -109,7 +114,8 @@ public class Affichage {
         for (int i = showIndex; i < end; i++) {
             System.out.println(String.format("#%-4s",(i + 1)) + " " + results.get(i));
         }
-        showIndex = end;
+
+        showIndex += PAGE_SIZE;
     }
 
     public Integer getIndex(){
