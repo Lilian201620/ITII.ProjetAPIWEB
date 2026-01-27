@@ -11,6 +11,14 @@ import java.util.Scanner;
 
 public class Terminal {
 
+    // ---- Styles ANSI (simple) ----
+    private static final String RESET = "\u001B[0m";
+    private static final String BOLD = "\u001B[1m";
+    private static final String GREEN = "\u001B[32m";
+    private static final String CYAN = "\u001B[36m";
+    private static final String YELLOW = "\u001B[33m";
+    private static final String RED = "\u001B[31m";
+
     private final APICaller apiCaller;
     private final JSONSerializer serializer;
     private final DBManager dbManager;
@@ -26,27 +34,31 @@ public class Terminal {
     public void start() {
         Scanner sc = new Scanner(System.in);
 
+        header("Projet APIWeb");
+
         while (true) {
             // MENU 1
-            System.out.println("\n1. Rechercher");
+            menuTitle("Menu principal");
+            System.out.println("1. Rechercher");
             System.out.println("2. Quitter");
-            System.out.print("> ");
+            System.out.print(prompt());
 
             String choice = sc.nextLine().trim();
 
             if (choice.equals("1")) {
                 doSearch(sc);
             } else if (choice.equals("2")) {
-                System.out.println("Fin.");
+                info("Fin.");
                 return;
             } else {
-                System.out.println("Choix invalide.");
+                warn("Choix invalide.");
             }
         }
     }
 
     private void doSearch(Scanner sc) {
-        System.out.print("Nom de la commune : ");
+        line();
+        System.out.print(CYAN + "Nom de la commune : " + RESET);
         String name = sc.nextLine().trim();
 
         lastResults = fetchByName(name);
@@ -56,53 +68,56 @@ public class Terminal {
             return; // retour menu principal
         }
 
-        // MENU 2 (après résultats)
+        // MENU 2
         while (true) {
-            System.out.println("\n1. Affiner recherche");
+            menuTitle("Après résultats");
+            System.out.println("1. Affiner recherche");
             System.out.println("2. Sauvegarder");
             System.out.println("3. Nouvelle recherche");
             System.out.println("4. Quitter");
-            System.out.print("> ");
+            System.out.print(prompt());
 
             String choice = sc.nextLine().trim();
 
             switch (choice) {
                 case "1" -> {
-                    doRefine(sc); // va ensuite au MENU 3
-                    return;       // revient au menu principal après MENU 3
+                    doRefine(sc); // mène au MENU 3
+                    return;
                 }
                 case "2" -> saveLastResults();
                 case "3" -> {
-                    doSearch(sc); // nouvelle recherche directe
+                    doSearch(sc);
                     return;
                 }
                 case "4" -> {
-                    System.out.println("Fin.");
+                    info("Fin.");
                     System.exit(0);
                 }
-                default -> System.out.println("Choix invalide.");
+                default -> warn("Choix invalide.");
             }
         }
     }
 
     private void doRefine(Scanner sc) {
-        System.out.println("Donnez un nom plus précis pour affiner la recherche :");
-        System.out.print("> ");
+        line();
+        System.out.println(YELLOW + "Donnez un nom plus précis pour affiner la recherche :" + RESET);
+        System.out.print(prompt());
         String refineName = sc.nextLine().trim();
 
         lastResults = fetchByName(refineName);
         display(lastResults);
 
         if (lastResults == null || lastResults.isEmpty()) {
-            return; // retour menu principal
+            return;
         }
 
-        // MENU 3 (après affinage)
+        // MENU 3
         while (true) {
-            System.out.println("\n1. Nouvelle recherche");
+            menuTitle("Après affinage");
+            System.out.println("1. Nouvelle recherche");
             System.out.println("2. Sauvegarder");
             System.out.println("3. Quitter");
-            System.out.print("> ");
+            System.out.print(prompt());
 
             String choice = sc.nextLine().trim();
 
@@ -113,10 +128,10 @@ public class Terminal {
                 }
                 case "2" -> saveLastResults();
                 case "3" -> {
-                    System.out.println("Fin.");
+                    info("Fin.");
                     System.exit(0);
                 }
-                default -> System.out.println("Choix invalide.");
+                default -> warn("Choix invalide.");
             }
         }
     }
@@ -128,27 +143,69 @@ public class Terminal {
 
     private void display(List<Commune> communes) {
         if (communes == null || communes.isEmpty()) {
-            System.out.println("Aucun résultat.");
+            error("Aucun résultat.");
             return;
         }
 
-        System.out.println("\n--- Résultats (" + communes.size() + ") ---");
+        line();
+        System.out.println(BOLD + GREEN + "Résultats (" + communes.size() + ")" + RESET);
+        line();
+
+        int i = 1;
         for (Commune c : communes) {
-            System.out.println(c.toString());
+            System.out.println(CYAN + "#" + i + RESET + " " + c.toString());
+            i++;
         }
+
+        line();
     }
 
     private void saveLastResults() {
         if (lastResults == null || lastResults.isEmpty()) {
-            System.out.println("Rien à sauvegarder.");
+            warn("Rien à sauvegarder.");
             return;
         }
 
         try {
             dbManager.save(lastResults);
-            System.out.println("Sauvegarde OK.");
+            ok("Sauvegarde OK.");
         } catch (Exception e) {
-            System.out.println("Erreur sauvegarde : " + e.getMessage());
+            error("Erreur sauvegarde : " + e.getMessage());
         }
+    }
+
+    // ---- Petites fonctions "style" ----
+    private void header(String title) {
+        System.out.println(BOLD + CYAN + "========================================" + RESET);
+        System.out.println(BOLD + CYAN + " " + title + RESET);
+        System.out.println(BOLD + CYAN + "========================================" + RESET);
+    }
+
+    private void menuTitle(String title) {
+        System.out.println("\n" + BOLD + "=== " + title + " ===" + RESET);
+    }
+
+    private void line() {
+        System.out.println(CYAN + "----------------------------------------" + RESET);
+    }
+
+    private String prompt() {
+        return BOLD + "> " + RESET;
+    }
+
+    private void ok(String msg) {
+        System.out.println(GREEN + "✔ " + msg + RESET);
+    }
+
+    private void info(String msg) {
+        System.out.println(CYAN + msg + RESET);
+    }
+
+    private void warn(String msg) {
+        System.out.println(YELLOW + "⚠ " + msg + RESET);
+    }
+
+    private void error(String msg) {
+        System.out.println(RED + "✖ " + msg + RESET);
     }
 }
