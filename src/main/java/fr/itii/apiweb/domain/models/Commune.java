@@ -55,8 +55,6 @@ public class Commune {
         this.codePostal = codePostal;
         this.population = population;
         this.id = id;
-
-        this.codePostal = codesPostaux.getFirst();
     }
 
     public Commune(){
@@ -162,7 +160,12 @@ public class Commune {
         return this.codeRegion;
     }
     public String getCodePostal() {
-        return this.codePostal;
+        if (this.codePostal != null) {
+            return codePostal;
+        } else if(this.codesPostaux != null){
+            return this.codesPostaux.getFirst();
+        }
+        return null;
     }
     public Integer getPopulation() {
         return this.population;
