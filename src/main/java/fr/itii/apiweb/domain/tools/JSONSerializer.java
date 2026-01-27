@@ -17,7 +17,6 @@ public class JSONSerializer {
 
         try {
             for(JsonNode node : json){
-                System.out.println(node.toString());
                 Commune ville = mapper.treeToValue(node, Commune.class);
                 villes.add(ville);
             }
