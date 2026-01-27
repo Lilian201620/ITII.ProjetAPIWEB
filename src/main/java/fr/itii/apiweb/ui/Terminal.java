@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Terminal {
 
-    // ---- Styles ANSI (simple) ----
+    //couleurs ANSI
     private static final String RESET = "\u001B[0m";
     private static final String BOLD = "\u001B[1m";
     private static final String GREEN = "\u001B[32m";
@@ -174,7 +174,7 @@ public class Terminal {
         }
     }
 
-    // ---- Petites fonctions "style" ----
+    // Encadrement/style
     private void header(String title) {
         System.out.println(BOLD + CYAN + "========================================" + RESET);
         System.out.println(BOLD + CYAN + " " + title + RESET);
