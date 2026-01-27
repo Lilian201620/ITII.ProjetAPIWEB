@@ -10,10 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSONSerializer {
 
-
     public List<Commune> toCommunes(JsonNode json) {
         ObjectMapper mapper = new ObjectMapper();
-        List<Commune> villes = new ArrayList();
+        List<Commune> villes = new ArrayList<>();
 
         try {
             for(JsonNode node : json){
@@ -27,19 +26,10 @@ public class JSONSerializer {
         }
     }
 
-    /*
-    public Commune getCommuneById(List<Commune> communeList, Integer idCommune){
-        return communeList.stream()
-                .filter(c -> c.getId() == idCommune)
-                .findFirst()
-                .orElse(null);
-    }
-
     public Commune getCommuneByNom(List<Commune> communeList, String nomCommune){
         return communeList.stream()
                 .filter(c -> c.getNom() == nomCommune)
                 .findFirst()
                 .orElse(null);
     }
-    */
 }
