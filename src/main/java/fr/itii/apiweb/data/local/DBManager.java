@@ -1,6 +1,7 @@
 package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
+import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
 import javax.swing.plaf.nimbus.State;
 import java.sql.*;
@@ -48,12 +49,7 @@ public class DBManager implements DataRepository {
     public static DBManager getInstance() {
         if (_instance == null) {
             _instance = new DBManager("localhost", "apiwebtoolUser", "RVomy#$@CE76#t!yNkPr", "5432", "ApiWebToolDB");
-            try {
-                _instance.createTable();
-            } catch (SQLException e) {
-                System.out.println("Impossible de créer l'instance : ");
-                e.printStackTrace();
-            }
+            _instance.createTable();
         }
         return _instance;
     }
@@ -61,26 +57,33 @@ public class DBManager implements DataRepository {
     /**
      * Privé. Permet de se connecter à la base SQL et de renvoyer une connexion.
      * @return Connection à la base SQL.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
-    private Connection connect() throws SQLException {
-        return DriverManager.getConnection(_url, _username, _password);
+    private Connection connect() {
+        try {
+            return DriverManager.getConnection(_url, _username, _password);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+            return null;
+        }
     }
 
     /**
      * Privé. Termine la connexion passée en paramètre.
      * @param _con Connexion à fermer.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
-    private void disconnect(Connection _con) throws SQLException {
-        _con.close();
+    private void disconnect(Connection _con) {
+        try {
+            _con.close();
+        }
+        catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+        }
     }
 
     /**
      * Privé. Crée la table si elle n'existe pas.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
-    private void createTable() throws SQLException {
+    private void createTable() {
         Connection _con = _instance.connect();
         String request = "CREATE TABLE IF NOT EXISTS Communes (" +
                             "Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
@@ -90,15 +93,19 @@ public class DBManager implements DataRepository {
                             "CodePostal VARCHAR(16)," +
                             "CodeRegion VARCHAR(2)," +
                             "population BIGINT);";
-        Statement _stmt = _con.createStatement();
-        _stmt.executeUpdate(request);
-        this.disconnect(_con);
+        try {
+            Statement _stmt = _con.createStatement();
+            _stmt.executeUpdate(request);
+            this.disconnect(_con);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+        }
+
     }
 
     /**
      * Public. Permet de sauvegarder une liste de communes dans la BDD.
      * @param communes Liste de communes à sauvegarder.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
     @Override
     public void save(List<Commune> communes) throws SQLException {
@@ -123,19 +130,23 @@ public class DBManager implements DataRepository {
     /**
      * Public. Permet de récupérer toutes les communes de la base SQL.
      * @return Liste de communes dans la base.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
     @Override
-    public List<Commune> getAll() throws SQLException {
+    public List<Commune> getAll() {
 
         String request = "SELECT * " +
                             "FROM communes;";
 
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        ResultSet results = _stmt.executeQuery(request);
-        this.disconnect(_con);
-        return this.getListFromRs(results);
+        try {
+            Statement _stmt = _con.createStatement();
+            ResultSet results = _stmt.executeQuery(request);
+            this.disconnect(_con);
+            return this.getListFromRs(results);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+            return new ArrayList<>();
+        }
     }
 
     /**
@@ -146,18 +157,23 @@ public class DBManager implements DataRepository {
      * @throws SQLException Erreur lors de la requête SQL.
      */
     @Override
-    public List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) throws SQLException{
+    public List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) {
         String request = "SELECT * FROM Communes WHERE nom ILIKE ?";
         Connection _con = _instance.connect();
-        PreparedStatement _stmt =  _con.prepareStatement(request);
-        if (OnlyExplicitCaracters) {
-            _stmt.setString(1, Name);
-        } else {
-            _stmt.setString(1, "%" + Name + "%");
+        try {
+            PreparedStatement _stmt = _con.prepareStatement(request);
+            if (OnlyExplicitCaracters) {
+                _stmt.setString(1, Name);
+            } else {
+                _stmt.setString(1, "%" + Name + "%");
+            }
+            ResultSet results = _stmt.executeQuery();
+            this.disconnect(_con);
+            return this.getListFromRs(results);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+            return new ArrayList<>();
         }
-        ResultSet results = _stmt.executeQuery();
-        this.disconnect(_con);
-        return this.getListFromRs(results);
     }
 
     /**
@@ -165,58 +181,71 @@ public class DBManager implements DataRepository {
      * @param CodeCommune Code de la commune à rechercher.
      * @param OnlyExplicitCaracters S'il faut ajouter des jockers autour de l'entrée.
      * @return Liste des communes correspondents aux critères.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
     @Override
-    public List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) throws SQLException {
+    public List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) {
         String request = "SELECT * FROM Communes WHERE codecommune ILIKE ?";
         Connection _con = _instance.connect();
-        PreparedStatement _stmt = _con.prepareStatement(request);
-        if (OnlyExplicitCaracters) {
-            _stmt.setString(1, CodeCommune);
-        } else {
-            _stmt.setString(1, "%" + CodeCommune + "%");
+        try {
+            PreparedStatement _stmt = _con.prepareStatement(request);
+            if (OnlyExplicitCaracters) {
+                _stmt.setString(1, CodeCommune);
+            } else {
+                _stmt.setString(1, "%" + CodeCommune + "%");
+            }
+            ResultSet results = _stmt.executeQuery();
+            this.disconnect(_con);
+            return this.getListFromRs(results);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+            return new ArrayList<>();
         }
-        ResultSet results = _stmt.executeQuery();
-        this.disconnect(_con);
-        return this.getListFromRs(results);
     }
 
     /**
      *
      * @param Name Nom de commune à supprimer dans la DB.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
     @Override
-    public void deleteByName(String Name) throws SQLException{
+    public void deleteByName(String Name) {
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        String request = "DELETE FROM Communes WHERE Nom='" + Name.replace("'", "''") + "';";
-        _stmt.executeUpdate(request);
+        try {
+            Statement _stmt = _con.createStatement();
+            String request = "DELETE FROM Communes WHERE Nom='" + Name.replace("'", "''") + "';";
+            _stmt.executeUpdate(request);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+        }
     }
 
     /**
      *
      * @param CodeCommune Code de la commune à supprimer dans la DB.
-     * @throws SQLException Erreur lors de la requête SQL.
      */
     @Override
-    public void deleteByCodeCommune(String CodeCommune) throws SQLException{
+    public void deleteByCodeCommune(String CodeCommune) {
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        String request = "DELETE FROM Communes WHERE CodeCommune='" + CodeCommune.replace("'", "''") + "';";
-        _stmt.executeUpdate(request);
+        try {
+            Statement _stmt = _con.createStatement();
+            String request = "DELETE FROM Communes WHERE CodeCommune='" + CodeCommune.replace("'", "''") + "';";
+            _stmt.executeUpdate(request);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+        }
     }
 
     /**
-     *
-     * @throws SQLException Erreur lors de la requête SQL.
+     * Suppprime toute la BDD
      */
-    public void deleteAll() throws SQLException{
+    public void deleteAll() {
         Connection _con = _instance.connect();
-        Statement _stmt = _con.createStatement();
-        String request = "DELETE FROM Communes;";
-        _stmt.executeUpdate(request);
+        try {
+            Statement _stmt = _con.createStatement();
+            String request = "DELETE FROM Communes;";
+            _stmt.executeUpdate(request);
+        } catch (SQLException e) {
+            ExceptionsHandler.handleException(e);
+        }
     }
 
     /**
