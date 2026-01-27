@@ -3,8 +3,6 @@ import fr.itii.apiweb.data.local.DBManager;
 import fr.itii.apiweb.domain.models.Commune;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +63,7 @@ public class DBManagerTest {
         List<Commune> _communes = new ArrayList<Commune>();
         _communes.add(_commune);
         _db.save(_communes);
-        List<Commune> _dbResult = _db.getByName("Paris", true);
+        List<Commune> _dbResult = _db.get("nom", "Paris", true);
         assertEquals(_communes.getFirst().getNom(), _dbResult.getFirst().getNom());
         assertEquals(_communes.getFirst().getCodeCommune(), _dbResult.getFirst().getCodeCommune());
         assertEquals(_communes.getFirst().getPopulation(), _dbResult.getFirst().getPopulation());
