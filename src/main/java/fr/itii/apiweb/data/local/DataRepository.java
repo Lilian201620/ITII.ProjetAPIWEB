@@ -5,6 +5,11 @@ import fr.itii.apiweb.domain.models.Commune;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Cette interface recense les méthodes nécessaires pour être un DataRepository
+ * @author Nathan
+ * @version 1.0.0
+ */
 public interface DataRepository {
     void save(List<Commune> communes) throws SQLException;
     List<Commune> getAll() throws SQLException;

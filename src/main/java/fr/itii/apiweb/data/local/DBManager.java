@@ -8,6 +8,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+
+/**
+ * Cette classe gère la connexion à une BDD PostGreSQL. De plus, il s'agit d'un singleton.
+ * @author Nathan
+ * @version 1.0.0
+ *
+ */
 public class DBManager implements DataRepository {
     private final String _url;
     private final String _username;
@@ -15,6 +22,13 @@ public class DBManager implements DataRepository {
 
     private static DBManager _instance;
 
+    /**
+     * @param url URL de la base PostgreSQL (sans formatage JDBC)
+     * @param user Nom d'utilisateur de la BDD.
+     * @param pass Mot de passe de la BDD.
+     * @param port Port de la BDD.
+     * @param dbName Nom de la BDD à utiliser.
+     */
     private DBManager(String url, String user, String pass, String port, String dbName) {
         _url = "jdbc:postgresql://" + url + ":" + port + "/" + dbName;
         _username = user;
@@ -26,6 +40,11 @@ public class DBManager implements DataRepository {
             System.out.println("Erreur, impossible de charger le driver pour : " + _url);
         }
     }
+
+    /**
+     * Permet d'initialiser ou récupérer l'instance de DBManager.
+     * @return Instance de DBManager (singleton).
+     */
     public static DBManager getInstance() {
         if (_instance == null) {
             _instance = new DBManager("localhost", "apiwebtoolUser", "RVomy#$@CE76#t!yNkPr", "5432", "ApiWebToolDB");
@@ -39,14 +58,28 @@ public class DBManager implements DataRepository {
         return _instance;
     }
 
+    /**
+     * Privé. Permet de se connecter à la base SQL et de renvoyer une connexion.
+     * @return Connection à la base SQL.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     private Connection connect() throws SQLException {
         return DriverManager.getConnection(_url, _username, _password);
     }
 
+    /**
+     * Privé. Termine la connexion passée en paramètre.
+     * @param _con Connexion à fermer.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     private void disconnect(Connection _con) throws SQLException {
         _con.close();
     }
 
+    /**
+     * Privé. Crée la table si elle n'existe pas.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     private void createTable() throws SQLException {
         Connection _con = _instance.connect();
         String request = "CREATE TABLE IF NOT EXISTS Communes (" +
@@ -62,6 +95,11 @@ public class DBManager implements DataRepository {
         this.disconnect(_con);
     }
 
+    /**
+     * Public. Permet de sauvegarder une liste de communes dans la BDD.
+     * @param communes Liste de communes à sauvegarder.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     @Override
     public void save(List<Commune> communes) throws SQLException {
         Connection _con = _instance.connect();
@@ -82,6 +120,11 @@ public class DBManager implements DataRepository {
         this.disconnect(_con);
     }
 
+    /**
+     * Public. Permet de récupérer toutes les communes de la base SQL.
+     * @return Liste de communes dans la base.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     @Override
     public List<Commune> getAll() throws SQLException {
 
@@ -95,6 +138,13 @@ public class DBManager implements DataRepository {
         return this.getListFromRs(results);
     }
 
+    /**
+     *
+     * @param Name Nom de commune à rechercher.
+     * @param OnlyExplicitCaracters S'il faut ajouter des jockers autour de l'entrée.
+     * @return Liste des communes correspondents aux critères.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     @Override
     public List<Commune> getByName(String Name, boolean OnlyExplicitCaracters) throws SQLException{
         String request = "SELECT * FROM Communes WHERE nom ILIKE ?";
@@ -110,6 +160,13 @@ public class DBManager implements DataRepository {
         return this.getListFromRs(results);
     }
 
+    /**
+     *
+     * @param CodeCommune Code de la commune à rechercher.
+     * @param OnlyExplicitCaracters S'il faut ajouter des jockers autour de l'entrée.
+     * @return Liste des communes correspondents aux critères.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     @Override
     public List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) throws SQLException {
         String request = "SELECT * FROM Communes WHERE codecommune ILIKE ?";
@@ -125,6 +182,11 @@ public class DBManager implements DataRepository {
         return this.getListFromRs(results);
     }
 
+    /**
+     *
+     * @param Name Nom de commune à supprimer dans la DB.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     @Override
     public void deleteByName(String Name) throws SQLException{
         Connection _con = _instance.connect();
@@ -133,6 +195,11 @@ public class DBManager implements DataRepository {
         _stmt.executeUpdate(request);
     }
 
+    /**
+     *
+     * @param CodeCommune Code de la commune à supprimer dans la DB.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     @Override
     public void deleteByCodeCommune(String CodeCommune) throws SQLException{
         Connection _con = _instance.connect();
@@ -141,6 +208,10 @@ public class DBManager implements DataRepository {
         _stmt.executeUpdate(request);
     }
 
+    /**
+     *
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     public void deleteAll() throws SQLException{
         Connection _con = _instance.connect();
         Statement _stmt = _con.createStatement();
@@ -148,6 +219,12 @@ public class DBManager implements DataRepository {
         _stmt.executeUpdate(request);
     }
 
+    /**
+     *
+     * @param results ResultSet de la DB.
+     * @return Liste des communes dans le RS.
+     * @throws SQLException Erreur lors de la requête SQL.
+     */
     private List<Commune> getListFromRs(ResultSet results) throws SQLException {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
