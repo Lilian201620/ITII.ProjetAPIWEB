@@ -165,13 +165,7 @@ public class Terminal {
             warn("Rien à sauvegarder.");
             return;
         }
-
-        try {
-            dbManager.save(lastResults);
-            ok("Sauvegarde OK.");
-        } catch (Exception e) {
-            error("Erreur sauvegarde : " + e.getMessage());
-        }
+        dbManager.save(lastResults);
     }
 
     // Encadrement/style
