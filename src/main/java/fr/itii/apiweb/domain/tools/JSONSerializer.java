@@ -2,6 +2,7 @@ package fr.itii.apiweb.domain.tools;
 import fr.itii.apiweb.domain.models.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,7 +23,8 @@ public class JSONSerializer {
             return villes;
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            ExceptionsHandler.handleException(e);
+            return Collections.emptyList();
         }
     }
 
