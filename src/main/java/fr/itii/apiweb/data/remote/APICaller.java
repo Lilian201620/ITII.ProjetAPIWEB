@@ -23,32 +23,35 @@ public class APICaller {
     }
 
     // Construction de l'URL de recherche par nom
-    public JsonNode getCommunesByName(String commune){
+    public JsonNode getCommunesByName(String commune, String limit){
         String encodedCommune = URLEncoder.encode(commune, StandardCharsets.UTF_8);
         String url = API_URL
                 + "?nom=" + encodedCommune
                 + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
-                + "&limit=10";
+                + "&limit="
+                + limit;
         return sendRequest(url);
     }
 
     // Construction de l'URL de recherche par code Postal
-    public JsonNode getCommunesByCodePostal(String codePostal){
+    public JsonNode getCommunesByCodePostal(String codePostal, String limit){
         String encodedCodePostal = URLEncoder.encode(codePostal, StandardCharsets.UTF_8);
         String url = API_URL
                 + "?codePostal=" + encodedCodePostal
                 + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
-                + "&limit=10";
+                + "&limit="
+                + limit;
         return sendRequest(url);
     }
 
     // Construction de l'URL de recherche par code Postal
-    public JsonNode getCommunesByDepartement(String codeDepartement){
+    public JsonNode getCommunesByDepartement(String codeDepartement, String limit){
         String encodedDepartement = URLEncoder.encode(codeDepartement, StandardCharsets.UTF_8);
         String url = API_URL
                 + "?codeDepartement=" + encodedDepartement
                 + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
-                + "&limit=10";
+                + "&limit="
+                + limit;
         return sendRequest(url);
     }
 
