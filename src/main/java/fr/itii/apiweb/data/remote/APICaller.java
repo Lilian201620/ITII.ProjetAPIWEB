@@ -21,28 +21,37 @@ public class APICaller {
     public APICaller() {
     }
 
+    // Construction de la requête de recherche par nom
     public JsonNode getCommunesByName(String commune){
-        ObjectMapper objectMapper = new ObjectMapper();
         String encodedCommune = URLEncoder.encode(commune, StandardCharsets.UTF_8);
         String url = API_URL
                 + "?nom=" + encodedCommune
                 + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
                 + "&limit=10";
-
         return sendRequest(url);
     }
 
-
+    // Construction de la requête de recherche par code Postal
     public JsonNode getCommunesByCodePostal(String codePostal){
         String encodedCodePostal = URLEncoder.encode(codePostal, StandardCharsets.UTF_8);
         String url = API_URL
                 + "?codePostal=" + encodedCodePostal
                 + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
                 + "&limit=10";
-
         return sendRequest(url);
     }
 
+    // Construction de la requête de recherche par code Postal
+    public JsonNode getCommunesByDepartement(String departement){
+        String encodedDepartement = URLEncoder.encode(departement, StandardCharsets.UTF_8);
+        String url = API_URL
+                + "?codeDepartement=" + encodedDepartement
+                + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
+                + "&limit=10";
+        return sendRequest(url);
+    }
+
+    // Envoi de la requête a l'api
     private JsonNode sendRequest(String url){
         try {
             HttpRequest request = HttpRequest.newBuilder()
