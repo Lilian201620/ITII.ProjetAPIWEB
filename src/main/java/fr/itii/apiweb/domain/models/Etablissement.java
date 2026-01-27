@@ -37,10 +37,8 @@ public class Etablissement {
     @JsonProperty("statut_public_prive")
     private String statutPublicPrive;
 
-    // ===== Autres variables =====
     private Integer id;
 
-    // ===== Constructeurs =====
     public Etablissement(
             String nomEtablissement,
             String typeEtablissement,
@@ -62,7 +60,6 @@ public class Etablissement {
     public Etablissement() {
     }
 
-    // ===== Builder =====
     public static class Builder {
         private String nomEtablissement;
         private String typeEtablissement;
@@ -120,7 +117,6 @@ public class Etablissement {
         }
     }
 
-    // ===== Setters =====
     public void setNomEtablissement(String nomEtablissement) {
         this.nomEtablissement = nomEtablissement;
     }
@@ -149,7 +145,6 @@ public class Etablissement {
         this.id = id;
     }
 
-    // ===== Getters =====
     public String getNomEtablissement() {
         return nomEtablissement;
     }
@@ -178,7 +173,7 @@ public class Etablissement {
         return id;
     }
 
-    // ===== Affichage ===== de tout
+    //affichage
     @Override
     public String toString() {
         return String.format(
