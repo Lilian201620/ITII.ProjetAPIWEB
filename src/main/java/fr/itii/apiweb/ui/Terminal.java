@@ -159,7 +159,7 @@ public class Terminal {
 
         line();
     }
-
+//.save
     private void saveLastResults() {
         if (lastResults == null || lastResults.isEmpty()) {
             warn("Rien à sauvegarder.");
