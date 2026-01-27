@@ -38,4 +38,11 @@ public class EtablissementApiCallerTest {
         JsonNode response = apiCaller.getEtablissementsByCodeDepartement("060", "80");
         assertNotEquals(0, response.size());
     }
+
+    @Test
+    public void testEtablissementApiCallByCodeDepartementExpectsResponseNotEmptyWith2Numbers() {
+        EtablissementApiCaller apiCaller = new EtablissementApiCaller();
+        JsonNode response = apiCaller.getEtablissementsByCodeDepartement("60", "80");
+        assertNotEquals(0, response.size());
+    }
 }
