@@ -8,6 +8,7 @@ import fr.itii.apiweb.domain.models.*;
 import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
 import fr.itii.apiweb.domain.models.api_models.EtablissementsFieldsEnum;
 import fr.itii.apiweb.domain.models.db_models.CommunesCol;
+import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
 
 import java.util.List;
 
@@ -61,12 +62,10 @@ public class Backend {
     }
 
     public void saveCommune(List<Commune> listeCommune) {
-        //Nathan à modifier
         db.saveCommunes(listeCommune);
     }
 
     public void deleteCommune() {
-        //Nathan à modifier
         db.deleteCommunes();
     }
 
@@ -90,26 +89,23 @@ public class Backend {
     }
 
     public List<Etablissement> searchEtablissementFromDBByNomCommune(String value){
-        //Lilian à remplir
-        return null;
+        return db.getJoin(CommunesCol.NOM, value, true);
     }
 
     public List<Etablissement> searchEtablissementFromDBByCodeCommune(String value){
-        //Lilian à remplir
-        return null;
+        return db.getEtablissements(EtablissementsCol.CODE_COMMUNE, value, false);
     }
 
     public  List<Etablissement> searchEtablissementFromDBByDepartement(String value){
-        //Lilian à remplir
-        return null;
+        return db.getJoin(CommunesCol.CODE_DEPARTEMENT, value, true);
     }
 
     public void saveEtablissement(List<Etablissement> listeEtablissement) {
-        //Lilian à remplir
+        db.saveEtablissements(listeEtablissement);
     }
 
     public void deleteEtablissement() {
-        //Lilian a remplir
+        db.deleteEtablissements();
     }
 
 

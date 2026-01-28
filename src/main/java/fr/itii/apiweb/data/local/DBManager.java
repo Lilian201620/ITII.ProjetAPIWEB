@@ -63,6 +63,7 @@ public class DBManager {
         return getString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
     }
 
+
     public void deleteCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
         deleteString(Tables.COMMUNES, col, critere, explicitCaractersOnly);
     }
@@ -129,8 +130,28 @@ public class DBManager {
         }
     }
 
-
-
+    public List<Etablissement> getJoin(CommunesCol col, String critere, boolean onlyExplicit)
+    {
+        List<Etablissement> _return = new ArrayList<>();
+        String _req = "SELECT * FROM " + Tables.ETABLISSEMENTS.toString() + " a INNER JOIN " + Tables.COMMUNES.toString() + " b ON a.codecommune = b.codecommune WHERE " + col.toString() + " = ?";
+        try {
+            Connection _con = _instance.connect();
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                if(onlyExplicit) {
+                    _stmt.setString(1, critere);
+                } else {
+                    _stmt.setString(1, "%" + critere + "%");
+                }
+                ResultSet results = _stmt.executeQuery();
+                this.disconnect(_con);
+                _return = this.getEtablissementListFromRs(results);
+            }
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+        }
+        return _return;
+    }
 
     // — Méthodes privées pour l'exécution des méthodes publiques
     //  PRIVATE | Only used in DBManager
