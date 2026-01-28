@@ -1,7 +1,7 @@
 package fr.itii.apiweb.domain.models.api_models;
 
 public enum CommunesFieldsEnum {
-    NOM("Nom"),
+    NOM("nom"),
     CODE_POSTAL("codePostal"),
     DEPARTEMENT("codeDepartement"),
     REGION("codeRegion");
