@@ -13,7 +13,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByNameExpectsResponseNotEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByName("paris", "10");
+        JsonNode response = apiCaller.getCommunesByName("paris", "1000");
         assertNotEquals(0, response.size());
     }
 

@@ -35,17 +35,17 @@ public class Backend {
     //  =========================================================
 
     public List<Commune> searchCommuneFromAPIByNom(String value){
-        JsonNode json = api.getCommunes(CommunesFieldsEnum.NOM, value, "1000");
+        JsonNode json = api.getCommunes(CommunesFieldsEnum.NOM, value, "100");
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByCodePostal(String value){
-        JsonNode json = api.getCommunes(CommunesFieldsEnum.CODE_POSTAL, value, "1000");
+        JsonNode json = api.getCommunes(CommunesFieldsEnum.CODE_POSTAL, value, "100");
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByDepartement(String value){
-        JsonNode json = api.getCommunes(CommunesFieldsEnum.DEPARTEMENT, value, "1000");
+        JsonNode json = api.getCommunes(CommunesFieldsEnum.DEPARTEMENT, value, "100");
         return serializer.toCommunes(json);
     }
 
@@ -74,17 +74,17 @@ public class Backend {
     //  =========================================================
 
     public List<Etablissement> searchEtablissementFromAPIByNomCommune(String value){
-        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.NOM_COMMUNE, value, "1000");
+        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.NOM_COMMUNE, value, "100");
         return serializer.toEtablissements(json);
     }
 
     public List<Etablissement> searchEtablissementFromAPIByCodeCommune(String value){
-        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_COMMUNE, value, "1000");
+        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_COMMUNE, value, "100");
         return serializer.toEtablissements(json);
     }
 
     public List<Etablissement> searchEtablissementFromAPIByDepartement(String value){
-        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_DEPARTEMENT, value, "1000");
+        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_DEPARTEMENT, value, "100");
         return serializer.toEtablissements(json);
     }
 
