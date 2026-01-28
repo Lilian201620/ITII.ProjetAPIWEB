@@ -95,19 +95,19 @@ public class Affichage {
         showList(results, 0);
     }
 
-    public <T> void showList(List<T> results, int page) {
+    public <T> void showList(List<T> results, int index) {
         if (results == null || results.isEmpty()) {
             System.out.println("\n" + BOLD + GREEN + "==== Résultats ====" + RESET);
             System.out.println("Aucun résultat.");
             return;
         }
 
-        if(page > results.size()) {
-            showList(results, page - PAGE_SIZE);
+        if(index > results.size()) {
+            showList(results, index - PAGE_SIZE);
             return;
         }
 
-        showIndex = Math.max(0, page);
+        showIndex = Math.max(0, index);
         int end = Math.min(showIndex + PAGE_SIZE, results.size());
 
         System.out.println("\n" + BOLD + GREEN + "==== Résultats " + (showIndex + 1) + " à " + end + " / " + results.size() + " ====" + RESET);
