@@ -1,4 +1,4 @@
-package fr.itii.apiweb.domain.models.dbModels;
+package fr.itii.apiweb.domain.models.db_models;
 
 public enum Tables {
     communes,
