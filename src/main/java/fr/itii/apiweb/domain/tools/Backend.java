@@ -29,8 +29,9 @@ public class Backend {
     //  =========================================================
 
     public List<Commune> searchCommuneFromAPIByNom(String value){
-        //Nicolas à remplir
-        return null;
+        //Nicolas à modifier
+        JsonNode json = api.getCommunesByName(value, "1000");
+        return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByCodePostal(String value){
