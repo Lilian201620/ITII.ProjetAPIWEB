@@ -69,6 +69,10 @@ public class APICaller {
         return sendRequest(url);
     }
 
+    public JsonNode getCommunes(CommunesFieldsEnum field, String query, Integer limit){
+        return getCommunes(field, query, String.valueOf(limit));
+    }
+
     // Envoi de la requête a l'api
     private JsonNode sendRequest(String url){
         try {
