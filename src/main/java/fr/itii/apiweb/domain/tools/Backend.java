@@ -3,7 +3,10 @@ package fr.itii.apiweb.domain.tools;
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.local.DBManager;
 import fr.itii.apiweb.data.remote.APICaller;
+import fr.itii.apiweb.data.remote.EtablissementApiCaller;
 import fr.itii.apiweb.domain.models.*;
+import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
+import fr.itii.apiweb.domain.models.api_models.EtablissementsFieldsEnum;
 import fr.itii.apiweb.domain.models.db_models.CommunesCol;
 
 import java.util.List;
@@ -22,6 +25,7 @@ public class Backend {
         //code departement
 
     private final APICaller api = new APICaller();
+    private final EtablissementApiCaller etablissementApiCaller = new EtablissementApiCaller();
     private final DBManager db = DBManager.getInstance();
     private final JSONSerializer serializer = new JSONSerializer();
 
@@ -30,17 +34,17 @@ public class Backend {
     //  =========================================================
 
     public List<Commune> searchCommuneFromAPIByNom(String value){
-        JsonNode json = api.getCommunesByName(value, "1000");
+        JsonNode json = api.getCommunes(CommunesFieldsEnum.NOM, value, "1000");
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByCodePostal(String value){
-        JsonNode json = api.getCommunesByCodePostal(value, "1000");
+        JsonNode json = api.getCommunes(CommunesFieldsEnum.CODE_POSTAL, value, "1000");
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByDepartement(String value){
-        JsonNode json = api.getCommunesByDepartement(value, "1000");
+        JsonNode json = api.getCommunes(CommunesFieldsEnum.DEPARTEMENT, value, "1000");
         return serializer.toCommunes(json);
     }
 
@@ -71,18 +75,18 @@ public class Backend {
     //  =========================================================
 
     public List<Etablissement> searchEtablissementFromAPIByNomCommune(String value){
-        //Lilian à remplir
-        return  null;
+        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.NOM_COMMUNE, value, "1000");
+        return serializer.toEtablissements(json);
     }
 
     public List<Etablissement> searchEtablissementFromAPIByCodeCommune(String value){
-        //Lilian à remplir
-        return null;
+        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_COMMUNE, value, "1000");
+        return serializer.toEtablissements(json);
     }
 
     public List<Etablissement> searchEtablissementFromAPIByDepartement(String value){
-        //Lilian à remplir
-        return null;
+        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_DEPARTEMENT, value, "1000");
+        return serializer.toEtablissements(json);
     }
 
     public List<Etablissement> searchEtablissementFromDBByNomCommune(String value){
