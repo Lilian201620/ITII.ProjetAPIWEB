@@ -1,8 +1,7 @@
 package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.dbModels.CommunesCol;
-import fr.itii.apiweb.domain.models.dbModels.Tables;
+import fr.itii.apiweb.domain.models.db_models.Tables;
 import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
 import java.sql.*;
