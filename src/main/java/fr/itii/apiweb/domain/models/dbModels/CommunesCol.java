@@ -1,6 +1,6 @@
 package fr.itii.apiweb.domain.models.dbModels;
 
-public enum CommunesCol {
+public enum CommunesCol extends Col {
     id,
     nom,
     codecommune,
