@@ -2,6 +2,7 @@ package data.remote;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.remote.APICaller;
+import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,4 +57,25 @@ public class APICallerTest {
         assertEquals(0, response.size());
     }
 
+    @Test
+    public void testGetCommuneNom(){
+        APICaller apiCaller = new APICaller();
+        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.NOM, "Beauvais", "10");
+        assertNotEquals(0, communes.size());
+    }
+
+    @Test
+    public void testGetCommunesCodePostal(){
+        APICaller apiCaller = new APICaller();
+        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.CODE_POSTAL, "60130", "100");
+        assertNotEquals(0, communes.size());
+    }
+
+
+    @Test
+    public void testGetEtablissementsCodeDepartement2Numbers(){
+        APICaller apiCaller = new APICaller();
+        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.DEPARTEMENT, "60", "100");
+        assertNotEquals(0, communes.size());
+    }
 }

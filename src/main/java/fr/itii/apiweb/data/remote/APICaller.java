@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
 import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
 public class APICaller {
@@ -49,6 +50,19 @@ public class APICaller {
         String encodedDepartement = URLEncoder.encode(codeDepartement, StandardCharsets.UTF_8);
         String url = API_URL
                 + "?codeDepartement=" + encodedDepartement
+                + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
+                + "&limit="
+                + limit;
+        return sendRequest(url);
+    }
+
+    public JsonNode getCommunes(CommunesFieldsEnum field, String query, String limit){
+        String trueField = field.getField();
+        String encodedField = URLEncoder.encode(trueField, StandardCharsets.UTF_8);
+
+        String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
+        String url = API_URL
+                + "?" + encodedField + "=" + encodedQuery
                 + "&fields=nom,code,codeDepartement,codeRegion,codesPostaux,population"
                 + "&limit="
                 + limit;
