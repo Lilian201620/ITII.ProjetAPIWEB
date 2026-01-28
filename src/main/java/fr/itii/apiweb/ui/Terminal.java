@@ -22,7 +22,7 @@ public class Terminal {
         System.out.println("1. " + CYAN + "Recherche API" + RESET);
         System.out.println("2. " + CYAN + "Recherche dans la DataBase" + RESET);
         System.out.println("3. " + CYAN + "Supprimer la database" + RESET);
-        System.out.println("4. " + CYAN + "Quitter" + RESET);
+        System.out.println("0. " + CYAN + "Quitter" + RESET);
         System.out.print(">");
 
         return sc.nextLine().trim();

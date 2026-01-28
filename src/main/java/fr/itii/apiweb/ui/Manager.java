@@ -149,7 +149,7 @@ public class Manager {
                 }
 
                 // retour menu principal
-                case "0" -> {
+                case "5" -> {
                     flow();
                 }
 
@@ -220,7 +220,7 @@ public class Manager {
             }
 
             //Retour
-            default -> flowDB();
+            default -> flow();
         }
     }
 
@@ -244,10 +244,10 @@ public class Manager {
 
                 // nouvelle recherche
                 case "3" -> {
-                    flowAPI();
+                    flowDB();
                 }
                 // retour menu principal
-                case "0" -> {
+                case "5" -> {
                     flow();
                 }
 
