@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.local.DBManager;
 import fr.itii.apiweb.data.remote.APICaller;
 import fr.itii.apiweb.domain.models.*;
+import fr.itii.apiweb.domain.models.db_models.CommunesCol;
 
 import java.util.List;
 
@@ -29,34 +30,30 @@ public class Backend {
     //  =========================================================
 
     public List<Commune> searchCommuneFromAPIByNom(String value){
-        //Nicolas à modifier
         JsonNode json = api.getCommunesByName(value, "1000");
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByCodePostal(String value){
-        //Nicolas à remplir
-        return null;
+        JsonNode json = api.getCommunesByCodePostal(value, "1000");
+        return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByDepartement(String value){
-        //Nicolas à remplir
-        return null;
+        JsonNode json = api.getCommunesByDepartement(value, "1000");
+        return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromDBByNom(String value){
-        //Nathan à remplir
-        return null;
+        return db.getCommune(CommunesCol.NOM, value, false);
     }
 
     public List<Commune> searchCommuneFromDBByCodePostal(String value){
-        //Nathan à remplir
-        return null;
+        return db.getCommune(CommunesCol.CODE_POSTAL, value, false);
     }
 
     public  List<Commune> searchCommuneFromDBByDepartement(String value){
-        //Nathan à remplir
-        return null;
+        return db.getCommune(CommunesCol.CODE_DEPARTEMENT, value, false);
     }
 
     public void saveCommune(List<Commune> listeCommune) {
