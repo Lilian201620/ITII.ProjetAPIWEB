@@ -1,6 +1,7 @@
 package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
+import fr.itii.apiweb.domain.models.Etablissement;
 import fr.itii.apiweb.domain.models.db_models.CommunesCol;
 import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
 import fr.itii.apiweb.domain.models.db_models.Tables;
@@ -8,34 +9,19 @@ import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-
-/**
- * Cette classe gère la connexion à une BDD PostGreSQL. De plus, il s'agit d'un singleton.
- * @author Nathan
- * @version 1.0.0
- *
- */
-public class DBManager implements DataRepository {
-    private final String _url;
-    private final String _username;
-    private final String _password;
+public class DBManager {
+    private final String _url = "jdbc:postgresql://localhost:5432/ApiWebToolDB";
+    private static final String _username = "apiwebtoolUser";
+    private static final String _password = "RVomy#$@CE76#t!yNkPr";
 
     private static DBManager _instance;
 
     /**
-     * @param url URL de la base PostgreSQL (sans formatage JDBC)
-     * @param user Nom d'utilisateur de la BDD.
-     * @param pass Mot de passe de la BDD.
-     * @param port Port de la BDD.
-     * @param dbName Nom de la BDD à utiliser.
+     * Constructeur privé pour réalisation d'un singleton
      */
-    private DBManager(String url, String user, String pass, String port, String dbName) {
-        _url = "jdbc:postgresql://" + url + ":" + port + "/" + dbName;
-        _username = user;
-        _password = pass;
+    private DBManager() {
         try {
             String _driverName = "org.postgresql.Driver";
             Class.forName(_driverName);
@@ -45,280 +31,244 @@ public class DBManager implements DataRepository {
     }
 
     /**
-     * Permet d'initialiser ou récupérer l'instance de DBManager.
-     * @return Instance de DBManager (singleton).
+     * Récupérer l'instance du singleton DBManager
      */
     public static DBManager getInstance() {
         if (_instance == null) {
-            _instance = new DBManager("localhost", "apiwebtoolUser", "RVomy#$@CE76#t!yNkPr", "5432", "ApiWebToolDB");
-            _instance.createTable();
+            _instance = new DBManager
+
+
+();
+            _instance.initTables();
         }
         return _instance;
     }
 
+    // - Méthodes publiques pour l'exécution des requêtes SQL
+    // PUBLIC | Used everywhere across the project
+    // ----------------------------------------------------------
+    public List<Commune> getCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
+        return getString(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+    }
+    public List<Commune> getCommunes(CommunesCol col, int critere) {
+        return getInt(Tables.COMMUNES, col, critere);
+    }
+    public List<Commune> getCommunes() {
+        return getString(Tables.COMMUNES, CommunesCol.ID, "", false);
+    }
+    public List<Etablissement> getEtablissements(EtablissementsCol col, String critere, boolean explicitCaractersOnly) {
+        return getString(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+    }
+    public List<Etablissement> getEtablissements(EtablissementsCol col, int critere) {
+        return getInt(Tables.ETABLISSEMENTS, col, critere);
+    }
+    public List<Etablissement> getEtablissements() {
+        return getString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
+    }
+
+    public void deleteCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
+        deleteString(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+    }
+    public void deleteCommunes(CommunesCol col, int critere) {
+        deleteInt(Tables.COMMUNES, col, critere);
+    }
+    public void deleteCommunes() {
+        deleteString(Tables.COMMUNES, CommunesCol.ID, "", false);
+    }
+    public void deleteEtablissements(EtablissementsCol col, String critere, boolean explicitCaractersOnly) {
+        deleteString(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+    }
+    public void deleteEtablissements(EtablissementsCol col, int critere) {
+        deleteInt(Tables.ETABLISSEMENTS, col, critere);
+    }
+    public void deleteEtablissements() {
+        deleteString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
+    }
+
+    public void saveCommunes(List<Commune> communes) {
+        try {
+            Connection _con = _instance.connect();
+            PreparedStatement _statement;
+            for (Commune _com : communes) {
+                String _req = "INSERT INTO " + Tables.COMMUNES.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", CommunesCol.NOM.toString(), CommunesCol.CODE_COMMUNE.toString(), CommunesCol.CODE_DEPARTEMENT.toString(), CommunesCol.CODE_POSTAL.toString(), CommunesCol.CODE_REGION.toString(), CommunesCol.POPULATION.toString());
+                _statement = _con.prepareStatement(_req);
+                _statement.setString(1, _com.getNom());
+                _statement.setString(2, _com.getCodeCommune());
+                _statement.setString(3, _com.getCodeDepartement());
+                _statement.setString(4, _com.getCodePostal());
+                _statement.setString(5, _com.getCodeRegion());
+                _statement.setInt(6, _com.getPopulation());
+                _statement.execute();
+            }
+            _con.close();
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+        }
+    }
+    public void saveEtablissements(List<Etablissement> Etablissements) {
+        try {
+            Connection _con = _instance.connect();
+            PreparedStatement _stmt;
+            for (Etablissement _etbl : Etablissements) {
+                String _req = "INSERT INTO " + Tables.ETABLISSEMENTS.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", EtablissementsCol.NOM.toString(), EtablissementsCol.TYPE.toString(), EtablissementsCol.MAIL.toString(), EtablissementsCol.STATUT.toString(), EtablissementsCol.CODE_COMMUNE.toString(), EtablissementsCol.NOM_COMMUNE.toString());
+                _stmt = _con.prepareStatement(_req);
+                _stmt.setString(1, _etbl.getNomEtablissement());
+                _stmt.setString(2, _etbl.getTypeEtablissement());
+                _stmt.setString(3, _etbl.getMail());
+                _stmt.setString(4, _etbl.getStatutPublicPrive());
+                _stmt.setString(5, _etbl.getCodeCommune());
+                _stmt.setString(6, _etbl.getNomCommune());
+                _stmt.execute();
+            }
+            this.disconnect(_con);
+
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+        }
+    }
+
+
+
+
+    // — Méthodes privées pour l'exécution des méthodes publiques
+    //  PRIVATE | Only used in DBManager
+    // ----------------------------------------------------------
+
     /**
-     * Privé. Permet de se connecter à la base SQL et de renvoyer une connexion.
-     * @return Connection à la base SQL.
+     * Méthode de connexion à la BDD.
+     * @return Connexion à la base de données
      */
     private Connection connect() throws SQLException {
-        return DriverManager.getConnection(_url, _username, _password);
+        return DriverManager.getConnection(_url,_username,_password);
     }
 
     /**
-     * Privé. Termine la connexion passée en paramètre.
-     * @param _con Connexion à fermer.
+     * Cette méthode coupe la connexion mentionnée à la BDD.
+     * @param _con Connexion à fermer
      */
     private void disconnect(Connection _con) throws SQLException {
-        _con.close();
-    }
-
-    /**
-     * Privé. Crée la table si elle n'existe pas.
-     */
-    private void createTable() {
-        try {
-            Connection _con = _instance.connect();
-            String request = "CREATE TABLE IF NOT EXISTS Communes (" +
-                                "Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, " +
-                                "Nom VARCHAR(256)," +
-                                "CodeCommune VARCHAR(5)," +
-                                "CodeDepartement VARCHAR(256)," +
-                                "CodePostal VARCHAR(16)," +
-                                "CodeRegion VARCHAR(2)," +
-                                "population BIGINT);";
-
-            Statement _stmt = _con.createStatement();
-            _stmt.executeUpdate(request);
-            this.disconnect(_con);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+        if (_con != null) {
+            _con.close();
         }
-
     }
 
     /**
-     * Public. Permet de sauvegarder une liste de communes dans la BDD.
-     * @param communes Liste de communes à sauvegarder.
+     * Cette méthode instancie les tables SQL nécessaires si elles n'existent pas dans la BDD.
      */
-    @Override
-    public void save(List<Commune> communes) {
+    private void initTables() {
         try {
             Connection _con = _instance.connect();
-            Statement _stmt = _con.createStatement();
-            Iterator<Commune> _iterator = communes.iterator();
-            while (_iterator.hasNext()) {
-                Commune _commune = _iterator.next();
-                System.out.println(_commune.toString());
-                String request = "INSERT INTO Communes(Nom, CodeCommune, CodeDepartement, CodePostal, CodeRegion, population) VALUES ('" +
-                        _commune.getNom().replace("'", "''") + "', '" +
-                        _commune.getCodeCommune().replace("'", "''") + "', '" +
-                        _commune.getCodeDepartement().replace("'", "''") + "', '" +
-                        _commune.getCodePostal().replace("'", "''") + "', '" +
-                        _commune.getCodeRegion().replace("'", "''") + "', " +
-                        _commune.getPopulation().toString() + ");";
-                _stmt.executeUpdate(request);
+            if (_con != null) {
+                String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + Tables.COMMUNES.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), CodeCommune VARCHAR(5), CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
+                String _reqEtablissements = "CREATE TABLE IF NOT EXISTS " + Tables.ETABLISSEMENTS.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), Type VARCHAR(256), Mail VARCHAR(256), statut VARCHAR(6), codeCommune VARCHAR(5), nomCommune VARCHAR(256));";
+                String _reqCommEtabl = "ALTER TABLE " + Tables.ETABLISSEMENTS.toString() + " ADD CONSTRAINT fk_communes FOREIGN KEY (codeCommune) REFERENCES " + Tables.COMMUNES.toString() + "(CodeCommune);";
+                Statement _stmt = _con.createStatement();
+                _stmt.executeUpdate(_reqCommunes);
+                _stmt.executeUpdate(_reqEtablissements);
+                _stmt.executeUpdate(_reqCommEtabl);
+                this.disconnect(_con);
             }
-            this.disconnect(_con);
-            System.out.println("Sauvegarde OK!");
         } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+                ExceptionsHandler.handleException(new SQLException());
         }
     }
 
     /**
-     * Public. Permet de récupérer toutes les communes de la base SQL.
-     * @return Liste de communes dans la base.
+     * Méthode générale getter
      */
-    @Override
-    public List<Commune> getAll() {
-
-        String request = "SELECT * " +
-                            "FROM communes;";
-        try {
-        Connection _con = _instance.connect();
-            Statement _stmt = _con.createStatement();
-            ResultSet results = _stmt.executeQuery(request);
-            this.disconnect(_con);
-            return this.getListFromRs(results);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
-            return new ArrayList<>();
-        }
-    }
-
-    @Override
-    public List<Commune> getCommune (CommunesCol col, String critere, boolean onlyExplicitCaracters)
+    private List getString(Tables Table, Enum col, String critere, boolean onlyExplicit)
     {
-        String request = "SELECT * FROM " + Tables.communes.toString() + " WHERE " + col.toString() + " ILIKE ?";
+        String _req = "SELECT * FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
+        List _return = new ArrayList<>();
         try {
             Connection _con = _instance.connect();
-            PreparedStatement _stmt = _con.prepareStatement(request);
-            if (onlyExplicitCaracters) {
-                _stmt.setString(1, critere);
-            } else {
-                _stmt.setString(1, "%" + critere + "%");
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                if (onlyExplicit) {
+                    _stmt.setString(1, critere);
+                } else {
+                    _stmt.setString(1, "%" + critere + "%");
+                }
+                ResultSet results = _stmt.executeQuery();
+                this.disconnect(_con);
+                if(col instanceof CommunesCol) {
+                    _return = this.getCommunesListFromRs(results);
+                } else {
+                    _return = this.getEtablissementListFromRs(results);
+                }
             }
-            ResultSet results = _stmt.executeQuery();
-            this.disconnect(_con);
-            return this.getListFromRs(results);
+        }  catch (Exception e) {
+                ExceptionsHandler.handleException(new SQLException());
+        }
+        return _return;
+    }
+    private List getInt(Tables Table, Enum col, int critere)
+    {
+        String _req = "SELECT * FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
+        List _return = new ArrayList<>();
+        try {
+            Connection _con = _instance.connect();
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                _stmt.setInt(1, critere);
+                ResultSet results = _stmt.executeQuery();
+                this.disconnect(_con);
+                if(col instanceof CommunesCol) {
+                    _return = this.getCommunesListFromRs(results);
+                } else {
+                    _return = this.getEtablissementListFromRs(results);
+                }
+            }
         }  catch (Exception e) {
             ExceptionsHandler.handleException(new SQLException());
-            return new ArrayList<>();
         }
+        return _return;
     }
 
-    @Override
-    public List<Commune> getEtablissement (EtablissementsCol col, String critere, boolean onlyExplicitCaracters)
+    /**
+     * Deleters
+     */
+    private void deleteString(Tables Table, Enum col, String critere, boolean onlyExplicit)
     {
-        String request = "SELECT * FROM " + Tables.etablissements.toString() + " WHERE " + col.toString() + " ILIKE ?";
+        String _req = "DELETE * FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
         try {
             Connection _con = _instance.connect();
-            PreparedStatement _stmt = _con.prepareStatement(request);
-            if (onlyExplicitCaracters) {
-                _stmt.setString(1, critere);
-            } else {
-                _stmt.setString(1, "%" + critere + "%");
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                if (onlyExplicit) {
+                    _stmt.setString(1, critere);
+                } else {
+                    _stmt.setString(1, "%" + critere + "%");
+                }
+                _stmt.executeUpdate();
+                this.disconnect(_con);
             }
-            ResultSet results = _stmt.executeQuery();
-            this.disconnect(_con);
-            return this.getListFromRs(results);
         }  catch (Exception e) {
             ExceptionsHandler.handleException(new SQLException());
-            return new ArrayList<>();
         }
     }
-
-    /**
-     *
-     * @param col Colonne sur laquelle baser la recherche.
-     * @param critere Critère que doit respecter l'élément.
-     * @return Liste de communes correspondant à la requête.
-     */
-    public List<Commune> getCommune(CommunesCol col, int critere) {
-        String request = "SELECT * FROM" + Tables.communes.toString() + " WHERE " + col.toString() + " = ?";
+    private void deleteInt(Tables Table, Enum col, int critere)
+    {
+        String _req = "DELETE * FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
         try {
             Connection _con = _instance.connect();
-            PreparedStatement _stmt = _con.prepareStatement(request);
-            _stmt.setLong(1, critere);
-            ResultSet results = _stmt.executeQuery();
-            this.disconnect(_con);
-            return this.getListFromRs(results);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
-            return new ArrayList<>();
-        }
-    }
-    public List<Commune> getEtablissement(EtablissementsCol col, int critere) {
-        String request = "SELECT * FROM" + Tables.etablissements.toString() + " WHERE " + col.toString() + " = ?";
-        try {
-            Connection _con = _instance.connect();
-            PreparedStatement _stmt = _con.prepareStatement(request);
-            _stmt.setLong(1, critere);
-            ResultSet results = _stmt.executeQuery();
-            this.disconnect(_con);
-            return this.getListFromRs(results);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
-            return new ArrayList<>();
-        }
-    }
-
-    /**
-     *
-     * @param CodeCommune Code de la commune à rechercher.
-     * @param OnlyExplicitCaracters S'il faut ajouter des jockers autour de l'entrée.
-     * @return Liste des communes correspondents aux critères.
-     */
-    @Override
-    public List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters) {
-        String request = "SELECT * FROM Communes WHERE codecommune ILIKE ?";
-        try {
-            Connection _con = _instance.connect();
-            PreparedStatement _stmt = _con.prepareStatement(request);
-            if (OnlyExplicitCaracters) {
-                _stmt.setString(1, CodeCommune);
-            } else {
-                _stmt.setString(1, "%" + CodeCommune + "%");
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                _stmt.setInt(1, critere);
+                _stmt.executeUpdate();
+                this.disconnect(_con);
             }
-            ResultSet results = _stmt.executeQuery();
-            this.disconnect(_con);
-            return this.getListFromRs(results);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
-            return new ArrayList<>();
-        }
-    }
-
-    /**
-     *
-     * @param Name Nom de commune à supprimer dans la DB.
-     */
-    @Override
-    public void deleteByName(String Name) {
-        try {
-            Connection _con = _instance.connect();
-            Statement _stmt = _con.createStatement();
-            String request = "DELETE FROM Communes WHERE Nom='" + Name.replace("'", "''") + "';";
-            _stmt.executeUpdate(request);
-        } catch (Exception e) {
+        }  catch (Exception e) {
             ExceptionsHandler.handleException(new SQLException());
         }
     }
-
-    /**
-     *
-     * @param id ID de la base de données à supprimer
-     */
-    @Override
-    public void deleteById(long id) {
-        try {
-            Connection _con = _instance.connect();
-            Statement _stmt = _con.createStatement();
-            String request = "DELETE FROM Communes WHERE id='" + id + "';";
-            _stmt.executeUpdate(request);
-            this.disconnect(_con);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
-        }
-    }
-
-    /**
-     *
-     * @param CodeCommune Code de la commune à supprimer dans la DB.
-     */
-    @Override
-    public void deleteByCodeCommune(String CodeCommune) {
-        try {
-            Connection _con = _instance.connect();
-            Statement _stmt = _con.createStatement();
-            String request = "DELETE FROM Communes WHERE CodeCommune='" + CodeCommune.replace("'", "''") + "';";
-            _stmt.executeUpdate(request);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
-        }
-    }
-
-    /**
-     * Suppprime toute la BDD
-     */
-    public void deleteAll() {
-        try {
-            Connection _con = _instance.connect();
-            Statement _stmt = _con.createStatement();
-            String request = "DELETE FROM Communes;";
-            _stmt.executeUpdate(request);
-        } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
-        }
-    }
-
     /**
      *
      * @param results ResultSet de la DB.
-     * @return Liste des communes dans le RS.
+     * @return Liste des  / Etablissements dans le RS.
      * @throws SQLException Erreur lors de la requête SQL.
      */
-    private List<Commune> getListFromRs(ResultSet results) throws SQLException {
+    private List<Commune> getCommunesListFromRs(ResultSet results) throws SQLException {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
             Commune.Builder _tempComBuilder = new Commune.Builder();
@@ -334,5 +284,19 @@ public class DBManager implements DataRepository {
         }
         return _communes;
     }
-
+    private List<Etablissement> getEtablissementListFromRs(ResultSet results) throws SQLException {
+        List<Etablissement> _etablissement = new ArrayList<>();
+        while(results.next()) {
+            Etablissement.Builder _tempEtablissement = new Etablissement.Builder();
+            _tempEtablissement.setId(results.getInt(1));
+            _tempEtablissement.setNomEtablissement(results.getString(2));
+            _tempEtablissement.setTypeEtablissement(results.getString(3));
+            _tempEtablissement.setMail(results.getString(4));
+            _tempEtablissement.setStatutPublicPrive(results.getString(5));
+            _tempEtablissement.setCodeCommune(results.getString(6));
+            _tempEtablissement.setNomCommune(results.getString(7));
+            _etablissement.add(_tempEtablissement.build());
+        }
+        return _etablissement;
+    }
 }

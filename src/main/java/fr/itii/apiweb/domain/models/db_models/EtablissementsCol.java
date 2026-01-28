@@ -1,6 +1,7 @@
 package fr.itii.apiweb.domain.models.db_models;
 
 public enum EtablissementsCol {
+    ID("id"),
     NOM("nom"),
     TYPE("type"),
     MAIL("mail"),
