@@ -1,4 +1,5 @@
 package fr.itii.apiweb.domain.tools;
+
 import fr.itii.apiweb.domain.models.*;
 
 import java.util.ArrayList;
@@ -11,16 +12,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JSONSerializer {
 
+    private final ObjectMapper mapper = new ObjectMapper();
+
+   //communes
     public List<Commune> toCommunes(JsonNode json) {
-        ObjectMapper mapper = new ObjectMapper();
-        List<Commune> villes = new ArrayList<>();
+        List<Commune> communes = new ArrayList<>();
 
         try {
-            for(JsonNode node : json){
-                Commune ville = mapper.treeToValue(node, Commune.class);
-                villes.add(ville);
+            for (JsonNode node : json) {
+                Commune commune = mapper.treeToValue(node, Commune.class);
+                communes.add(commune);
             }
-            return villes;
+            return communes;
 
         } catch (JsonProcessingException e) {
             ExceptionsHandler.handleException(e);
@@ -28,9 +31,36 @@ public class JSONSerializer {
         }
     }
 
-    public Commune getCommuneByNom(List<Commune> communeList, String nomCommune){
+    public Commune getCommuneByNom(List<Commune> communeList, String nomCommune) {
         return communeList.stream()
-                .filter(c -> c.getNom() == nomCommune)
+                .filter(c -> c.getNom().equalsIgnoreCase(nomCommune))
+                .findFirst()
+                .orElse(null);
+    }
+
+ //etablissements
+    public List<Etablissement> toEtablissements(JsonNode json) {
+        List<Etablissement> etablissements = new ArrayList<>();
+
+        try {
+            for (JsonNode node : json) {
+                Etablissement etablissement = mapper.treeToValue(node, Etablissement.class);
+                etablissements.add(etablissement);
+            }
+            return etablissements;
+
+        } catch (JsonProcessingException e) {
+            ExceptionsHandler.handleException(e);
+            return Collections.emptyList();
+        }
+    }
+
+    public Etablissement getEtablissementByNom(
+            List<Etablissement> etablissementList,
+            String nomEtablissement
+    ) {
+        return etablissementList.stream()
+                .filter(e -> e.getNomEtablissement().equalsIgnoreCase(nomEtablissement))
                 .findFirst()
                 .orElse(null);
     }

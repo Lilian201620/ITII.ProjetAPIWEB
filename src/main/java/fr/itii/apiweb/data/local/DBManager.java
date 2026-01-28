@@ -1,9 +1,11 @@
 package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
+import fr.itii.apiweb.domain.models.db_models.CommunesCol;
+import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
+import fr.itii.apiweb.domain.models.db_models.Tables;
 import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -144,16 +146,10 @@ public class DBManager implements DataRepository {
         }
     }
 
-    /**
-     *
-     * @param col Colonne sur laquelle baser sa recherche.
-     * @param critere Critere que doit respecter l'élément.
-     * @param onlyExplicitCaracters S'il faut ajouter des jockers autour de l'entrée.
-     * @return Liste des communes correspondents aux critères.
-     */
     @Override
-    public List<Commune> get(String col, String critere, boolean onlyExplicitCaracters) {
-        String request = "SELECT * FROM Communes WHERE " + col + " ILIKE ?";
+    public List<Commune> getCommune (CommunesCol col, String critere, boolean onlyExplicitCaracters)
+    {
+        String request = "SELECT * FROM " + Tables.communes.toString() + " WHERE " + col.toString() + " ILIKE ?";
         try {
             Connection _con = _instance.connect();
             PreparedStatement _stmt = _con.prepareStatement(request);
@@ -165,7 +161,28 @@ public class DBManager implements DataRepository {
             ResultSet results = _stmt.executeQuery();
             this.disconnect(_con);
             return this.getListFromRs(results);
-        } catch (Exception e) {
+        }  catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Commune> getEtablissement (EtablissementsCol col, String critere, boolean onlyExplicitCaracters)
+    {
+        String request = "SELECT * FROM " + Tables.etablissements.toString() + " WHERE " + col.toString() + " ILIKE ?";
+        try {
+            Connection _con = _instance.connect();
+            PreparedStatement _stmt = _con.prepareStatement(request);
+            if (onlyExplicitCaracters) {
+                _stmt.setString(1, critere);
+            } else {
+                _stmt.setString(1, "%" + critere + "%");
+            }
+            ResultSet results = _stmt.executeQuery();
+            this.disconnect(_con);
+            return this.getListFromRs(results);
+        }  catch (Exception e) {
             ExceptionsHandler.handleException(new SQLException());
             return new ArrayList<>();
         }
@@ -177,8 +194,22 @@ public class DBManager implements DataRepository {
      * @param critere Critère que doit respecter l'élément.
      * @return Liste de communes correspondant à la requête.
      */
-    public List<Commune> get(String col, int critere) {
-        String request = "SELECT * FROM Communes WHERE " + col + " = ?";
+    public List<Commune> getCommune(CommunesCol col, int critere) {
+        String request = "SELECT * FROM" + Tables.communes.toString() + " WHERE " + col.toString() + " = ?";
+        try {
+            Connection _con = _instance.connect();
+            PreparedStatement _stmt = _con.prepareStatement(request);
+            _stmt.setLong(1, critere);
+            ResultSet results = _stmt.executeQuery();
+            this.disconnect(_con);
+            return this.getListFromRs(results);
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+            return new ArrayList<>();
+        }
+    }
+    public List<Commune> getEtablissement(EtablissementsCol col, int critere) {
+        String request = "SELECT * FROM" + Tables.etablissements.toString() + " WHERE " + col.toString() + " = ?";
         try {
             Connection _con = _instance.connect();
             PreparedStatement _stmt = _con.prepareStatement(request);
