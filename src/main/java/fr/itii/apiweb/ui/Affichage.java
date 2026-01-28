@@ -15,8 +15,6 @@ public class Affichage {
     private static final String YELLOW = "\u001B[33m";
     private static final String RED = "\u001B[31m";
 
-    Scanner sc = new Scanner(System.in);
-
     private final Integer PAGE_SIZE = 10;
     private Integer showIndex = 0;
 
