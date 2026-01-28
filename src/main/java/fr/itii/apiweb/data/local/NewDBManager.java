@@ -3,6 +3,7 @@ package fr.itii.apiweb.data.local;
 import fr.itii.apiweb.domain.models.Commune;
 import fr.itii.apiweb.domain.models.Etablissement;
 import fr.itii.apiweb.domain.models.db_models.CommunesCol;
+import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
 import fr.itii.apiweb.domain.models.db_models.Tables;
 import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
@@ -46,7 +47,9 @@ public class NewDBManager {
     public List<Commune> getCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
         return get(Tables.COMMUNES, col, critere, explicitCaractersOnly);
     }
-    public List<Etablissement> getEtablissements
+    public List<Etablissement> getEtablissements(EtablissementsCol col, String critere, boolean explicitCaractersOnly) {
+        return get(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+    }
 
 
 
