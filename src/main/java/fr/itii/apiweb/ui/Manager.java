@@ -230,7 +230,7 @@ public class Manager {
 
     private <T> void flowDB(List<T> liste) {
         while (true) {
-            switch (a.showMenuAPI()) {
+            switch (a.showMenuDB()) {
                 //Page précédente
                 case "1" -> {
                     a.showList(liste, a.getIndex() - 20);
