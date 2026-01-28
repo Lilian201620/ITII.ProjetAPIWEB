@@ -63,6 +63,25 @@ public class NewDBManager {
         return getString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
     }
 
+    public void deleteCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
+        deleteString(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+    }
+    public void deleteCommunes(CommunesCol col, int critere) {
+        deleteInt(Tables.COMMUNES, col, critere);
+    }
+    public void deleteCommunes() {
+        deleteString(Tables.COMMUNES, CommunesCol.ID, "", false);
+    }
+    public void deleteEtablissements(EtablissementsCol col, String critere, boolean explicitCaractersOnly) {
+        deleteString(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+    }
+    public void deleteEtablissements(EtablissementsCol col, int critere) {
+        deleteInt(Tables.ETABLISSEMENTS, col, critere);
+    }
+    public void deleteEtablissements() {
+        deleteString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
+    }
+
     public void saveCommunes(List<Commune> communes) {
         try {
             Connection _con = _instance.connect();
@@ -203,6 +222,43 @@ public class NewDBManager {
         return _return;
     }
 
+    /**
+     * Deleters
+     */
+    private void deleteString(Tables Table, Enum col, String critere, boolean onlyExplicit)
+    {
+        String _req = "DELETE * FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
+        try {
+            Connection _con = _instance.connect();
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                if (onlyExplicit) {
+                    _stmt.setString(1, critere);
+                } else {
+                    _stmt.setString(1, "%" + critere + "%");
+                }
+                _stmt.executeUpdate();
+                this.disconnect(_con);
+            }
+        }  catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+        }
+    }
+    private void deleteInt(Tables Table, Enum col, int critere)
+    {
+        String _req = "DELETE * FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
+        try {
+            Connection _con = _instance.connect();
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                _stmt.setInt(1, critere);
+                _stmt.executeUpdate();
+                this.disconnect(_con);
+            }
+        }  catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+        }
+    }
     /**
      *
      * @param results ResultSet de la DB.
