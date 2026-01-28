@@ -45,10 +45,64 @@ public class NewDBManager {
     // PUBLIC | Used everywhere across the project
     // ----------------------------------------------------------
     public List<Commune> getCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
-        return get(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+        return getString(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+    }
+    public List<Commune> getCommunes(CommunesCol col, int critere) {
+        return getInt(Tables.COMMUNES, col, critere);
+    }
+    public List<Commune> getCommunes() {
+        return getString(Tables.COMMUNES, CommunesCol.ID, "", false);
     }
     public List<Etablissement> getEtablissements(EtablissementsCol col, String critere, boolean explicitCaractersOnly) {
-        return get(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+        return getString(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+    }
+    public List<Etablissement> getEtablissements(EtablissementsCol col, int critere) {
+        return getInt(Tables.ETABLISSEMENTS, col, critere);
+    }
+    public List<Etablissement> getEtablissements() {
+        return getString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
+    }
+
+    public void saveCommunes(List<Commune> communes) {
+        try {
+            Connection _con = _instance.connect();
+            PreparedStatement _statement;
+            for (Commune _com : communes) {
+                String _req = "INSERT INTO " + Tables.COMMUNES.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", CommunesCol.NOM.toString(), CommunesCol.CODE_COMMUNE.toString(), CommunesCol.CODE_DEPARTEMENT.toString(), CommunesCol.CODE_POSTAL.toString(), CommunesCol.CODE_REGION.toString(), CommunesCol.POPULATION.toString());
+                _statement = _con.prepareStatement(_req);
+                _statement.setString(1, _com.getNom());
+                _statement.setString(2, _com.getCodeCommune());
+                _statement.setString(3, _com.getCodeDepartement());
+                _statement.setString(4, _com.getCodePostal());
+                _statement.setString(5, _com.getCodeRegion());
+                _statement.setInt(6, _com.getPopulation());
+                _statement.execute();
+            }
+            _con.close();
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+        }
+    }
+    public void saveEtablissements(List<Etablissement> Etablissements) {
+        try {
+            Connection _con = _instance.connect();
+            PreparedStatement _stmt;
+            for (Etablissement _etbl : Etablissements) {
+                String _req = "INSERT INTO " + Tables.ETABLISSEMENTS.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", EtablissementsCol.NOM.toString(), EtablissementsCol.TYPE.toString(), EtablissementsCol.MAIL.toString(), EtablissementsCol.STATUT.toString(), EtablissementsCol.CODE_COMMUNE.toString(), EtablissementsCol.NOM_COMMUNE.toString());
+                _stmt = _con.prepareStatement(_req);
+                _stmt.setString(1, _etbl.getNomEtablissement());
+                _stmt.setString(2, _etbl.getTypeEtablissement());
+                _stmt.setString(3, _etbl.getMail());
+                _stmt.setString(4, _etbl.getStatutPublicPrive());
+                _stmt.setString(5, _etbl.getCodeCommune());
+                _stmt.setString(6, _etbl.getNomCommune());
+                _stmt.execute();
+            }
+            this.disconnect(_con);
+
+        } catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
+        }
     }
 
 
@@ -100,7 +154,7 @@ public class NewDBManager {
     /**
      * Méthode générale getter
      */
-    private List get(Tables Table, Enum col, String critere, boolean onlyExplicit)
+    private List getString(Tables Table, Enum col, String critere, boolean onlyExplicit)
     {
         String _req = "SELECT * FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
         List _return = new ArrayList<>();
@@ -123,6 +177,28 @@ public class NewDBManager {
             }
         }  catch (Exception e) {
                 ExceptionsHandler.handleException(new SQLException());
+        }
+        return _return;
+    }
+    private List getInt(Tables Table, Enum col, int critere)
+    {
+        String _req = "SELECT * FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
+        List _return = new ArrayList<>();
+        try {
+            Connection _con = _instance.connect();
+            if (_con != null) {
+                PreparedStatement _stmt = _con.prepareStatement(_req);
+                _stmt.setInt(1, critere);
+                ResultSet results = _stmt.executeQuery();
+                this.disconnect(_con);
+                if(col instanceof CommunesCol) {
+                    _return = this.getCommunesListFromRs(results);
+                } else {
+                    _return = this.getEtablissementListFromRs(results);
+                }
+            }
+        }  catch (Exception e) {
+            ExceptionsHandler.handleException(new SQLException());
         }
         return _return;
     }
