@@ -45,25 +45,25 @@ public class Backend {
     }
 
     public List<Commune> searchCommuneFromDBByNom(String value){
-        return db.getCommune(CommunesCol.NOM, value, false);
+        return db.getCommunes(CommunesCol.NOM, value, false);
     }
 
     public List<Commune> searchCommuneFromDBByCodePostal(String value){
-        return db.getCommune(CommunesCol.CODE_POSTAL, value, false);
+        return db.getCommunes(CommunesCol.CODE_POSTAL, value, false);
     }
 
     public  List<Commune> searchCommuneFromDBByDepartement(String value){
-        return db.getCommune(CommunesCol.CODE_DEPARTEMENT, value, false);
+        return db.getCommunes(CommunesCol.CODE_DEPARTEMENT, value, false);
     }
 
     public void saveCommune(List<Commune> listeCommune) {
         //Nathan à modifier
-        db.save(listeCommune);
+        db.saveCommunes(listeCommune);
     }
 
     public void deleteCommune() {
         //Nathan à modifier
-        db.deleteAll();
+        db.deleteCommunes();
     }
 
     // ==========================================================
@@ -72,7 +72,7 @@ public class Backend {
 
     public List<Etablissement> searchEtablissementFromAPIByNomCommune(String value){
         //Lilian à remplir
-        return null;
+        return  null;
     }
 
     public List<Etablissement> searchEtablissementFromAPIByCodeCommune(String value){
