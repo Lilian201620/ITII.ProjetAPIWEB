@@ -1,6 +1,8 @@
 package fr.itii.apiweb.data.local;
 
 import fr.itii.apiweb.domain.models.Commune;
+import fr.itii.apiweb.domain.models.Etablissement;
+import fr.itii.apiweb.domain.models.db_models.CommunesCol;
 import fr.itii.apiweb.domain.models.db_models.Tables;
 import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
@@ -41,7 +43,10 @@ public class NewDBManager {
     // - Méthodes publiques pour l'exécution des requêtes SQL
     // PUBLIC | Used everywhere across the project
     // ----------------------------------------------------------
-
+    public List<Commune> getCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
+        return get(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+    }
+    public List<Etablissement> getEtablissements
 
 
 
@@ -75,9 +80,9 @@ public class NewDBManager {
         try {
             Connection _con = _instance.connect();
             if (_con != null) {
-                String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + Tables.communes.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), CodeCommune VARCHAR(5), CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
-                String _reqEtablissements = "CREATE TABLE IF NOT EXISTS " + Tables.etablissements.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), Type VARCHAR(256), Mail VARCHAR(256), statut VARCHAR(6), codeCommune VARCHAR(5), nomCommune VARCHAR(256));";
-                String _reqCommEtabl = "ALTER TABLE " + Tables.etablissements.toString() + " ADD CONSTRAINT fk_communes FOREIGN KEY (codeCommune) REFERENCES " + Tables.communes.toString() + "(CodeCommune);";
+                String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + Tables.COMMUNES.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), CodeCommune VARCHAR(5), CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
+                String _reqEtablissements = "CREATE TABLE IF NOT EXISTS " + Tables.ETABLISSEMENTS.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), Type VARCHAR(256), Mail VARCHAR(256), statut VARCHAR(6), codeCommune VARCHAR(5), nomCommune VARCHAR(256));";
+                String _reqCommEtabl = "ALTER TABLE " + Tables.ETABLISSEMENTS.toString() + " ADD CONSTRAINT fk_communes FOREIGN KEY (codeCommune) REFERENCES " + Tables.COMMUNES.toString() + "(CodeCommune);";
                 Statement _stmt = _con.createStatement();
                 _stmt.executeUpdate(_reqCommunes);
                 _stmt.executeUpdate(_reqEtablissements);
@@ -92,10 +97,10 @@ public class NewDBManager {
     /**
      * Méthode générale getter
      */
-    private List<Commune> get(Tables Table, Enum col, String critere, boolean onlyExplicit)
+    private List get(Tables Table, Enum col, String critere, boolean onlyExplicit)
     {
-        String _req = "SELECT * FROM " + Tables.communes.toString() + " WHERE " + col.toString() + " ILIKE ?";
-        List<Commune> _return = new ArrayList<>();
+        String _req = "SELECT * FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
+        List _return = new ArrayList<>();
         try {
             Connection _con = _instance.connect();
             if (_con != null) {
@@ -107,7 +112,11 @@ public class NewDBManager {
                 }
                 ResultSet results = _stmt.executeQuery();
                 this.disconnect(_con);
-                _return = this.getListFromRs(results);
+                if(col instanceof CommunesCol) {
+                    _return = this.getCommunesListFromRs(results);
+                } else {
+                    _return = this.getEtablissementListFromRs(results);
+                }
             }
         }  catch (Exception e) {
                 ExceptionsHandler.handleException(new SQLException());
@@ -118,10 +127,10 @@ public class NewDBManager {
     /**
      *
      * @param results ResultSet de la DB.
-     * @return Liste des communes dans le RS.
+     * @return Liste des  / Etablissements dans le RS.
      * @throws SQLException Erreur lors de la requête SQL.
      */
-    private List<Commune> getListFromRs(ResultSet results) throws SQLException {
+    private List<Commune> getCommunesListFromRs(ResultSet results) throws SQLException {
         List<Commune> _communes = new ArrayList<Commune>();
         while(results.next()) {
             Commune.Builder _tempComBuilder = new Commune.Builder();
@@ -136,5 +145,20 @@ public class NewDBManager {
             _communes.add(_tempCom);
         }
         return _communes;
+    }
+    private List<Etablissement> getEtablissementListFromRs(ResultSet results) throws SQLException {
+        List<Etablissement> _etablissement = new ArrayList<>();
+        while(results.next()) {
+            Etablissement.Builder _tempEtablissement = new Etablissement.Builder();
+            _tempEtablissement.setId(results.getInt(1));
+            _tempEtablissement.setNomEtablissement(results.getString(2));
+            _tempEtablissement.setTypeEtablissement(results.getString(3));
+            _tempEtablissement.setMail(results.getString(4));
+            _tempEtablissement.setStatutPublicPrive(results.getString(5));
+            _tempEtablissement.setCodeCommune(results.getString(6));
+            _tempEtablissement.setNomCommune(results.getString(7));
+            _etablissement.add(_tempEtablissement.build());
+        }
+        return _etablissement;
     }
 }
