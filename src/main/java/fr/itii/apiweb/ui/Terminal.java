@@ -1,12 +1,9 @@
 package fr.itii.apiweb.ui;
 
-import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.Etablissement;
-
 import java.util.List;
 import java.util.Scanner;
 
-public class Affichage {
+public class Terminal {
 
     private static final String RESET = "\u001B[0m";
     private static final String BOLD = "\u001B[1m";
@@ -46,11 +43,11 @@ public class Affichage {
 
     public String showMenuAPI() {
         System.out.println("\n" + BOLD + GREEN + "==== Action API ====" + RESET);
-        System.out.println("1. " + CYAN + "Page précédente" + RESET);  //Page suivante
+        System.out.println("1. " + CYAN + "Page précédente" + RESET);
         System.out.println("2. " + CYAN + "Page suivante" + RESET);
-        System.out.println("3. " + CYAN + "Sauvegarder" + RESET);            //Save dans DB
-        System.out.println("4. " + CYAN + "Nouvelle recherche" + RESET);     //Nouvelle API
-        System.out.println("5. " + CYAN + "Retour" + RESET);                 //Retour au menu principal
+        System.out.println("3. " + CYAN + "Sauvegarder" + RESET);
+        System.out.println("4. " + CYAN + "Nouvelle recherche" + RESET);
+        System.out.println("5. " + CYAN + "Retour" + RESET);
         System.out.print(">");
 
         String c;
@@ -62,21 +59,23 @@ public class Affichage {
     }
 
     public String showMenuSearchDB(){
-        System.out.println("\n" + BOLD + "1. Commune par nom" + RESET);  //Page suivante
-        System.out.println(BOLD + "2. Commune par code postal" + RESET);
-        System.out.println(BOLD + "3. Commune par departement" + RESET);
-        System.out.println(BOLD + "4. Etablissement par nom de commune" + RESET);
-        System.out.println(BOLD + "5. Etablissement par code postal" + RESET);
-        System.out.println(BOLD + "6. Etablissement par departement" + RESET);
+        System.out.println("\n" + BOLD + YELLOW + "==== Recherche DB ====" + RESET);
+        System.out.println("1. " + CYAN + "Commune par nom" + RESET);
+        System.out.println("2. " + CYAN + "Commune par code postal" + RESET);
+        System.out.println("3. " + CYAN + "Commune par departement" + RESET);
+        System.out.println("4. " + CYAN + "Etablissement par nom de commune" + RESET);
+        System.out.println("5. " + CYAN + "Etablissement par code postal" + RESET);
+        System.out.println("6. " + CYAN + "Etablissement par departement" + RESET);
 
         return sc.nextLine().trim();
     }
 
     public String showMenuDB() {
-        System.out.println("\n" + BOLD + "1. Page précédente" + RESET);  //Page suivante
-        System.out.println(BOLD + "2. Page suivante" + RESET);
-        System.out.println(BOLD + "3. Nouvelle recherche" + RESET);     //Nouvelle API
-        System.out.println(BOLD + "4. Retour" + RESET);                 //Retour au menu principal
+        System.out.println("\n" + BOLD + GREEN + "==== Action DB ====" + RESET);
+        System.out.println("1. " + CYAN + "Page précédente" + RESET);
+        System.out.println("2. " + CYAN + "Page suivante" + RESET);
+        System.out.println("3. " + CYAN + "Nouvelle recherche" + RESET);
+        System.out.println("4. " + CYAN + "Retour" + RESET);
         System.out.print(">");
 
         return sc.nextLine().trim();

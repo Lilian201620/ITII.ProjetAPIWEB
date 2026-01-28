@@ -3,7 +3,7 @@ package fr.itii.apiweb;
 import fr.itii.apiweb.data.local.DBManager;
 import fr.itii.apiweb.data.remote.APICaller;
 import fr.itii.apiweb.domain.tools.JSONSerializer;
-import fr.itii.apiweb.ui.Terminal;
+import fr.itii.apiweb.ui.Manager;
 
 public class Main {
 
@@ -12,7 +12,7 @@ public class Main {
         JSONSerializer serializer = new JSONSerializer();
         DBManager dbManager = DBManager.getInstance();
 
-        Terminal terminal = new Terminal();
-        terminal.flow();
+        Manager m = new Manager();
+        m.flow();
     }
 }
