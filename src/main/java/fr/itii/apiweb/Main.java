@@ -7,13 +7,12 @@ import fr.itii.apiweb.ui.Terminal;
 
 public class Main {
 
-    //MAIN LILIAN11
     public static void main(String[] args) {
         APICaller apiCaller = new APICaller();
         JSONSerializer serializer = new JSONSerializer();
         DBManager dbManager = DBManager.getInstance();
 
-        Terminal terminal = new Terminal(apiCaller, serializer, dbManager);
-        terminal.start();
+        Terminal terminal = new Terminal();
+        terminal.flow();
     }
 }
