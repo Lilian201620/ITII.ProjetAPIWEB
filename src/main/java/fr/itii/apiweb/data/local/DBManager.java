@@ -35,10 +35,7 @@ public class DBManager {
      */
     public static DBManager getInstance() {
         if (_instance == null) {
-            _instance = new DBManager
-
-
-();
+            _instance = new DBManager();
             _instance.initTables();
         }
         return _instance;
@@ -90,15 +87,20 @@ public class DBManager {
             Connection _con = _instance.connect();
             PreparedStatement _statement;
             for (Commune _com : communes) {
-                String _req = "INSERT INTO " + Tables.COMMUNES.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", CommunesCol.NOM.toString(), CommunesCol.CODE_COMMUNE.toString(), CommunesCol.CODE_DEPARTEMENT.toString(), CommunesCol.CODE_POSTAL.toString(), CommunesCol.CODE_REGION.toString(), CommunesCol.POPULATION.toString());
-                _statement = _con.prepareStatement(_req);
-                _statement.setString(1, _com.getNom());
-                _statement.setString(2, _com.getCodeCommune());
-                _statement.setString(3, _com.getCodeDepartement());
-                _statement.setString(4, _com.getCodePostal());
-                _statement.setString(5, _com.getCodeRegion());
-                _statement.setInt(6, _com.getPopulation());
-                _statement.execute();
+                if(getCommunes(CommunesCol.CODE_COMMUNE, _com.getCodeCommune(), true).isEmpty()) {
+                    String _req = "INSERT INTO " + Tables.COMMUNES.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", CommunesCol.NOM.toString(), CommunesCol.CODE_COMMUNE.toString(), CommunesCol.CODE_DEPARTEMENT.toString(), CommunesCol.CODE_POSTAL.toString(), CommunesCol.CODE_REGION.toString(), CommunesCol.POPULATION.toString());
+                    _statement = _con.prepareStatement(_req);
+                    _statement.setString(1, _com.getNom());
+                    _statement.setString(2, _com.getCodeCommune());
+                    _statement.setString(3, _com.getCodeDepartement());
+                    _statement.setString(4, _com.getCodePostal());
+                    _statement.setString(5, _com.getCodeRegion());
+                    _statement.setInt(6, _com.getPopulation());
+                    _statement.execute();
+                } else {
+                    System.out.println("\u001B[3m \u001B[90m  Entrée " + _com.getNom() + " déjà présente dans la BDD. \u001B[0m");
+                }
+
             }
             _con.close();
         } catch (Exception e) {
@@ -159,9 +161,9 @@ public class DBManager {
         try {
             Connection _con = _instance.connect();
             if (_con != null) {
-                String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + Tables.COMMUNES.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), CodeCommune VARCHAR(5), CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
+                String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + Tables.COMMUNES.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY, Nom VARCHAR(256), CodeCommune VARCHAR(5) PRIMARY KEY, CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
                 String _reqEtablissements = "CREATE TABLE IF NOT EXISTS " + Tables.ETABLISSEMENTS.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), Type VARCHAR(256), Mail VARCHAR(256), statut VARCHAR(6), codeCommune VARCHAR(5), nomCommune VARCHAR(256));";
-                String _reqCommEtabl = "ALTER TABLE " + Tables.ETABLISSEMENTS.toString() + " ADD CONSTRAINT fk_communes FOREIGN KEY (codeCommune) REFERENCES " + Tables.COMMUNES.toString() + "(CodeCommune);";
+                String _reqCommEtabl = "DO $$ BEGIN IF NOT EXISTS ( SELECT 1 FROM pg_constraint WHERE conname = 'fk_communes' ) THEN ALTER TABLE " + Tables.ETABLISSEMENTS.toString() + " ADD CONSTRAINT fk_communes FOREIGN KEY (codeCommune) REFERENCES " + Tables.COMMUNES.toString() + "(CodeCommune); END IF; END $$;";
                 Statement _stmt = _con.createStatement();
                 _stmt.executeUpdate(_reqCommunes);
                 _stmt.executeUpdate(_reqEtablissements);
