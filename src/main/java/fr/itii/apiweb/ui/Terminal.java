@@ -116,7 +116,7 @@ public class Terminal {
 
         showIndex += PAGE_SIZE;
     }
-//
+
     public Integer getIndex(){
         return showIndex;
     }
