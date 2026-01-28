@@ -1,7 +1,5 @@
 package data.local;
-import fr.itii.apiweb.data.local.DBManager;
 import fr.itii.apiweb.domain.models.Commune;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.ArrayList;
