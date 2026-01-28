@@ -247,7 +247,7 @@ public class Manager {
                     flowDB();
                 }
                 // retour menu principal
-                case "5" -> {
+                case "4" -> {
                     flow();
                 }
 
