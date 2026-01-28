@@ -18,10 +18,11 @@ public class Terminal {
     private Integer showIndex = 0;
 
     public String showMenu() {
+        clear();
         System.out.println("\n" + BOLD + RED + "==== Menu Principal ====" + RESET);
         System.out.println("1. " + CYAN + "Recherche API" + RESET);
         System.out.println("2. " + CYAN + "Recherche dans la DataBase" + RESET);
-        System.out.println("3. " + CYAN + "Supprimer la database" + RESET);
+        System.out.println("3. " + CYAN + "Supprimer une table" + RESET);
         System.out.println("0. " + CYAN + "Quitter" + RESET);
         System.out.print(">");
 
@@ -29,6 +30,7 @@ public class Terminal {
     }
 
     public String showMenuSearchAPI() {
+        clear();
         System.out.println("\n" + BOLD + YELLOW + "==== Recherche API ====" + RESET);
         System.out.println("1. " + CYAN + "Commune par nom" + RESET);  //Page suivante
         System.out.println("2. " + CYAN + "Commune par code postal" + RESET);
@@ -50,15 +52,11 @@ public class Terminal {
         System.out.println("5. " + CYAN + "Retour" + RESET);
         System.out.print(">");
 
-        String c;
-        do {
-            c = sc.nextLine().trim();
-        } while (c.isEmpty());
-        return c;
-
+        return sc.nextLine().trim();
     }
 
     public String showMenuSearchDB(){
+        clear();
         System.out.println("\n" + BOLD + YELLOW + "==== Recherche DB ====" + RESET);
         System.out.println("1. " + CYAN + "Commune par nom" + RESET);
         System.out.println("2. " + CYAN + "Commune par code postal" + RESET);
@@ -82,8 +80,19 @@ public class Terminal {
     }
 
     public String showConfig(String title, String msg){
+        clear();
         System.out.println("\n" + BOLD + YELLOW + "==== "+ title + " ====" + RESET);
         System.out.print(msg);
+
+        return sc.nextLine().trim();
+    }
+
+    public String showMenuDeleteDB(){
+        clear();
+        System.out.println("\n" + BOLD + YELLOW + "==== Table ====" + RESET);
+        System.out.println("1. " + CYAN + "Supprimer commune" + RESET);
+        System.out.println("2. " + CYAN + "Supprimer etablissement" + RESET);
+        System.out.println("3. " + CYAN + "Retour" + RESET);
 
         return sc.nextLine().trim();
     }
@@ -95,6 +104,7 @@ public class Terminal {
     }
 
     public <T> void showList(List<T> results, int index) {
+        clear();
         if (results == null || results.isEmpty()) {
             System.out.println("\n" + BOLD + GREEN + "==== Résultats ====" + RESET);
             System.out.println("Aucun résultat.");
@@ -119,6 +129,12 @@ public class Terminal {
 
     public Integer getIndex(){
         return showIndex;
+    }
+
+    public void clear(){
+        for(Integer i=0; i<20; i++){
+            System.out.println();
+        }
     }
 
 }

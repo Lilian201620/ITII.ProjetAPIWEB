@@ -31,7 +31,7 @@ public class Manager {
 
                 //Delete DB
                 case "3" -> {
-                    deleteDatabase();
+                    deleteDB();
                 }
 
                 //Quitter
@@ -256,7 +256,28 @@ public class Manager {
         }
     }
 
-    private void deleteDatabase() {
-        flow();
+    private void deleteDB() {
+        while (true) {
+            switch (a.showMenuDeleteDB()) {
+                //Supprimer commune
+                case "1" -> {
+                    b.deleteCommune();
+                    deleteDB();
+                }
+
+                //Supprimer etablissment
+                case "2" -> {
+                    b.deleteEtablissement();
+                    deleteDB();
+                }
+
+                //Retour
+                case "3" -> {
+                    flow();
+                }
+
+                default -> {}
+            }
+        }
     }
 }
