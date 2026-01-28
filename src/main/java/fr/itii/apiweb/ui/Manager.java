@@ -225,7 +225,7 @@ public class Manager {
     }
 
     // ==========================================================
-    //  DATABASE vers List ////
+    //  DATABASE vers List
     //  =========================================================
 
     private <T> void flowDB(List<T> liste) {
