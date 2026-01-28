@@ -3,7 +3,8 @@ package fr.itii.apiweb.domain.models.api_models;
 public enum CommunesFieldsEnum {
     NOM("Nom"),
     CODE_POSTAL("codePostal"),
-    DEPARTEMENT("codeDepartement");
+    DEPARTEMENT("codeDepartement"),
+    REGION("codeRegion");
 
     private final String field;
 
