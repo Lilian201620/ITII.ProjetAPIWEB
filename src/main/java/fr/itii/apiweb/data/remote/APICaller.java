@@ -9,8 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
-import fr.itii.apiweb.domain.tools.ExceptionsHandler;
+import fr.itii.apiweb.domain.models.api_models.API_Commune;
 
 public class APICaller {
 
@@ -56,7 +55,7 @@ public class APICaller {
         return sendRequest(url);
     }
 
-    public JsonNode getCommunes(CommunesFieldsEnum field, String query, String limit){
+    public JsonNode getCommunes(API_Commune field, String query, String limit){
         String trueField = field.getField();
         String encodedField = URLEncoder.encode(trueField, StandardCharsets.UTF_8);
 
@@ -69,7 +68,7 @@ public class APICaller {
         return sendRequest(url);
     }
 
-    public JsonNode getCommunes(CommunesFieldsEnum field, String query, Integer limit){
+    public JsonNode getCommunes(API_Commune field, String query, Integer limit){
         return getCommunes(field, query, String.valueOf(limit));
     }
 
