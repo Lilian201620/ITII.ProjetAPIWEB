@@ -24,7 +24,7 @@ public class Terminal {
 
     public String showMenu() {
         clear();
-        System.out.println("\n" + Font.BOLD + Font.RED + "==== Menu Principal ====" + Font.RESET);
+        System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== Menu Principal ====" + Font.RESET);
         System.out.println("1. " + Font.CYAN + "Appel API" + Font.RESET);
         System.out.println("2. " + Font.CYAN + "Lire la Database" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer une table" + Font.RESET);

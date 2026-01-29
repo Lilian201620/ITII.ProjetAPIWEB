@@ -26,7 +26,7 @@ public class JSONSerializer {
             return communes;
 
         } catch (JsonProcessingException e) {
-            ExceptionsHandler.handleException(e);
+            ExceptionHandler.handleException(e);
             return Collections.emptyList();
         }
     }
@@ -44,7 +44,7 @@ public class JSONSerializer {
             return etablissements;
 
         } catch (JsonProcessingException e) {
-            ExceptionsHandler.handleException(e);
+            ExceptionHandler.handleException(e);
             return Collections.emptyList();
         }
     }

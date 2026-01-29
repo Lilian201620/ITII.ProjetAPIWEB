@@ -6,7 +6,7 @@ import fr.itii.apiweb.domain.models.enumlist.db.DBCommune;
 import fr.itii.apiweb.domain.models.enumlist.db.DBEtablissement;
 import fr.itii.apiweb.domain.models.enumlist.db.DBTable;
 import fr.itii.apiweb.domain.models.enumlist.font.Font;
-import fr.itii.apiweb.domain.tools.ExceptionsHandler;
+import fr.itii.apiweb.domain.tools.ExceptionHandler;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class DBManager {
             }
             _con.close();
         } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
     }
     public void saveEtablissements(List<Etablissement> Etablissements) {
@@ -127,7 +127,7 @@ public class DBManager {
             this.disconnect(_con);
 
         } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
     }
 
@@ -149,7 +149,7 @@ public class DBManager {
                 _return = this.getEtablissementListFromRs(results);
             }
         } catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
         return _return;
     }
@@ -193,7 +193,7 @@ public class DBManager {
                 this.disconnect(_con);
             }
         } catch (Exception e) {
-                ExceptionsHandler.handleException(new SQLException());
+                ExceptionHandler.handleException(new SQLException());
         }
     }
 
@@ -222,7 +222,7 @@ public class DBManager {
                 }
             }
         }  catch (Exception e) {
-                ExceptionsHandler.handleException(new SQLException());
+                ExceptionHandler.handleException(new SQLException());
         }
         return _return;
     }
@@ -244,7 +244,7 @@ public class DBManager {
                 }
             }
         }  catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
         return _return;
     }
@@ -271,7 +271,7 @@ public class DBManager {
                 this.disconnect(_con);
             }
         }  catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
     }
     private void deleteInt(DBTable Table, Enum col, int critere)
@@ -286,7 +286,7 @@ public class DBManager {
                 this.disconnect(_con);
             }
         }  catch (Exception e) {
-            ExceptionsHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
     }
     /**
