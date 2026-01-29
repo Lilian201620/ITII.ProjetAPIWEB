@@ -133,7 +133,7 @@ public class DBManager {
     public List<Etablissement> getJoin(CommunesCol col, String critere, boolean onlyExplicit)
     {
         List<Etablissement> _return = new ArrayList<>();
-        String _req = "SELECT * FROM " + Tables.ETABLISSEMENTS.toString() + " a INNER JOIN " + Tables.COMMUNES.toString() + " b ON a.codecommune = b.codecommune WHERE " + col.toString() + " = ?";
+        String _req = "SELECT * FROM " + Tables.ETABLISSEMENTS.toString() + " a INNER JOIN " + Tables.COMMUNES.toString() + " b ON a.codecommune = b.codecommune WHERE b." + col.toString() + " = ?";
         try {
             Connection _con = _instance.connect();
             if (_con != null) {
@@ -253,12 +253,15 @@ public class DBManager {
      */
     private void deleteString(Tables Table, Enum col, String critere, boolean onlyExplicit)
     {
-        String _req = "DELETE * FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
+        String _req = "DELETE FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
         try {
             Connection _con = _instance.connect();
             if (_con != null) {
                 PreparedStatement _stmt = _con.prepareStatement(_req);
-                if (onlyExplicit) {
+                if (critere.isEmpty()) {
+                    _stmt = _con.prepareStatement("DELETE FROM " + Table.toString() + ";");
+                }
+                else if (onlyExplicit) {
                     _stmt.setString(1, critere);
                 } else {
                     _stmt.setString(1, "%" + critere + "%");
@@ -272,7 +275,7 @@ public class DBManager {
     }
     private void deleteInt(Tables Table, Enum col, int critere)
     {
-        String _req = "DELETE * FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
+        String _req = "DELETE FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
         try {
             Connection _con = _instance.connect();
             if (_con != null) {

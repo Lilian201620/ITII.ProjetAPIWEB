@@ -2,8 +2,12 @@ package data.remote;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.remote.APICaller;
+import fr.itii.apiweb.domain.models.Commune;
 import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
+import fr.itii.apiweb.domain.tools.Backend;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,8 +17,9 @@ public class APICallerTest {
     @Test
     public void testApiCallByNameExpectsResponseNotEmpty() {
         APICaller apiCaller = new APICaller();
-        JsonNode response = apiCaller.getCommunesByName("paris", "1000");
+        JsonNode response = apiCaller.getCommunesByName("Beauvais", "100");
         assertNotEquals(0, response.size());
+        System.out.println(response);
     }
 
     // Test sur byName sans resultats
@@ -60,7 +65,7 @@ public class APICallerTest {
     @Test
     public void testGetCommuneNom(){
         APICaller apiCaller = new APICaller();
-        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.NOM, "Beauvais", "10");
+        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.NOM, "Beauvais", "100");
         assertNotEquals(0, communes.size());
     }
 
@@ -77,5 +82,12 @@ public class APICallerTest {
         APICaller apiCaller = new APICaller();
         JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.DEPARTEMENT, "60", "100");
         assertNotEquals(0, communes.size());
+    }
+
+    @Test
+    public void testfromBackendByName(){
+        Backend backend = new Backend();
+        List<Commune> communes = backend.searchCommuneFromAPIByNom("Beauvais");
+        assertEquals("Beauvais", communes.getFirst().getNom());
     }
 }

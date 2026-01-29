@@ -2,10 +2,14 @@ package data.remote;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.remote.EtablissementApiCaller;
+import fr.itii.apiweb.domain.models.Commune;
 import fr.itii.apiweb.domain.models.Etablissement;
 import fr.itii.apiweb.domain.models.api_models.EtablissementsFieldsEnum;
+import fr.itii.apiweb.domain.tools.Backend;
 import fr.itii.apiweb.domain.tools.JSONSerializer;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -61,6 +65,7 @@ public class EtablissementApiCallerTest {
         EtablissementApiCaller apiCaller = new EtablissementApiCaller();
         JsonNode response = apiCaller.getEtablissements(EtablissementsFieldsEnum.NOM_COMMUNE, "Beauvais", "100");
         assertEquals(80, response.size());
+        System.out.println(response);
     }
 
     @Test
@@ -83,4 +88,5 @@ public class EtablissementApiCallerTest {
         JsonNode response = apiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_DEPARTEMENT, "60", "100");
         assertNotEquals(0, response.size());
     }
+
 }
