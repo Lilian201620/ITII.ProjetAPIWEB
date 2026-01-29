@@ -6,6 +6,9 @@ import fr.itii.apiweb.domain.tools.Backend;
 
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class Controller {
     private final Terminal t = new Terminal();
@@ -150,7 +153,8 @@ public class Controller {
                             b.saveEtablissement((List<Etablissement>) liste);
                         }
                     }
-                    open();
+                    t.showList(liste);
+                    call(liste);
                 }
 
                 // nouvelle recherche
@@ -178,91 +182,81 @@ public class Controller {
         switch (t.showMenuSearchDB()) {
             //Commune par nom
             case "1" -> {
-                List<Commune> res = b.searchCommuneFromDBByNom(
-                        t.showConfig("Recherche commune dans DB", "Nom de la commune: ")
-                );
+                String value = t.showConfig("Recherche commune dans DB", "Nom de la commune: ");
+                List<Commune> res = b.searchCommuneFromDBByNom(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchCommuneFromDBByNom, value);
             }
 
             //Commune par code postal
             case "2" -> {
-                List<Commune> res = b.searchCommuneFromDBByCodePostal(
-                        t.showConfig("Recherche commune dans DB", "Numero du code postal: ")
-                );
+                String value = t.showConfig("Recherche commune dans DB", "Numero du code postal: ");
+                List<Commune> res = b.searchCommuneFromDBByCodePostal(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchCommuneFromDBByCodePostal, value);
             }
             //Commune par departement
             case "3" -> {
-                List<Commune> res = b.searchCommuneFromDBByDepartement(
-                        t.showConfig("Recherche commune dans DB", "Numero de departement: ")
-                );
+                String value = t.showConfig("Recherche commune dans DB", "Numero de departement: ");
+                List<Commune> res = b.searchCommuneFromDBByDepartement(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchCommuneFromDBByDepartement, value);
             }
 
             //Commune par region
             case "4" -> {
-                List<Commune> res = b.searchCommuneFromDBByRegion(
-                        t.showConfig("Recherche commune dans DB", "Numero de region: ")
-                );
+                String value = t.showConfig("Recherche commune dans DB", "Numero de region: ");
+                List<Commune> res = b.searchCommuneFromDBByRegion(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchCommuneFromDBByRegion, value);
             }
 
             //Etablissement par nom
             case "5" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByNom(
-                        t.showConfig("Recherche etablissement dans DB", "Nom de l'etablissement: ")
-                );
+                String value = t.showConfig("Recherche etablissement dans DB", "Nom de l'etablissement: ");
+                List<Etablissement> res = b.searchEtablissementFromDBByNom(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchEtablissementFromDBByNom,  value);
 
             }
             //Etablissement par type
             case "6" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByType(
-                        t.showConfig("Recherche etablissement dans DB","Type d'etablissement: ")
-                );
+                String value = t.showConfig("Recherche etablissement dans DB","Type d'etablissement: ");
+                List<Etablissement> res = b.searchEtablissementFromDBByType(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchEtablissementFromDBByType, value);
 
             }
             //Etablissement par nom de commune
             case "7" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByNomCommune(
-                        t.showConfig("Recherche etablissement dans DB", "Nom de la commune: ")
-                );
+                String value = t.showConfig("Recherche etablissement dans DB", "Nom de la commune: ");
+                List<Etablissement> res = b.searchEtablissementFromDBByNomCommune(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchEtablissementFromDBByNomCommune, value);
             }
 
             //Etablissment par code postal
             case "8" -> {
-                List<Etablissement> res = b.searchEtablissementFromAPIByNom(
-                        t.showConfig("Recherche etablissement dans DB", "Numero du code postal: ")
-                );
+                String value = t.showConfig("Recherche etablissement dans DB", "Numero du code postal: ");
+                List<Etablissement> res = b.searchEtablissementFromAPIByCodePostal(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchEtablissementFromAPIByCodePostal, value);
             }
 
             //Etablissement par departement
             case "9" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByDepartement(
-                        t.showConfig("Recherche etablissement dans DB", "Numero de departement: ")
-                );
+                String value = t.showConfig("Recherche etablissement dans DB", "Numero de departement: ");
+                List<Etablissement> res = b.searchEtablissementFromDBByDepartement(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchEtablissementFromDBByDepartement, value);
             }
 
             //Etablissement par region
             case "10" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByRegion(
-                        t.showConfig("Recherche etablissement dans DB", "Numero de region: ")
-                );
+                String value = t.showConfig("Recherche etablissement dans DB", "Numero de region: ");
+                List<Etablissement> res = b.searchEtablissementFromDBByRegion(value);
                 t.showList(res);
-                read(res);
+                read(res, b.searchEtablissementFromDBByRegion, value);
             }
 
             //Retour
@@ -274,37 +268,42 @@ public class Controller {
     //  DATABASE
     //  =========================================================
 
-    private <T> void read(List<T> liste) {
+    private <T> void read(List<T> liste, Function<String, List<T>> callback, String value) {
         while (true) {
             switch (t.showMenuDB()) {
                 //Page précédente
                 case "1" -> {
                     t.showList(liste, t.getIndex() - 20);
-                    read(liste);
+                    read(liste, callback, value);
                 }
                 //Page suivante
                 case "2" -> {
                     t.showList(liste, t.getIndex());
-                    read(liste);
+                    read(liste, callback, value);
                 }
 
                 //Delete par indice
                 case "3" -> {
-                    String param = t.showAction(
+                    String index = t.showAction(
                             "Supprimer",
                             "Liste des indices: "
                     );
                     if (!liste.isEmpty()) {
-                        Object first = liste.get(0);
+                        Object first = liste.getFirst();
 
                         if (first instanceof Commune) {
-                            b.deleteCommune((List<Commune>) liste, param);
+                            b.deleteCommune((List<Commune>) liste, index);
                         } else if (first instanceof Etablissement) {
-                            b.deleteEtablissement((List<Etablissement>) liste, param);
+                            b.deleteEtablissement((List<Etablissement>) liste, index);
                         }
+
+                        List<T> newListe = callback.apply(value);
+                        t.showList(newListe);
+                        read(newListe, callback, value);
+
+                    } else {
+                        read(liste, callback, value);
                     }
-                    t.showList(liste);
-                    read(liste);
                 }
 
                 //Delete tout
@@ -318,7 +317,9 @@ public class Controller {
                             b.deleteEtablissement((List<Etablissement>) liste);
                         }
                     }
-                    open();
+                    List<T> newListe = callback.apply(value);
+                    t.showList(newListe);
+                    read(newListe, callback, value);
                 }
 
                 // nouvelle recherche

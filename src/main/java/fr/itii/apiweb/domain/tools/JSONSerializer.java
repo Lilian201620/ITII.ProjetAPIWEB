@@ -50,12 +50,12 @@ public class JSONSerializer {
     }
 
     //Listes
-    public <T> List toLists(List<T> liste, String value){
-        if(value.equals("*")){
+    public <T> List toLists(List<T> liste, String indexs){
+        if(indexs.equals("*")){
             return liste;
         }
 
-        String[] select = value.replaceAll("[^0-9\\- ]", "").split("\\s+");
+        String[] select = indexs.replaceAll("[^0-9\\- ]", "").split("\\s+");
         List<T> newList = new ArrayList<>();
 
         for (String s : select) {

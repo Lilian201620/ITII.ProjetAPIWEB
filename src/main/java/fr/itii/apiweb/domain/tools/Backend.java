@@ -13,6 +13,7 @@ import fr.itii.apiweb.domain.models.objet.Etablissement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class Backend {
 
@@ -20,6 +21,17 @@ public class Backend {
     private final EtablissementApiCaller etablissementApiCaller = new EtablissementApiCaller();
     private final DBManager db = DBManager.getInstance();
     private final JSONSerializer serializer = new JSONSerializer();
+
+    public Function<String, List<Commune>> searchCommuneFromDBByNom = this::searchCommuneFromDBByNom;
+    public Function<String, List<Commune>> searchCommuneFromDBByCodePostal =  this::searchCommuneFromDBByCodePostal;
+    public Function<String, List<Commune>> searchCommuneFromDBByDepartement = this::searchCommuneFromDBByDepartement;
+    public Function<String, List<Commune>> searchCommuneFromDBByRegion =  this::searchCommuneFromDBByRegion;
+    public Function<String, List<Etablissement>> searchEtablissementFromDBByNom = this::searchEtablissementFromDBByNom;
+    public Function<String, List<Etablissement>> searchEtablissementFromDBByType = this::searchEtablissementFromDBByType;
+    public Function<String, List<Etablissement>> searchEtablissementFromDBByNomCommune =  this::searchEtablissementFromDBByNomCommune;
+    public Function<String, List<Etablissement>> searchEtablissementFromAPIByCodePostal = this::searchEtablissementFromAPIByCodePostal;
+    public Function<String, List<Etablissement>> searchEtablissementFromDBByDepartement = this::searchEtablissementFromDBByDepartement;
+    public Function<String, List<Etablissement>> searchEtablissementFromDBByRegion = this::searchEtablissementFromDBByRegion;
 
     // ==================================================
     //  Commune call API

@@ -100,7 +100,7 @@ public class Terminal {
 
     public String showAction(String title, String msg){
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== "+ title + " ====" + Font.RESET);
-        System.out.println(Font.ITALIC + "" + Font.GREY + "Exemple de saisi: 1 4 7-10 => indice sauvegardé: 1,4,7,8,9,10" + Font.RESET);
+        System.out.println(Font.ITALIC + "" + Font.GREY + "Exemple de saisi: 1 4 7-10 => indice selectionne: 1,4,7,8,9,10" + Font.RESET);
         System.out.print(msg);
 
         return sc.nextLine().trim();
@@ -123,8 +123,8 @@ public class Terminal {
     public <T> void showList(List<T> results, int index) {
         clear();
         if (results == null || results.isEmpty()) {
-            System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Résultats ====" + Font.RESET);
-            System.out.println("Aucun résultat.");
+            System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats ====" + Font.RESET);
+            System.out.println("Aucun resultat.");
             return;
         }
 
@@ -136,7 +136,7 @@ public class Terminal {
         showIndex = Math.max(0, index);
         int end = Math.min(showIndex + PAGE_SIZE, results.size());
 
-        System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Résultats " + (showIndex + 1) + " à " + end + " / " + results.size() + " ====" + Font.RESET);
+        System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats " + (showIndex + 1) + " à " + end + " / " + results.size() + " ====" + Font.RESET);
         for (int i = showIndex; i < end; i++) {
             System.out.println(String.format("#%-4s",(i + 1)) + " " + results.get(i));
         }
