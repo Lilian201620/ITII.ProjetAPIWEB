@@ -14,7 +14,7 @@ public class JSONSerializer {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-   //communes
+    //Commune
     public List<Commune> toCommunes(JsonNode json) {
         List<Commune> communes = new ArrayList<>();
 
@@ -31,14 +31,8 @@ public class JSONSerializer {
         }
     }
 
-    public Commune getCommuneByNom(List<Commune> communeList, String nomCommune) {
-        return communeList.stream()
-                .filter(c -> c.getNom().equalsIgnoreCase(nomCommune))
-                .findFirst()
-                .orElse(null);
-    }
 
- //etablissements
+    //Etablissements
     public List<Etablissement> toEtablissements(JsonNode json) {
         List<Etablissement> etablissements = new ArrayList<>();
 
@@ -55,13 +49,30 @@ public class JSONSerializer {
         }
     }
 
-    public Etablissement getEtablissementByNom(
-            List<Etablissement> etablissementList,
-            String nomEtablissement
-    ) {
-        return etablissementList.stream()
-                .filter(e -> e.getNomEtablissement().equalsIgnoreCase(nomEtablissement))
-                .findFirst()
-                .orElse(null);
+    //Listes
+    public <T> List toLists(List<T> liste, String value){
+        if(value.equals("*")){
+            return liste;
+        }
+
+        String[] select = value.replaceAll("[^0-9\\- ]", "").split("\\s+");
+        List<T> newList = new ArrayList<>();
+
+        for (String s : select) {
+            if (s.isEmpty()) continue;
+
+            String[] intervalle = s.split("-");
+            try {
+                int start = Integer.parseInt(intervalle[0]);
+                int end = (intervalle.length > 1) ? Integer.parseInt(intervalle[1]) : start;
+
+                for (int j = Math.max(0, start); j <= Math.min(end, liste.size() - 1); j++) {
+                    newList.add(liste.get(j));
+                }
+            } catch (NumberFormatException e) {
+
+            }
+        }
+        return newList;
     }
 }
