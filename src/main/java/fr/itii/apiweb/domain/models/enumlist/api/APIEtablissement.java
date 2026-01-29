@@ -1,6 +1,6 @@
-package fr.itii.apiweb.domain.models.api_models;
+package fr.itii.apiweb.domain.models.enumlist.api;
 
-public enum EtablissementsFieldsEnum {
+public enum APIEtablissement {
 
     CODE_COMMUNE("code_commune"),
     NOM_COMMUNE("nom_commune"),
@@ -8,7 +8,7 @@ public enum EtablissementsFieldsEnum {
 
     private final String field;
 
-    EtablissementsFieldsEnum(String field) {
+    APIEtablissement(String field) {
         this.field = field;
     }
 

@@ -2,14 +2,10 @@ package data.remote;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.remote.EtablissementApiCaller;
-import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.Etablissement;
-import fr.itii.apiweb.domain.models.api_models.EtablissementsFieldsEnum;
-import fr.itii.apiweb.domain.tools.Backend;
+import fr.itii.apiweb.domain.models.objet.Etablissement;
+import fr.itii.apiweb.domain.models.enumlist.api.APIEtablissement;
 import fr.itii.apiweb.domain.tools.JSONSerializer;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -63,7 +59,7 @@ public class EtablissementApiCallerTest {
     @Test
     public void testGetEtablissementsNom(){
         EtablissementApiCaller apiCaller = new EtablissementApiCaller();
-        JsonNode response = apiCaller.getEtablissements(EtablissementsFieldsEnum.NOM_COMMUNE, "Beauvais", "100");
+        JsonNode response = apiCaller.getEtablissements(APIEtablissement.NOM_COMMUNE, "Beauvais", "100");
         assertEquals(80, response.size());
         System.out.println(response);
     }
@@ -71,21 +67,21 @@ public class EtablissementApiCallerTest {
     @Test
     public void testGetEtablissementsCodeCommune(){
         EtablissementApiCaller apiCaller = new EtablissementApiCaller();
-        JsonNode response = apiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_COMMUNE, "60130", "100");
+        JsonNode response = apiCaller.getEtablissements(APIEtablissement.CODE_COMMUNE, "60130", "100");
         assertEquals(1, response.size());
     }
 
     @Test
     public void testGetEtablissementsCodeDepartement(){
         EtablissementApiCaller apiCaller = new EtablissementApiCaller();
-        JsonNode response = apiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_DEPARTEMENT, "060", "100");
+        JsonNode response = apiCaller.getEtablissements(APIEtablissement.CODE_DEPARTEMENT, "060", "100");
         assertNotEquals(0, response.size());
     }
 
     @Test
     public void testGetEtablissementsCodeDepartement2Numbers(){
         EtablissementApiCaller apiCaller = new EtablissementApiCaller();
-        JsonNode response = apiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_DEPARTEMENT, "60", "100");
+        JsonNode response = apiCaller.getEtablissements(APIEtablissement.CODE_DEPARTEMENT, "60", "100");
         assertNotEquals(0, response.size());
     }
 

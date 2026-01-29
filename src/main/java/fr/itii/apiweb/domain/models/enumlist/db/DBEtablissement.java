@@ -1,6 +1,6 @@
-package fr.itii.apiweb.domain.models.db_models;
+package fr.itii.apiweb.domain.models.enumlist.db;
 
-public enum EtablissementsCol {
+public enum DBEtablissement {
     ID("id"),
     NOM("nom"),
     TYPE("type"),
@@ -9,13 +9,13 @@ public enum EtablissementsCol {
     CODE_COMMUNE("codecommune"),
     NOM_COMMUNE("nomcommune");
 
-    private final String _sql;
+    private final String sql;
 
-    EtablissementsCol(String _sql) {
-        this._sql = _sql;
+    DBEtablissement(String sql) {
+        this.sql = sql;
     }
     @Override
     public String toString() {
-        return _sql;
+        return sql;
     }
 }

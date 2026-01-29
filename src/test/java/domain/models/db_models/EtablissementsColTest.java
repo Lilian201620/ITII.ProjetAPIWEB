@@ -1,6 +1,6 @@
 package domain.models.db_models;
 
-import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
+import fr.itii.apiweb.domain.models.enumlist.db.DBEtablissement;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,24 +10,24 @@ public class EtablissementsColTest {
     @Test
     public void EtablissementsColIdentifiersTest()
     {
-        assertInstanceOf(EtablissementsCol.class, EtablissementsCol.ID);
-        assertInstanceOf(EtablissementsCol.class, EtablissementsCol.NOM);
-        assertInstanceOf(EtablissementsCol.class, EtablissementsCol.TYPE);
-        assertInstanceOf(EtablissementsCol.class, EtablissementsCol.MAIL);
-        assertInstanceOf(EtablissementsCol.class, EtablissementsCol.STATUT);
-        assertInstanceOf(EtablissementsCol.class, EtablissementsCol.CODE_COMMUNE);
-        assertInstanceOf(EtablissementsCol.class, EtablissementsCol.NOM_COMMUNE);
+        assertInstanceOf(DBEtablissement.class, DBEtablissement.ID);
+        assertInstanceOf(DBEtablissement.class, DBEtablissement.NOM);
+        assertInstanceOf(DBEtablissement.class, DBEtablissement.TYPE);
+        assertInstanceOf(DBEtablissement.class, DBEtablissement.MAIL);
+        assertInstanceOf(DBEtablissement.class, DBEtablissement.STATUT);
+        assertInstanceOf(DBEtablissement.class, DBEtablissement.CODE_COMMUNE);
+        assertInstanceOf(DBEtablissement.class, DBEtablissement.NOM_COMMUNE);
     }
 
     @Test
     public void EtablissementsColSqlNameTest()
     {
-        assertEquals("id",  EtablissementsCol.ID.toString());
-        assertEquals("nom",  EtablissementsCol.NOM.toString());
-        assertEquals("type",  EtablissementsCol.TYPE.toString());
-        assertEquals("mail",  EtablissementsCol.MAIL.toString());
-        assertEquals("statut",  EtablissementsCol.STATUT.toString());
-        assertEquals("codecommune",  EtablissementsCol.CODE_COMMUNE.toString());
-        assertEquals("nomcommune",   EtablissementsCol.NOM_COMMUNE.toString());
+        assertEquals("id",  DBEtablissement.ID.toString());
+        assertEquals("nom",  DBEtablissement.NOM.toString());
+        assertEquals("type",  DBEtablissement.TYPE.toString());
+        assertEquals("mail",  DBEtablissement.MAIL.toString());
+        assertEquals("statut",  DBEtablissement.STATUT.toString());
+        assertEquals("codecommune",  DBEtablissement.CODE_COMMUNE.toString());
+        assertEquals("nomcommune",   DBEtablissement.NOM_COMMUNE.toString());
     }
 }

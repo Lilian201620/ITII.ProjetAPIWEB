@@ -1,8 +1,8 @@
 package fr.itii.apiweb.data.local;
 
-import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.db_models.CommunesCol;
-import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
+import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.enumlist.db.DBCommune;
+import fr.itii.apiweb.domain.models.enumlist.db.DBEtablissement;
 
 import java.util.List;
 
@@ -14,8 +14,8 @@ import java.util.List;
 public interface DataRepository {
     void save(List<Commune> communes);
     List<Commune> getAll();
-    List<Commune> getCommune(CommunesCol col, String Name, boolean OnlyExplicitCaracters);
-    List<Commune> getEtablissement(EtablissementsCol col, String Name, boolean OnlyExplicitCaracters);
+    List<Commune> getCommune(DBCommune col, String Name, boolean OnlyExplicitCaracters);
+    List<Commune> getEtablissement(DBEtablissement col, String Name, boolean OnlyExplicitCaracters);
     List<Commune> getByCodeCommune(String CodeCommune, boolean OnlyExplicitCaracters);
     void deleteByName(String Name);
     void deleteById(long id);

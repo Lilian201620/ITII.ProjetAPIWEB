@@ -2,8 +2,8 @@ package string;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.remote.APICaller;
-import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
+import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.enumlist.api.APICommune;
 import fr.itii.apiweb.domain.tools.JSONSerializer;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class StringPrint {
         String a = "";
 
         APICaller apiCaller = new APICaller();
-        JsonNode jsonNode = apiCaller.getCommunes(CommunesFieldsEnum.NOM, "beauvais", 100);
+        JsonNode jsonNode = apiCaller.getCommunes(APICommune.NOM, "beauvais", 100);
         System.out.println(jsonNode);
 
         JSONSerializer jsonSerializer = new JSONSerializer();

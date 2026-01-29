@@ -1,13 +1,13 @@
 package fr.itii.apiweb.ui;
 
-import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.Etablissement;
+import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.objet.Etablissement;
 import fr.itii.apiweb.domain.tools.Backend;
 
 import java.util.List;
 import java.util.Scanner;
 
-public class Manager {
+public class Controller {
     private final Terminal t = new Terminal();
     private final Backend b = new Backend();
     private final Scanner sc = new Scanner(System.in);

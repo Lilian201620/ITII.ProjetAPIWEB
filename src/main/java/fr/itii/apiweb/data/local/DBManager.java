@@ -1,10 +1,11 @@
 package fr.itii.apiweb.data.local;
 
-import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.Etablissement;
-import fr.itii.apiweb.domain.models.db_models.CommunesCol;
-import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
-import fr.itii.apiweb.domain.models.db_models.Tables;
+import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.objet.Etablissement;
+import fr.itii.apiweb.domain.models.enumlist.db.DBCommune;
+import fr.itii.apiweb.domain.models.enumlist.db.DBEtablissement;
+import fr.itii.apiweb.domain.models.enumlist.db.DBTable;
+import fr.itii.apiweb.domain.models.enumlist.font.Font;
 import fr.itii.apiweb.domain.tools.ExceptionsHandler;
 
 import java.sql.*;
@@ -44,43 +45,43 @@ public class DBManager {
     // - Méthodes publiques pour l'exécution des requêtes SQL
     // PUBLIC | Used everywhere across the project
     // ----------------------------------------------------------
-    public List<Commune> getCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
-        return getString(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+    public List<Commune> getCommunes(DBCommune col, String critere, boolean explicitCaractersOnly) {
+        return getString(DBTable.COMMUNES, col, critere, explicitCaractersOnly);
     }
-    public List<Commune> getCommunes(CommunesCol col, int critere) {
-        return getInt(Tables.COMMUNES, col, critere);
+    public List<Commune> getCommunes(DBCommune col, int critere) {
+        return getInt(DBTable.COMMUNES, col, critere);
     }
     public List<Commune> getCommunes() {
-        return getString(Tables.COMMUNES, CommunesCol.ID, "", false);
+        return getString(DBTable.COMMUNES, DBCommune.ID, "", false);
     }
-    public List<Etablissement> getEtablissements(EtablissementsCol col, String critere, boolean explicitCaractersOnly) {
-        return getString(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+    public List<Etablissement> getEtablissements(DBEtablissement col, String critere, boolean explicitCaractersOnly) {
+        return getString(DBTable.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
     }
-    public List<Etablissement> getEtablissements(EtablissementsCol col, int critere) {
-        return getInt(Tables.ETABLISSEMENTS, col, critere);
+    public List<Etablissement> getEtablissements(DBEtablissement col, int critere) {
+        return getInt(DBTable.ETABLISSEMENTS, col, critere);
     }
     public List<Etablissement> getEtablissements() {
-        return getString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
+        return getString(DBTable.ETABLISSEMENTS, DBEtablissement.ID, "", false);
     }
 
 
-    public void deleteCommunes(CommunesCol col, String critere, boolean explicitCaractersOnly) {
-        deleteString(Tables.COMMUNES, col, critere, explicitCaractersOnly);
+    public void deleteCommunes(DBCommune col, String critere, boolean explicitCaractersOnly) {
+        deleteString(DBTable.COMMUNES, col, critere, explicitCaractersOnly);
     }
-    public void deleteCommunes(CommunesCol col, int critere) {
-        deleteInt(Tables.COMMUNES, col, critere);
+    public void deleteCommunes(DBCommune col, int critere) {
+        deleteInt(DBTable.COMMUNES, col, critere);
     }
     public void deleteCommunes() {
-        deleteString(Tables.COMMUNES, CommunesCol.ID, "", false);
+        deleteString(DBTable.COMMUNES, DBCommune.ID, "", false);
     }
-    public void deleteEtablissements(EtablissementsCol col, String critere, boolean explicitCaractersOnly) {
-        deleteString(Tables.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
+    public void deleteEtablissements(DBEtablissement col, String critere, boolean explicitCaractersOnly) {
+        deleteString(DBTable.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
     }
-    public void deleteEtablissements(EtablissementsCol col, int critere) {
-        deleteInt(Tables.ETABLISSEMENTS, col, critere);
+    public void deleteEtablissements(DBEtablissement col, int critere) {
+        deleteInt(DBTable.ETABLISSEMENTS, col, critere);
     }
     public void deleteEtablissements() {
-        deleteString(Tables.ETABLISSEMENTS, EtablissementsCol.ID, "", false);
+        deleteString(DBTable.ETABLISSEMENTS, DBEtablissement.ID, "", false);
     }
 
     public void saveCommunes(List<Commune> communes) {
@@ -88,8 +89,8 @@ public class DBManager {
             Connection _con = _instance.connect();
             PreparedStatement _statement;
             for (Commune _com : communes) {
-                if(getCommunes(CommunesCol.CODE_COMMUNE, _com.getCodeCommune(), true).isEmpty()) {
-                    String _req = "INSERT INTO " + Tables.COMMUNES.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", CommunesCol.NOM.toString(), CommunesCol.CODE_COMMUNE.toString(), CommunesCol.CODE_DEPARTEMENT.toString(), CommunesCol.CODE_POSTAL.toString(), CommunesCol.CODE_REGION.toString(), CommunesCol.POPULATION.toString());
+                if(getCommunes(DBCommune.CODE_COMMUNE, _com.getCodeCommune(), true).isEmpty()) {
+                    String _req = "INSERT INTO " + DBTable.COMMUNES.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", DBCommune.NOM.toString(), DBCommune.CODE_COMMUNE.toString(), DBCommune.CODE_DEPARTEMENT.toString(), DBCommune.CODE_POSTAL.toString(), DBCommune.CODE_REGION.toString(), DBCommune.POPULATION.toString());
                     _statement = _con.prepareStatement(_req);
                     _statement.setString(1, _com.getNom());
                     _statement.setString(2, _com.getCodeCommune());
@@ -99,7 +100,7 @@ public class DBManager {
                     _statement.setInt(6, _com.getPopulation());
                     _statement.execute();
                 } else {
-                    System.out.println("\u001B[3m \u001B[90m  Entrée " + _com.getNom() + " déjà présente dans la BDD. \u001B[0m");
+                    System.out.println(Font.ITALIC + "" +  Font.GREY + "Entrée " + _com.getNom() + " déjà présente dans la BDD." + Font.RESET);
                 }
 
             }
@@ -113,7 +114,7 @@ public class DBManager {
             Connection _con = _instance.connect();
             PreparedStatement _stmt;
             for (Etablissement _etbl : Etablissements) {
-                String _req = "INSERT INTO " + Tables.ETABLISSEMENTS.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", EtablissementsCol.NOM.toString(), EtablissementsCol.TYPE.toString(), EtablissementsCol.MAIL.toString(), EtablissementsCol.STATUT.toString(), EtablissementsCol.CODE_COMMUNE.toString(), EtablissementsCol.NOM_COMMUNE.toString());
+                String _req = "INSERT INTO " + DBTable.ETABLISSEMENTS.toString() + String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)", DBEtablissement.NOM.toString(), DBEtablissement.TYPE.toString(), DBEtablissement.MAIL.toString(), DBEtablissement.STATUT.toString(), DBEtablissement.CODE_COMMUNE.toString(), DBEtablissement.NOM_COMMUNE.toString());
                 _stmt = _con.prepareStatement(_req);
                 _stmt.setString(1, _etbl.getNomEtablissement());
                 _stmt.setString(2, _etbl.getTypeEtablissement());
@@ -130,10 +131,10 @@ public class DBManager {
         }
     }
 
-    public List<Etablissement> getJoin(CommunesCol col, String critere, boolean onlyExplicit)
+    public List<Etablissement> getJoin(DBCommune col, String critere, boolean onlyExplicit)
     {
         List<Etablissement> _return = new ArrayList<>();
-        String _req = "SELECT * FROM " + Tables.ETABLISSEMENTS.toString() + " a INNER JOIN " + Tables.COMMUNES.toString() + " b ON a.codecommune = b.codecommune WHERE b." + col.toString() + " = ?";
+        String _req = "SELECT * FROM " + DBTable.ETABLISSEMENTS.toString() + " a INNER JOIN " + DBTable.COMMUNES.toString() + " b ON a.codecommune = b.codecommune WHERE b." + col.toString() + " = ?";
         try {
             Connection _con = _instance.connect();
             if (_con != null) {
@@ -182,9 +183,9 @@ public class DBManager {
         try {
             Connection _con = _instance.connect();
             if (_con != null) {
-                String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + Tables.COMMUNES.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY, Nom VARCHAR(256), CodeCommune VARCHAR(5) PRIMARY KEY, CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
-                String _reqEtablissements = "CREATE TABLE IF NOT EXISTS " + Tables.ETABLISSEMENTS.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), Type VARCHAR(256), Mail VARCHAR(256), statut VARCHAR(6), codeCommune VARCHAR(5), nomCommune VARCHAR(256));";
-                String _reqCommEtabl = "DO $$ BEGIN IF NOT EXISTS ( SELECT 1 FROM pg_constraint WHERE conname = 'fk_communes' ) THEN ALTER TABLE " + Tables.ETABLISSEMENTS.toString() + " ADD CONSTRAINT fk_communes FOREIGN KEY (codeCommune) REFERENCES " + Tables.COMMUNES.toString() + "(CodeCommune) ON DELETE CASCADE; END IF; END $$;";
+                String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + DBTable.COMMUNES.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY, Nom VARCHAR(256), CodeCommune VARCHAR(5) PRIMARY KEY, CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
+                String _reqEtablissements = "CREATE TABLE IF NOT EXISTS " + DBTable.ETABLISSEMENTS.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), Type VARCHAR(256), Mail VARCHAR(256), statut VARCHAR(6), codeCommune VARCHAR(5), nomCommune VARCHAR(256));";
+                String _reqCommEtabl = "DO $$ BEGIN IF NOT EXISTS ( SELECT 1 FROM pg_constraint WHERE conname = 'fk_communes' ) THEN ALTER TABLE " + DBTable.ETABLISSEMENTS.toString() + " ADD CONSTRAINT fk_communes FOREIGN KEY (codeCommune) REFERENCES " + DBTable.COMMUNES.toString() + "(CodeCommune) ON DELETE CASCADE; END IF; END $$;";
                 Statement _stmt = _con.createStatement();
                 _stmt.executeUpdate(_reqCommunes);
                 _stmt.executeUpdate(_reqEtablissements);
@@ -199,7 +200,7 @@ public class DBManager {
     /**
      * Méthode générale getter
      */
-    private List getString(Tables Table, Enum col, String critere, boolean onlyExplicit)
+    private List getString(DBTable Table, Enum col, String critere, boolean onlyExplicit)
     {
         String _req = "SELECT * FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
         List _return = new ArrayList<>();
@@ -214,7 +215,7 @@ public class DBManager {
                 }
                 ResultSet results = _stmt.executeQuery();
                 this.disconnect(_con);
-                if(col instanceof CommunesCol) {
+                if(col instanceof DBCommune) {
                     _return = this.getCommunesListFromRs(results);
                 } else {
                     _return = this.getEtablissementListFromRs(results);
@@ -225,7 +226,7 @@ public class DBManager {
         }
         return _return;
     }
-    private List getInt(Tables Table, Enum col, int critere)
+    private List getInt(DBTable Table, Enum col, int critere)
     {
         String _req = "SELECT * FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
         List _return = new ArrayList<>();
@@ -236,7 +237,7 @@ public class DBManager {
                 _stmt.setInt(1, critere);
                 ResultSet results = _stmt.executeQuery();
                 this.disconnect(_con);
-                if(col instanceof CommunesCol) {
+                if(col instanceof DBCommune) {
                     _return = this.getCommunesListFromRs(results);
                 } else {
                     _return = this.getEtablissementListFromRs(results);
@@ -251,7 +252,7 @@ public class DBManager {
     /**
      * Deleters
      */
-    private void deleteString(Tables Table, Enum col, String critere, boolean onlyExplicit)
+    private void deleteString(DBTable Table, Enum col, String critere, boolean onlyExplicit)
     {
         String _req = "DELETE FROM " + Table.toString() + " WHERE " + col.toString() + " ILIKE ?";
         try {
@@ -273,7 +274,7 @@ public class DBManager {
             ExceptionsHandler.handleException(new SQLException());
         }
     }
-    private void deleteInt(Tables Table, Enum col, int critere)
+    private void deleteInt(DBTable Table, Enum col, int critere)
     {
         String _req = "DELETE FROM " + Table.toString() + " WHERE " + col.toString() + " = ?";
         try {

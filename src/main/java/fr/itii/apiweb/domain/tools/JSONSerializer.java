@@ -1,7 +1,5 @@
 package fr.itii.apiweb.domain.tools;
 
-import fr.itii.apiweb.domain.models.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +7,8 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.objet.Etablissement;
 
 public class JSONSerializer {
 

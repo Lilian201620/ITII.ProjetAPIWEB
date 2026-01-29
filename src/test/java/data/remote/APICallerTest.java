@@ -2,8 +2,8 @@ package data.remote;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.remote.APICaller;
-import fr.itii.apiweb.domain.models.Commune;
-import fr.itii.apiweb.domain.models.api_models.CommunesFieldsEnum;
+import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.enumlist.api.APICommune;
 import fr.itii.apiweb.domain.tools.Backend;
 import org.junit.jupiter.api.Test;
 
@@ -65,14 +65,14 @@ public class APICallerTest {
     @Test
     public void testGetCommuneNom(){
         APICaller apiCaller = new APICaller();
-        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.NOM, "Beauvais", "100");
+        JsonNode communes = apiCaller.getCommunes(APICommune.NOM, "Beauvais", "100");
         assertNotEquals(0, communes.size());
     }
 
     @Test
     public void testGetCommunesCodePostal(){
         APICaller apiCaller = new APICaller();
-        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.CODE_POSTAL, "60130", "100");
+        JsonNode communes = apiCaller.getCommunes(APICommune.CODE_POSTAL, "60130", "100");
         assertNotEquals(0, communes.size());
     }
 
@@ -80,7 +80,7 @@ public class APICallerTest {
     @Test
     public void testGetEtablissementsCodeDepartement2Numbers(){
         APICaller apiCaller = new APICaller();
-        JsonNode communes = apiCaller.getCommunes(CommunesFieldsEnum.DEPARTEMENT, "60", "100");
+        JsonNode communes = apiCaller.getCommunes(APICommune.DEPARTEMENT, "60", "100");
         assertNotEquals(0, communes.size());
     }
 

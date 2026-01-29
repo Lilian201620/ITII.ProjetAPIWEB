@@ -4,9 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import fr.itii.apiweb.data.local.DBManager;
 import fr.itii.apiweb.data.remote.APICaller;
 import fr.itii.apiweb.data.remote.EtablissementApiCaller;
-import fr.itii.apiweb.domain.models.*;
-import fr.itii.apiweb.domain.models.api_models.*;
-import fr.itii.apiweb.domain.models.db_models.*;
+import fr.itii.apiweb.domain.models.enumlist.api.APICommune;
+import fr.itii.apiweb.domain.models.enumlist.api.APIEtablissement;
+import fr.itii.apiweb.domain.models.enumlist.db.DBCommune;
+import fr.itii.apiweb.domain.models.enumlist.db.DBEtablissement;
+import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.objet.Etablissement;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,17 +26,17 @@ public class Backend {
     // ==================================================
 
     public List<Commune> searchCommuneFromAPIByNom(String value){
-        JsonNode json = api.getCommunes(CommunesFieldsEnum.NOM, value, 100);
+        JsonNode json = api.getCommunes(APICommune.NOM, value, 100);
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByCodePostal(String value){
-        JsonNode json = api.getCommunes(CommunesFieldsEnum.CODE_POSTAL, value, 100);
+        JsonNode json = api.getCommunes(APICommune.CODE_POSTAL, value, 100);
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByDepartement(String value){
-        JsonNode json = api.getCommunes(CommunesFieldsEnum.DEPARTEMENT, value, 100);
+        JsonNode json = api.getCommunes(APICommune.DEPARTEMENT, value, 100);
         return serializer.toCommunes(json);
     }
 
@@ -42,19 +45,19 @@ public class Backend {
     // ==================================================
 
     public List<Commune> searchCommuneFromDBByNom(String value){
-        return db.getCommunes(CommunesCol.NOM, value, false);
+        return db.getCommunes(DBCommune.NOM, value, false);
     }
 
     public List<Commune> searchCommuneFromDBByCodePostal(String value){
-        return db.getCommunes(CommunesCol.CODE_POSTAL, value, false);
+        return db.getCommunes(DBCommune.CODE_POSTAL, value, false);
     }
 
     public  List<Commune> searchCommuneFromDBByDepartement(String value){
-        return db.getCommunes(CommunesCol.CODE_DEPARTEMENT, value, false);
+        return db.getCommunes(DBCommune.CODE_DEPARTEMENT, value, false);
     }
 
     public List<Commune> searchCommuneFromDBByRegion(String value){
-        return db.getCommunes(CommunesCol.CODE_REGION, value, false);
+        return db.getCommunes(DBCommune.CODE_REGION, value, false);
     }
 
     // ==================================================
@@ -81,7 +84,7 @@ public class Backend {
 
     public void deleteCommune(List<Commune> listeCommune){
         for(Commune c : listeCommune){
-            db.deleteCommunes(CommunesCol.CODE_COMMUNE, c.getCodeCommune(), false);
+            db.deleteCommunes(DBCommune.CODE_COMMUNE, c.getCodeCommune(), false);
         }
     }
 
@@ -104,7 +107,7 @@ public class Backend {
     }
 
     public List<Etablissement> searchEtablissementFromAPIByNomCommune(String value){
-        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.NOM_COMMUNE, value, 100);
+        JsonNode json = etablissementApiCaller.getEtablissements(APIEtablissement.NOM_COMMUNE, value, 100);
         return serializer.toEtablissements(json);
     }
 
@@ -113,7 +116,7 @@ public class Backend {
     }
 
     public List<Etablissement> searchEtablissementFromAPIByDepartement(String value){
-        JsonNode json = etablissementApiCaller.getEtablissements(EtablissementsFieldsEnum.CODE_DEPARTEMENT, value, 100);
+        JsonNode json = etablissementApiCaller.getEtablissements(APIEtablissement.CODE_DEPARTEMENT, value, 100);
         return serializer.toEtablissements(json);
     }
 
@@ -122,27 +125,27 @@ public class Backend {
     // ==================================================
 
     public List<Etablissement> searchEtablissementFromDBByNom(String value){
-        return db.getEtablissements(EtablissementsCol.NOM, value, false);
+        return db.getEtablissements(DBEtablissement.NOM, value, false);
     }
 
     public List<Etablissement> searchEtablissementFromDBByType(String value){
-        return db.getEtablissements(EtablissementsCol.TYPE, value, false);
+        return db.getEtablissements(DBEtablissement.TYPE, value, false);
     }
 
     public List<Etablissement> searchEtablissementFromDBByNomCommune(String value){
-        return db.getJoin(CommunesCol.NOM, value, true);
+        return db.getJoin(DBCommune.NOM, value, true);
     }
 
     public List<Etablissement> searchEtablissementFromDBByCodePostal(String value){
-        return db.getJoin(CommunesCol.CODE_POSTAL, value, true);
+        return db.getJoin(DBCommune.CODE_POSTAL, value, true);
     }
 
     public  List<Etablissement> searchEtablissementFromDBByDepartement(String value){
-        return db.getJoin(CommunesCol.CODE_DEPARTEMENT, value, true);
+        return db.getJoin(DBCommune.CODE_DEPARTEMENT, value, true);
     }
 
     public List<Etablissement> searchEtablissementFromDBByRegion(String value){
-        return db.getJoin(CommunesCol.CODE_REGION, value, true);
+        return db.getJoin(DBCommune.CODE_REGION, value, true);
     }
 
     // ==================================================
@@ -159,7 +162,7 @@ public class Backend {
         }
         List<Commune> _listCommune = new ArrayList<>();
         for(String _comm : _listCodeCommunes){
-            JsonNode json = api.getCommunes(CommunesFieldsEnum.CODE_COMMUNE, _comm, "1");
+            JsonNode json = api.getCommunes(APICommune.CODE_COMMUNE, _comm, "1");
             _listCommune.add(serializer.toCommunes(json).getFirst());
         }
         db.saveCommunes(_listCommune);
@@ -182,7 +185,7 @@ public class Backend {
 
     public void deleteEtablissement(List<Etablissement> listeEtablissement) {
         for (Etablissement et : listeEtablissement) {
-            db.deleteEtablissements(EtablissementsCol.NOM, et.getNomEtablissement(), true);
+            db.deleteEtablissements(DBEtablissement.NOM, et.getNomEtablissement(), true);
         }
     }
 

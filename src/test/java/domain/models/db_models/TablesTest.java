@@ -1,6 +1,6 @@
 package domain.models.db_models;
 
-import fr.itii.apiweb.domain.models.db_models.Tables;
+import fr.itii.apiweb.domain.models.enumlist.db.DBTable;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,14 +10,14 @@ public class TablesTest {
     @Test
     public void TablesIdentifiersTest()
     {
-        assertInstanceOf(Tables.class, Tables.COMMUNES);
-        assertInstanceOf(Tables.class, Tables.ETABLISSEMENTS);
+        assertInstanceOf(DBTable.class, DBTable.COMMUNES);
+        assertInstanceOf(DBTable.class, DBTable.ETABLISSEMENTS);
     }
 
     @Test
     public void TablesSqlNameTest()
     {
-        assertEquals("communes", Tables.COMMUNES.toString());
-        assertEquals("etablissements", Tables.ETABLISSEMENTS.toString());
+        assertEquals("communes", DBTable.COMMUNES.toString());
+        assertEquals("etablissements", DBTable.ETABLISSEMENTS.toString());
     }
 }

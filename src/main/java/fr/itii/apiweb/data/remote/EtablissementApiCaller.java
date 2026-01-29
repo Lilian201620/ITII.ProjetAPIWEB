@@ -2,7 +2,7 @@ package fr.itii.apiweb.data.remote;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.itii.apiweb.domain.models.api_models.EtablissementsFieldsEnum;
+import fr.itii.apiweb.domain.models.enumlist.api.APIEtablissement;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -53,14 +53,14 @@ public class EtablissementApiCaller {
         return sendRequest(url);
     }
 
-    public JsonNode getEtablissements(EtablissementsFieldsEnum field, String query, Integer limit){
+    public JsonNode getEtablissements(APIEtablissement field, String query, Integer limit){
         return getEtablissements(field, query, limit.toString());
     }
 
-    public JsonNode getEtablissements(EtablissementsFieldsEnum field, String query, String limit){
+    public JsonNode getEtablissements(APIEtablissement field, String query, String limit){
         String trueField = field.getField();
         String trueQuery;
-        if (field == EtablissementsFieldsEnum.CODE_DEPARTEMENT && query.length()<3){
+        if (field == APIEtablissement.CODE_DEPARTEMENT && query.length()<3){
             trueQuery = "0"+ query;
         } else {
             trueQuery = query;

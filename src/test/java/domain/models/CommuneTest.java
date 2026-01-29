@@ -1,6 +1,6 @@
 package domain.models;
 
-import fr.itii.apiweb.domain.models.Commune;
+import fr.itii.apiweb.domain.models.objet.Commune;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,4 +1,4 @@
-package fr.itii.apiweb.domain.models;
+package fr.itii.apiweb.domain.models.objet;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
