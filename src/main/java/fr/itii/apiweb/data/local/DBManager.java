@@ -18,6 +18,7 @@ public class DBManager {
     private static final String _password = "RVomy#$@CE76#t!yNkPr";
 
     private static DBManager _instance;
+    private static boolean _isInit = false;
 
     /**
      * Constructeur privé pour réalisation d'un singleton
@@ -100,7 +101,7 @@ public class DBManager {
                     _statement.setInt(6, _com.getPopulation());
                     _statement.execute();
                 } else {
-                    System.out.println(Font.ITALIC + "" +  Font.GREY + "Entrée " + _com.getNom() + " déjà présente dans la BDD." + Font.RESET);
+                    System.out.println(Font.ITALIC.toString() + "" +  Font.GREY.toString() + "Entrée " + _com.getNom() + " déjà présente dans la BDD." + Font.RESET.toString());
                 }
 
             }
@@ -163,6 +164,9 @@ public class DBManager {
      * @return Connexion à la base de données
      */
     private Connection connect() throws SQLException {
+        if (!_isInit) {
+            this.initTables();
+        }
         return DriverManager.getConnection(_url,_username,_password);
     }
 
@@ -181,7 +185,7 @@ public class DBManager {
      */
     private void initTables() {
         try {
-            Connection _con = _instance.connect();
+            Connection _con = DriverManager.getConnection(_url,_username,_password);
             if (_con != null) {
                 String _reqCommunes = "CREATE TABLE IF NOT EXISTS " + DBTable.COMMUNES.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY, Nom VARCHAR(256), CodeCommune VARCHAR(5) PRIMARY KEY, CodeDepartement VARCHAR(50), CodePostal VARCHAR(16), CodeRegion VARCHAR(2), population BIGINT);";
                 String _reqEtablissements = "CREATE TABLE IF NOT EXISTS " + DBTable.ETABLISSEMENTS.toString() + "( Id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, Nom VARCHAR(256), Type VARCHAR(256), Mail VARCHAR(256), statut VARCHAR(6), codeCommune VARCHAR(5), nomCommune VARCHAR(256));";
@@ -191,6 +195,7 @@ public class DBManager {
                 _stmt.executeUpdate(_reqEtablissements);
                 _stmt.executeUpdate(_reqCommEtabl);
                 this.disconnect(_con);
+                _isInit = true;
             }
         } catch (Exception e) {
                 ExceptionHandler.handleException(new SQLException());
