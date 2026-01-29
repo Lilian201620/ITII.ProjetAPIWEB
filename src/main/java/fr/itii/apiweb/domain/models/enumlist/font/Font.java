@@ -16,7 +16,7 @@ public enum Font {
         this.font = font;
     }
 
-    public String getFont() {
+    public String toString() {
         return font;
     }
 
