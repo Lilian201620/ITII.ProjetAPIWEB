@@ -10,6 +10,7 @@ import fr.itii.apiweb.domain.models.api_models.EtablissementsFieldsEnum;
 import fr.itii.apiweb.domain.models.db_models.CommunesCol;
 import fr.itii.apiweb.domain.models.db_models.EtablissementsCol;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Backend {
@@ -101,6 +102,19 @@ public class Backend {
     }
 
     public void saveEtablissement(List<Etablissement> listeEtablissement) {
+        List<String> _listCodeCommunes = new ArrayList<>();
+        for(Etablissement _etbl : listeEtablissement){
+            String _commEtbl = _etbl.getCodeCommune();
+            if(!_listCodeCommunes.contains(_commEtbl)){
+                _listCodeCommunes.add(_commEtbl);
+            }
+        }
+        List<Commune> _listCommune = new ArrayList<>();
+        for(String _comm : _listCodeCommunes){
+            JsonNode json = api.getCommunes(CommunesFieldsEnum.CODE_COMMUNE, _comm, "1");
+            _listCommune.add(serializer.toCommunes(json).getFirst());
+        }
+        db.saveCommunes(_listCommune);
         db.saveEtablissements(listeEtablissement);
     }
 

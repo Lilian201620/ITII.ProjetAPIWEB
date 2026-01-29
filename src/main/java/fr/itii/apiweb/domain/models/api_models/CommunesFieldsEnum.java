@@ -4,6 +4,7 @@ public enum CommunesFieldsEnum {
     NOM("nom"),
     CODE_POSTAL("codePostal"),
     DEPARTEMENT("codeDepartement"),
+    CODE_COMMUNE("code"),
     REGION("codeRegion");
 
     private final String field;
