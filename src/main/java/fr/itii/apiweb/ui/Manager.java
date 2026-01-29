@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Manager {
-    private final Terminal a = new Terminal();
+    private final Terminal t = new Terminal();
     private final Backend b = new Backend();
     private final Scanner sc = new Scanner(System.in);
 
@@ -16,22 +16,22 @@ public class Manager {
     //  PRINCIPAL
     //  =========================================================
 
-    public void flow() {
+    public void open() {
         while (true) {
-            switch (a.showMenu()) {
+            switch (t.showMenu()) {
                 //Recherche API
                 case "1" -> {
-                    flowAPI();
+                    call();
                 }
 
                 //Recherche DB
                 case "2" -> {
-                    flowDB();
+                    read();
                 }
 
                 //Delete DB
                 case "3" -> {
-                    deleteDB();
+                    delete();
                 }
 
                 //Quitter
@@ -49,90 +49,100 @@ public class Manager {
     //  API
     //  =========================================================
 
-    private void flowAPI() {
-        switch (a.showMenuSearchAPI()) {
+    private void call() {
+        switch (t.showMenuSearchAPI()) {
             //Commune par nom
             case "1" -> {
                 List<Commune> res = b.searchCommuneFromAPIByNom(
-                        a.showConfig("Recherche commune dans API", "Nom de la commune: ")
+                        t.showConfig("Recherche commune dans API", "Nom de la commune: ")
                 );
-                a.showList(res);
-                flowAPI(res);
+                t.showList(res);
+                call(res);
             }
 
             //Commune par code postal
             case "2" -> {
                 List<Commune> res = b.searchCommuneFromAPIByCodePostal(
-                        a.showConfig("Recherche commune dans API", "Numéro du code postal: ")
+                        t.showConfig("Recherche commune dans API", "Numero du code postal: ")
                 );
-                a.showList(res);
-                flowAPI(res);
+                t.showList(res);
+                call(res);
             }
 
             //Commune par departement
             case "3" -> {
                 List<Commune> res = b.searchCommuneFromAPIByDepartement(
-                        a.showConfig("Recherche commune dans API", "Numéro de département: ")
+                        t.showConfig("Recherche commune dans API", "Numero de departement: ")
                 );
-                a.showList(res);
-                flowAPI(res);
+                t.showList(res);
+                call(res);
             }
 
-            //Etablissement par commune
+            //Etablissement par nom de la commune
             case "4" -> {
                 List<Etablissement> res = b.searchEtablissementFromAPIByNomCommune(
-                        a.showConfig("Recherche etablissement dans API", "Nom de la commune: ")
+                        t.showConfig("Recherche etablissement dans API", "Nom de la commune: ")
                 );
-                a.showList(res);
-                flowAPI(res);
-            }
-
-            //Etablissement par code commune
-            case "5" -> {
-                List<Etablissement> res = b.searchEtablissementFromAPIByCodeCommune(
-                        a.showConfig("Recherche etablissement dans API", "Numero de la commune: ")
-                );
-                a.showList(res);
-                flowAPI(res);
+                t.showList(res);
+                call(res);
             }
 
             //Etablissement par departement
-            case "6" -> {
-                List<Etablissement> res = b.searchEtablissementFromAPIByDepartement(
-                        a.showConfig("Recherche etablissement dans API", "Numero de departement: ")
+            case "5" -> {
+                List<Etablissement> res = b.searchEtablissementFromAPIByNomCommune(
+                        t.showConfig("Recherche etablissement dans API", "Numero de departement: ")
                 );
-                a.showList(res);
-                flowAPI(res);
+                t.showList(res);
+                call(res);
             }
 
             //Retour
-            default -> { flow();}
+            default -> { open();}
         }
     }
 
     // ==========================================================
-    //  API vers List
+    //  API2
     //  =========================================================
 
-    private <T> void flowAPI(List<T> liste) {
+    private <T> void call(List<T> liste) {
         while (true) {
-            switch (a.showMenuAPI()) {
+            switch (t.showMenuAPI()) {
                 //Page précédente
                 case "1" -> {
-                    a.showList(liste, a.getIndex() - 20);
-                    flowAPI(liste);
+                    t.showList(liste, t.getIndex() - 20);
+                    call(liste);
                 }
 
                 //Page suivante
                 case "2" -> {
-                    a.showList(liste, a.getIndex());
-                    flowAPI(liste);
+                    t.showList(liste, t.getIndex());
+                    call(liste);
                 }
 
-                //Save
+                //Save par indice
                 case "3" -> {
+                    String param = t.showAction(
+                            "Sauvegarde",
+                            "Liste des indices: "
+                    );
                     if (!liste.isEmpty()) {
-                        Object first = liste.get(0);
+                        Object first = liste.getFirst();
+
+                        if (first instanceof Commune) {
+                            b.saveCommune((List<Commune>) liste, param);
+                        } else if (first instanceof Etablissement) {
+                            b.saveEtablissement((List<Etablissement>) liste, param);
+                        }
+                    }
+                    t.showList(liste);
+                    call(liste);
+                }
+
+                //Save tout
+                case "4" -> {
+                    if (!liste.isEmpty()) {
+                        Object first = liste.getFirst();
 
                         if (first instanceof Commune) {
                             b.saveCommune((List<Commune>) liste);
@@ -140,17 +150,17 @@ public class Manager {
                             b.saveEtablissement((List<Etablissement>) liste);
                         }
                     }
-                    flowAPI(liste);
+                    open();
                 }
 
                 // nouvelle recherche
-                case "4" -> {
-                    flowAPI();
+                case "5" -> {
+                    call();
                 }
 
                 // retour menu principal
-                case "5" -> {
-                    flow();
+                case "6" -> {
+                    open();
                 }
 
                 default -> {}
@@ -164,91 +174,160 @@ public class Manager {
     //  DATABASE
     //  =========================================================
 
-    private void flowDB() {
-        switch (a.showMenuSearchDB()) {
+    private void read() {
+        switch (t.showMenuSearchDB()) {
             //Commune par nom
             case "1" -> {
                 List<Commune> res = b.searchCommuneFromDBByNom(
-                        a.showConfig("Recherche commune dans DB", "Nom de la commune: ")
+                        t.showConfig("Recherche commune dans DB", "Nom de la commune: ")
                 );
-                a.showList(res);
-                flowDB(res);
+                t.showList(res);
+                read(res);
             }
 
             //Commune par code postal
             case "2" -> {
                 List<Commune> res = b.searchCommuneFromDBByCodePostal(
-                        a.showConfig("Recherche commune dans DB", "Numero du code postal: ")
+                        t.showConfig("Recherche commune dans DB", "Numero du code postal: ")
                 );
-                a.showList(res);
-                flowDB(res);
+                t.showList(res);
+                read(res);
             }
             //Commune par departement
             case "3" -> {
                 List<Commune> res = b.searchCommuneFromDBByDepartement(
-                        a.showConfig("Recherche commune dans DB", "Numero de departement: ")
+                        t.showConfig("Recherche commune dans DB", "Numero de departement: ")
                 );
-                a.showList(res);
-                flowDB(res);
+                t.showList(res);
+                read(res);
             }
 
-            //Etablissement par commune
+            //Commune par region
             case "4" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByNomCommune(
-                        a.showConfig("Recherche etablissement dans DB", "Nom de la commune: ")
+                List<Commune> res = b.searchCommuneFromDBByRegion(
+                        t.showConfig("Recherche commune dans DB", "Numero de region: ")
                 );
-                a.showList(res);
-                flowDB(res);
-
+                t.showList(res);
+                read(res);
             }
-            //Etablissement par code commune
+
+            //Etablissement par nom
             case "5" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByCodeCommune(
-                        a.showConfig("Recherche etablissement dans DB","Numéro de la commune: ")
+                List<Etablissement> res = b.searchEtablissementFromDBByNom(
+                        t.showConfig("Recherche etablissement dans DB", "Nom de l'etablissement: ")
                 );
-                a.showList(res);
-                flowDB(res);
+                t.showList(res);
+                read(res);
 
             }
-            //Etablissement par departement
+            //Etablissement par type
             case "6" -> {
-                List<Etablissement> res = b.searchEtablissementFromDBByDepartement(
-                        a.showConfig("Recherche etablissement dans DB", "Numero de departement: ")
+                List<Etablissement> res = b.searchEtablissementFromDBByType(
+                        t.showConfig("Recherche etablissement dans DB","Type d'etablissement: ")
                 );
-                a.showList(res);
-                flowDB(res);
+                t.showList(res);
+                read(res);
+
+            }
+            //Etablissement par nom de commune
+            case "7" -> {
+                List<Etablissement> res = b.searchEtablissementFromDBByNomCommune(
+                        t.showConfig("Recherche etablissement dans DB", "Nom de la commune: ")
+                );
+                t.showList(res);
+                read(res);
+            }
+
+            //Etablissment par code postal
+            case "8" -> {
+                List<Etablissement> res = b.searchEtablissementFromAPIByNom(
+                        t.showConfig("Recherche etablissement dans DB", "Numero du code postal: ")
+                );
+                t.showList(res);
+                read(res);
+            }
+
+            //Etablissement par departement
+            case "9" -> {
+                List<Etablissement> res = b.searchEtablissementFromDBByDepartement(
+                        t.showConfig("Recherche etablissement dans DB", "Numero de departement: ")
+                );
+                t.showList(res);
+                read(res);
+            }
+
+            //Etablissement par region
+            case "10" -> {
+                List<Etablissement> res = b.searchEtablissementFromDBByRegion(
+                        t.showConfig("Recherche etablissement dans DB", "Numero de region: ")
+                );
+                t.showList(res);
+                read(res);
             }
 
             //Retour
-            default -> flow();
+            default -> open();
         }
     }
 
     // ==========================================================
-    //  DATABASE vers List
+    //  DATABASE
     //  =========================================================
 
-    private <T> void flowDB(List<T> liste) {
+    private <T> void read(List<T> liste) {
         while (true) {
-            switch (a.showMenuDB()) {
+            switch (t.showMenuDB()) {
                 //Page précédente
                 case "1" -> {
-                    a.showList(liste, a.getIndex() - 20);
-                    flowDB(liste);
+                    t.showList(liste, t.getIndex() - 20);
+                    read(liste);
                 }
                 //Page suivante
                 case "2" -> {
-                    a.showList(liste, a.getIndex());
-                    flowDB(liste);
+                    t.showList(liste, t.getIndex());
+                    read(liste);
+                }
+
+                //Delete par indice
+                case "3" -> {
+                    String param = t.showAction(
+                            "Supprimer",
+                            "Liste des indices: "
+                    );
+                    if (!liste.isEmpty()) {
+                        Object first = liste.get(0);
+
+                        if (first instanceof Commune) {
+                            b.deleteCommune((List<Commune>) liste, param);
+                        } else if (first instanceof Etablissement) {
+                            b.deleteEtablissement((List<Etablissement>) liste, param);
+                        }
+                    }
+                    t.showList(liste);
+                    read(liste);
+                }
+
+                //Delete tout
+                case "4" -> {
+                    if (!liste.isEmpty()) {
+                        Object first = liste.getFirst();
+
+                        if (first instanceof Commune) {
+                            b.deleteCommune((List<Commune>) liste);
+                        } else if (first instanceof Etablissement) {
+                            b.deleteEtablissement((List<Etablissement>) liste);
+                        }
+                    }
+                    open();
                 }
 
                 // nouvelle recherche
-                case "3" -> {
-                    flowDB();
+                case "5" -> {
+                    read();
                 }
                 // retour menu principal
-                case "4" -> {
-                    flow();
+                case "6" -> {
+                    open();
                 }
 
                 default -> {}
@@ -256,24 +335,24 @@ public class Manager {
         }
     }
 
-    private void deleteDB() {
+    private void delete() {
         while (true) {
-            switch (a.showMenuDeleteDB()) {
+            switch (t.showMenuDeleteDB()) {
                 //Supprimer commune
                 case "1" -> {
                     b.deleteCommune();
-                    deleteDB();
+                    delete();
                 }
 
                 //Supprimer etablissment
                 case "2" -> {
                     b.deleteEtablissement();
-                    deleteDB();
+                    delete();
                 }
 
                 //Retour
                 case "3" -> {
-                    flow();
+                    open();
                 }
 
                 default -> {}

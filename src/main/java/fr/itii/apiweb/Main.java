@@ -5,7 +5,7 @@ import fr.itii.apiweb.ui.Manager;
 public class Main {
 
     public static void main(String[] args) {
-        Manager terminal = new Manager();
-        terminal.flow();
+        Manager m = new Manager();
+        m.open();
     }
 }
