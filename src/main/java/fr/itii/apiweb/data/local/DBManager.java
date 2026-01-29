@@ -18,6 +18,7 @@ public class DBManager {
     private static final String _password = "RVomy#$@CE76#t!yNkPr";
 
     private static DBManager _instance;
+    private static boolean _isInit = false;
 
     /**
      * Constructeur privé pour réalisation d'un singleton
@@ -163,6 +164,9 @@ public class DBManager {
      * @return Connexion à la base de données
      */
     private Connection connect() throws SQLException {
+        if (!_isInit) {
+            this.initTables();
+        }
         return DriverManager.getConnection(_url,_username,_password);
     }
 
@@ -191,6 +195,7 @@ public class DBManager {
                 _stmt.executeUpdate(_reqEtablissements);
                 _stmt.executeUpdate(_reqCommEtabl);
                 this.disconnect(_con);
+                _isInit = true;
             }
         } catch (Exception e) {
                 ExceptionHandler.handleException(new SQLException());
