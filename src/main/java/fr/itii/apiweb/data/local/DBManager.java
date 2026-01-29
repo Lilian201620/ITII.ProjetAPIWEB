@@ -100,7 +100,7 @@ public class DBManager {
                     _statement.setInt(6, _com.getPopulation());
                     _statement.execute();
                 } else {
-                    System.out.println(Font.ITALIC + "" +  Font.GREY + "Entrée " + _com.getNom() + " déjà présente dans la BDD." + Font.RESET);
+                    System.out.println(Font.ITALIC.toString() + "" +  Font.GREY.toString() + "Entrée " + _com.getNom() + " déjà présente dans la BDD." + Font.RESET.toString());
                 }
 
             }
