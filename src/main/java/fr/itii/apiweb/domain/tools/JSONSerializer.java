@@ -66,7 +66,7 @@ public class JSONSerializer {
                 int start = Integer.parseInt(intervalle[0]);
                 int end = (intervalle.length > 1) ? Integer.parseInt(intervalle[1]) : start;
 
-                for (int j = Math.max(0, start); j <= Math.min(end, liste.size() - 1); j++) {
+                for (int j = Math.max(0, start - 1); j <= Math.min(end - 1, liste.size() - 1); j++) {
                     newList.add(liste.get(j));
                 }
             } catch (NumberFormatException e) {
