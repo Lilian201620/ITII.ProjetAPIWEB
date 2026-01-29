@@ -53,6 +53,10 @@ public class EtablissementApiCaller {
         return sendRequest(url);
     }
 
+    public JsonNode getEtablissements(EtablissementsFieldsEnum field, String query, Integer limit){
+        return getEtablissements(field, query, limit.toString());
+    }
+
     public JsonNode getEtablissements(EtablissementsFieldsEnum field, String query, String limit){
         String trueField = field.getField();
         String trueQuery;
