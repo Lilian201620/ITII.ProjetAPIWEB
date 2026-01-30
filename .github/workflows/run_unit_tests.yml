@@ -32,7 +32,7 @@ jobs:
 
       - name: Upload des resultats de tests
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: junit-reports
           path: target/surefire-reports
