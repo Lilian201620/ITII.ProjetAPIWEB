@@ -49,7 +49,7 @@ public class Terminal {
 
     public String showMenuAPI() {
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Action API ====" + Font.RESET);
-        System.out.println("1. " + Font.CYAN + "Page précédente" + Font.RESET);
+        System.out.println("1. " + Font.CYAN + "Page precedente" + Font.RESET);
         System.out.println("2. " + Font.CYAN + "Page suivante" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Sauvegarder par indice" + Font.RESET);
         System.out.println("4. " + Font.CYAN + "Sauvegarder tout" + Font.RESET);
@@ -79,7 +79,7 @@ public class Terminal {
 
     public String showMenuDB() {
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Action sur la DB ====" + Font.RESET);
-        System.out.println("1. " + Font.CYAN + "Page précédente" + Font.RESET);
+        System.out.println("1. " + Font.CYAN + "Page precedente" + Font.RESET);
         System.out.println("2. " + Font.CYAN + "Page suivante" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer par indice" + Font.RESET);
         System.out.println("4. " + Font.CYAN + "Supprimer tout" + Font.RESET);
@@ -109,8 +109,8 @@ public class Terminal {
     public String showMenuDeleteDB(){
         clear();
         System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== Table ====" + Font.RESET);
-        System.out.println("1. " + Font.CYAN + "Supprimer commune" + Font.RESET);
-        System.out.println("2. " + Font.CYAN + "Supprimer etablissement" + Font.RESET);
+        System.out.println("1. " + Font.CYAN + "Supprimer communes et etablissements" + Font.RESET);
+        System.out.println("2. " + Font.CYAN + "Supprimer etablissements" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Retour" + Font.RESET);
 
         return scan();
