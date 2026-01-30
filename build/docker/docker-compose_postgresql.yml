@@ -20,7 +20,7 @@ services:
 
   app:
     container_name: apiweb_tool
-    image: myapp:1.0
+    image: lilian2016/apiwebtool:latest
     stdin_open: true
     tty: true
     restart: always
