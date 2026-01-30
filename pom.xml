@@ -16,6 +16,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+
+
     <dependencies>
 
         <!-- Jackson (JSON)1 -->
@@ -45,6 +47,7 @@
     </dependencies>
 
     <build>
+        <finalName>ApiWebTool</finalName>
         <plugins>
 
             <!-- FAT JAR : tout dans un seul .jar -->
