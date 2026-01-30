@@ -28,6 +28,7 @@ public class Terminal {
         System.out.println("1. " + Font.CYAN + "Appel API" + Font.RESET);
         System.out.println("2. " + Font.CYAN + "Lire la Database" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer une table" + Font.RESET);
+        System.out.println("4. " + Font.CYAN + "Afficher la meteo d'une commune (en cours de configuration)" + Font.RESET);
         System.out.println("0. " + Font.CYAN + "Quitter" + Font.RESET);
         System.out.print(">");
 
@@ -85,6 +86,7 @@ public class Terminal {
         System.out.println("4. " + Font.CYAN + "Supprimer tout" + Font.RESET);
         System.out.println("5. " + Font.CYAN + "Nouvelle recherche" + Font.RESET);
         System.out.println("6. " + Font.CYAN + "Retour" + Font.RESET);
+        System.out.println(Font.ITALIC + "" + Font.GREY + "Supprimer une commune, supprimera ses etablissements..." + Font.RESET);
         System.out.print(">");
 
         return scan();
