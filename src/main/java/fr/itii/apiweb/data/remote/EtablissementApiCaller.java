@@ -3,6 +3,7 @@ package fr.itii.apiweb.data.remote;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.itii.apiweb.domain.models.enumlist.api.APIEtablissement;
+import fr.itii.apiweb.domain.tools.ExceptionHandler;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -88,7 +89,8 @@ public class EtablissementApiCaller {
 
             return responseNode.get("results");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ExceptionHandler.handleException(e);
+            return objectMapper.createArrayNode();
         }
     }
 }
