@@ -124,7 +124,7 @@ public class Terminal {
         clear();
         if (results == null || results.isEmpty()) {
             System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats ====" + Font.RESET);
-            System.out.println("Aucun resultat.");
+            System.out.println("Aucun resultat...");
             return;
         }
 
