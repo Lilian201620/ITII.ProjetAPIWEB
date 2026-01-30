@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DBManager implements DataRepository{
-    private final String _url = "jdbc:postgresql://192.168.0.2:5432/ApiWebToolDB";
+    private final String _dbHost = System.getenv().getOrDefault("DB_HOST", "localhost");
+    private final String _url = "jdbc:postgresql://" + _dbHost + ":5432/ApiWebToolDB";
     private static final String _username = "apiwebtoolUser";
     private static final String _password = "RVomy#$@CE76#t!yNkPr";
 
