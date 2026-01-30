@@ -48,7 +48,7 @@ public class Backend {
     }
 
     public List<Commune> searchCommuneFromAPIByDepartement(String value){
-        JsonNode json = api.getCommunes(APICommune.DEPARTEMENT, value, 100);
+        JsonNode json = api.getCommunes(APICommune.DEPARTEMENT, value, 1000);
         return serializer.toCommunes(json);
     }
 

@@ -5,15 +5,11 @@ import fr.itii.apiweb.domain.models.objet.Etablissement;
 import fr.itii.apiweb.domain.tools.Backend;
 
 import java.util.List;
-import java.util.Scanner;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Controller {
     private final Terminal t = new Terminal();
     private final Backend b = new Backend();
-    private final Scanner sc = new Scanner(System.in);
 
     // =========================================================
     //  PRINCIPAL
