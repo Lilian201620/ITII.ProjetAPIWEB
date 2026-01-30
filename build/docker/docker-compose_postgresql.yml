@@ -12,6 +12,11 @@ services:
       POSTGRES_USER: apiwebtoolUser
       POSTGRES_PASSWORD: RVomy#$@CE76#t!yNkPr
       POSTGRES_DB: ApiWebToolDB
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U apiwebtoolUser -d ApiWebToolDB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - "5432:5432"
     networks:
@@ -25,7 +30,8 @@ services:
     tty: true
     restart: always
     depends_on:
-    - db
+      db:
+        condition: service_healthy
 
     networks:
       app_net:
