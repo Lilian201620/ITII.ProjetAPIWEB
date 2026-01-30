@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DBManager {
+public class DBManager implements DataRepository{
     private final String _url = "jdbc:postgresql://localhost:5432/ApiWebToolDB";
     private static final String _username = "apiwebtoolUser";
     private static final String _password = "RVomy#$@CE76#t!yNkPr";
@@ -46,21 +46,27 @@ public class DBManager {
     // - Méthodes publiques pour l'exécution des requêtes SQL
     // PUBLIC | Used everywhere across the project
     // ----------------------------------------------------------
+    @Override
     public List<Commune> getCommunes(DBCommune col, String critere, boolean explicitCaractersOnly) {
         return getString(DBTable.COMMUNES, col, critere, explicitCaractersOnly);
     }
+    @Override
     public List<Commune> getCommunes(DBCommune col, int critere) {
         return getInt(DBTable.COMMUNES, col, critere);
     }
+    @Override
     public List<Commune> getCommunes() {
         return getString(DBTable.COMMUNES, DBCommune.ID, "", false);
     }
+    @Override
     public List<Etablissement> getEtablissements(DBEtablissement col, String critere, boolean explicitCaractersOnly) {
         return getString(DBTable.ETABLISSEMENTS, col, critere, explicitCaractersOnly);
     }
+    @Override
     public List<Etablissement> getEtablissements(DBEtablissement col, int critere) {
         return getInt(DBTable.ETABLISSEMENTS, col, critere);
     }
+    @Override
     public List<Etablissement> getEtablissements() {
         return getString(DBTable.ETABLISSEMENTS, DBEtablissement.ID, "", false);
     }
@@ -85,6 +91,7 @@ public class DBManager {
         deleteString(DBTable.ETABLISSEMENTS, DBEtablissement.ID, "", false);
     }
 
+    @Override
     public void saveCommunes(List<Commune> communes) {
         try {
             Connection _con = _instance.connect();
@@ -110,6 +117,7 @@ public class DBManager {
             ExceptionHandler.handleException(new SQLException());
         }
     }
+    @Override
     public void saveEtablissements(List<Etablissement> Etablissements) {
         try {
             Connection _con = _instance.connect();
