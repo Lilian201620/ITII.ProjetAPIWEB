@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.itii.apiweb.domain.models.enumlist.api.APICommune;
+import fr.itii.apiweb.domain.tools.ExceptionHandler;
 
 public class APICaller {
 
@@ -84,7 +85,8 @@ public class APICaller {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return objectMapper.readTree(response.body());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ExceptionHandler.handleException(e);
+            return objectMapper.createArrayNode();
         }
     }
 
