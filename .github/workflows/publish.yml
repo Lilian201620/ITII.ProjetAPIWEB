@@ -32,7 +32,7 @@ jobs:
           cp 'target/ApiWebTool.jar' 'build/docker/projet.jar'
 
       - name: Build image docker
-        run: docker build ./build/docker --file ./build/docker/Dockerfile --tag apiwebtool:latest
+        run: docker build ./build/docker --file ./build/docker/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/apiwebtool:latest
 
       - name: Login into docker account
         uses: docker/login-action@v2
@@ -41,5 +41,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker Image
-        run: docker push lilian2016/apiwebtool:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/apiwebtool:latest
           
