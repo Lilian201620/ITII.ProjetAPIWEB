@@ -8,6 +8,7 @@ import fr.itii.apiweb.domain.models.enumlist.api.APICommune;
 import fr.itii.apiweb.domain.models.enumlist.api.APIEtablissement;
 import fr.itii.apiweb.domain.models.enumlist.db.DBCommune;
 import fr.itii.apiweb.domain.models.enumlist.db.DBEtablissement;
+import fr.itii.apiweb.domain.models.enumlist.font.Font;
 import fr.itii.apiweb.domain.models.objet.Commune;
 import fr.itii.apiweb.domain.models.objet.Etablissement;
 
@@ -175,7 +176,9 @@ public class Backend {
         List<Commune> _listCommune = new ArrayList<>();
         for(String _comm : _listCodeCommunes){
             JsonNode json = api.getCommunes(APICommune.CODE_COMMUNE, _comm, "1");
-            _listCommune.add(serializer.toCommunes(json).getFirst());
+            Commune _commune = serializer.toCommunes(json).getFirst();
+            _listCommune.add(_commune);
+            System.out.println(Font.ITALIC + "   " + Font.GREY + "Ajout de la commune " + _commune.getNom() + " car un établissement est dedans.");
         }
         db.saveCommunes(_listCommune);
         db.saveEtablissements(listeEtablissement);
