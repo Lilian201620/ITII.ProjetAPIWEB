@@ -10,9 +10,7 @@ public class ExceptionHandler {
 
     public static void handleException(Exception exception){
         switch (exception) {
-            case IOException ioException ->
-                    System.out.println(Font.RED + "" + Font.BOLD + "Un problème est survenu lors de la requête à l'API Web. Vérifiez votre connexion et réessayez" + Font.RESET);
-            case InterruptedException interruptedException ->
+            case IOException _, InterruptedException _ ->
                     System.out.println(Font.RED + "" + Font.BOLD + "Un problème est survenu lors de la requête à l'API Web. Vérifiez votre connexion et réessayez" + Font.RESET);
             case SQLException _ ->
                     System.out.println(Font.RED + "" + Font.BOLD + "Un problème est survenu avec la base de données, vérifiez le serveur SQL et réessayez" + Font.RESET);
