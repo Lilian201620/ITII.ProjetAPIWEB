@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: '[CD] Push docker image'
 
 on:
   workflow_dispatch: 
@@ -32,7 +32,7 @@ jobs:
           cp 'target/ApiWebTool.jar' 'build/docker/projet.jar'
 
       - name: Build image docker
-        run: docker build ./build/docker --file Dockerfile --tag ApiWebTool:latest
+        run: docker build ./build/docker --file Dockerfile --tag apiwebtool:latest
 
       - name: Login into docker account
         uses: docker/login-action@v2
@@ -41,5 +41,5 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Push Docker Image
-        run: docker push lilian2016/apiWebTool:latest
+        run: docker push lilian2016/apiwebtool:latest
           
