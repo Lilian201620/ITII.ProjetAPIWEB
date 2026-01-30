@@ -28,7 +28,7 @@ public class Terminal {
         System.out.println("1. " + Font.CYAN + "Appel API" + Font.RESET);
         System.out.println("2. " + Font.CYAN + "Lire la Database" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer une table" + Font.RESET);
-        System.out.println("4. " + Font.CYAN + "Afficher la meteo d'une commune (en cours de configuration)" + Font.RESET);
+        System.out.println("4. " + Font.CYAN + "Afficher la meteo (en cours de configuration)" + Font.RESET);
         System.out.println("0. " + Font.CYAN + "Quitter" + Font.RESET);
         System.out.print(">");
 
