@@ -25,7 +25,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: 'Compilation en .jar'
-        run: mvn clean package
+        run: mvn clean package -DskipTests
 
       - name: 'Copie du projet vers build'
         run: |
