@@ -3,190 +3,186 @@ package fr.itii.apiweb.domain.models.objet;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Commune {
-//    {
-//        "nom" : "Beauvais",
-//        "code" : "60057",
-//        "codeDepartement" : "60",
-//        "siren" : "216000562",
-//        "codeEpci" : "200067999",
-//        "codeRegion" : "32",
-//        "codesPostaux" : [ "60000" ],
-//        "population" : 55550
-//    }
 
-    //Variable JSON
+    //Varaible
+    @JsonProperty("nom")
     private String nom;
+
     @JsonProperty("code")
     private String code;
-    private String codeDepartement;
-    private String siren;
-    private String codeEpci;
-    private String codeRegion;
+
+    @JsonProperty("departement")
+    private Ressource departement;
+
+    @JsonProperty("region")
+    private Ressource region;
+
     @JsonProperty("codesPostaux")
     private List<String> codesPostaux;
+
+    @JsonProperty("population")
     private Integer population;
 
-    //Autre variable
-    private String codePostal = null;
-    private Integer id;
+    @JsonProperty("centre")
+    private Position coordonnees;
 
     //Constructeur
     public Commune(
-            String nom,
-            String codeCommune,
-            String codeDepartement,
-            String siren,
-            String codeEpci,
-            String codeRegion,
-            String codePostal,
-            Integer population,
-            Integer id
+        String nom,
+        String code,
+        Ressource departement,
+        Ressource region,
+        List<String> codesPostaux,
+        Integer population,
+        Position coordonnees
     ) {
         this.nom = nom;
-        this.code = codeCommune;
-        this.codeDepartement = codeDepartement;
-        this.siren = siren;
-        this.codeEpci = codeEpci;
-        this.codeRegion = codeRegion;
-        this.codePostal = codePostal;
+        this.code = code;
+        this.departement = departement;
+        this.region = region;
+        this.codesPostaux = codesPostaux;
         this.population = population;
-        this.id = id;
+        this.coordonnees = coordonnees;
     }
 
-    public Commune(){
-
-    }
-
-    //Builder
     public static class Builder {
-        private String nom;
-        private String code;
-        private String codeDepartement;
-        private String siren;
-        private String codeEpci;
-        private String codeRegion;
-        private String codePostal;
-        private Integer population;
-        private Integer id;
+        String nom;
+        String code;
+        Ressource departement;
+        Ressource region;
+        List<String> codesPostaux;
+        Integer population;
+        Position coordonnees;
 
         public Builder setNom(String nom) {
             this.nom = nom;
             return this;
         }
-        public Builder setCodeCommune(String codeCommune) {
-            this.code = codeCommune;
+        public Builder setCode(String code) {
+            this.code = code;
             return this;
         }
-        public Builder setCodeDepartement(String codeDepartement) {
-            this.codeDepartement = codeDepartement;
+        public Builder setDepartement(String code, String nom) {
+            this.departement = new Ressource(code, nom);
             return this;
         }
-        public Builder setSiren(String siren) {
-            this.siren = siren;
+        public Builder setRegion(String code, String nom) {
+            this.region = new Ressource(code, nom);
             return this;
         }
-        public  Builder setCodeEpci(String codeEpci) {
-            this.codeEpci = codeEpci;
-            return this;
-        }
-        public Builder setCodeRegion(String codeRegion) {
-            this.codeRegion = codeRegion;
-            return this;
-        }
-        public Builder setCodePostal(String codePostal) {
-            this.codePostal = codePostal;
+        public Builder setCodesPostaux(List<String> codesPostaux) {
+            this.codesPostaux = codesPostaux;
             return this;
         }
         public Builder setPopulation(Integer population) {
             this.population = population;
             return this;
         }
-        public Builder setId(Integer id) {
-            this.id = id;
+        public Builder setCoordonnees(double longitude, double latitude) {
+            this.coordonnees = new Position(longitude, latitude);
             return this;
         }
-        public Commune build() {
-            return new Commune(nom, code, codeDepartement, siren, codeEpci, codeRegion, codePostal, population, id);
+
+        public Commune build(){
+            return new Commune(nom, code, departement, region, codesPostaux, population, coordonnees);
         }
     }
 
     //Setters
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-    public void setCodeCommune(String codeCommune) {
-        this.code = codeCommune;
-    }
-    public void setCodeDepartement(String codeDepartement) {
-        this.codeDepartement = codeDepartement;
-    }
-    public void setSiren(String siren) {
-        this.siren = siren;
-    }
-    public void setCodeEpci(String codeEpci) {
-        this.codeEpci = codeEpci;
-    }
-    public void setCodeRegion(String codeRegion) {
-        this.codeRegion = codeRegion;
-    }
-    public void setCodePostal(String codePostal) {
-        this.codePostal = codePostal;
-    }
-    public void setPopulation(Integer population) {
-        this.population = population;
-    }
 
-    //Getters
-    public String getNom() {
+
+    // Getters
+    public String getNom(){
         return this.nom;
     }
-    public String getCodeCommune() {
+    public String getCodeCommune(){
         return this.code;
     }
-    public String getCodeDepartement() {
-        return this.codeDepartement;
+    public String getCodeDepartement(){
+        return this.departement.code;
     }
-    public String getSiren() {
-        return this.siren;
+    public String getNomDepartement(){
+        return this.departement.nom;
     }
-    public String getCodeEpci() {
-        return this.codeEpci;
+    public String getDepartement(){
+        return this.departement.toString();
     }
-    public String getCodeRegion() {
-        return this.codeRegion;
+    public String getNomRegion(){
+        return region.nom;
     }
-    public String getCodePostal() {
-        if (this.codePostal != null) {
-            return codePostal;
-        } else if(this.codesPostaux != null){
-            return this.codesPostaux.getFirst();
-        }
-        return null;
+    public String getCodeRegion(){
+        return region.code;
     }
-    public Integer getPopulation() {
+    public String getRegion(){
+        return region.toString();
+    }
+    public List<String> getCodesPostaux(){
+        return this.codesPostaux;
+    }
+    public String getCodePostal(){
+        return this.codesPostaux.get(0);
+    }
+    public Integer getPopulation(){
         return this.population;
     }
-    public Integer getId() {
-        return this.id;
+    public List<Double> getCoordonnees(){
+        return coordonnees.value;
+    }
+    public Double getLongitude(){
+        return coordonnees.value.get(0);
+    }
+    public  Double getLatitude(){
+        return coordonnees.value.get(1);
     }
 
     @Override
     public String toString() {
-        return String.format(
-                "nom: %-25s commune: %-10s departement: %-10s region: %-10s postal: %-10s population: %5d",
-                getNom(), getCodeCommune(), getCodeDepartement(), getCodeRegion(), getCodePostal(), getPopulation()
-        );
-    /*
-        return  "nom: " + getNom() +
-                ",\t commune: " + getCodeCommune() +
-                ",\t departement: " + getCodeDepartement() +
-                ",\t region: " + getCodeRegion() +
-                ",\t postal: " + getCodePostal() +
-                ",\t population: " + getPopulation();
-                */
+        return
+            "nom: " + getNom() +
+            ", \tdepartement: " + getDepartement() +
+            ", \tregion: " + getRegion() +
+            ", \tcodes postaux: " + getCodesPostaux() +
+            ", \tpopulation: " + getPopulation() +
+            ", \tcoordonnees: " + getCoordonnees();
+    }
+
+    // Sous-Classes
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Ressource {
+        @JsonProperty("code")
+        public String code;
+        @JsonProperty("nom")
+        public String nom;
+
+        public Ressource(String code, String nom) {
+            this.code = code;
+            this.nom = nom;
+        }
+
+        public String toString() {
+            return code + " - " + nom;
+        }
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class Position {
+        @JsonProperty("coordinates")
+        public List<Double> value;
+
+        public Position(double longitude, double latitude) {
+            this.value = new ArrayList<Double>();
+            this.value.add(longitude);
+            this.value.add(latitude);
+        }
+
+        public String toString() {
+            return value.toString();
+        }
     }
 }
