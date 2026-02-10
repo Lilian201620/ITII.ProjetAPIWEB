@@ -161,7 +161,7 @@ public class Commune {
 
     @Override
     public String toString() {
-        return String.format("nom: %-40s departement: %-30s region: %-20s codes postaux: %-10s poupulation: %-10s",
+        return String.format("%-40s %-30s %-30s %-30s %-10s",
                 getNom(),
                 getDepartement(),
                 getNomRegion(),

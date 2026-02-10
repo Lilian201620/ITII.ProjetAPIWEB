@@ -1,9 +1,9 @@
 package fr.itii.apiweb.data.local;
 
-import fr.itii.apiweb.domain.models.enumlist.DBTable;
+import fr.itii.apiweb.domain.models.enums.DBTable;
 import fr.itii.apiweb.domain.models.objet.Commune;
 import fr.itii.apiweb.domain.models.objet.Etablissement;
-import fr.itii.apiweb.domain.models.enumlist.Font;
+import fr.itii.apiweb.ui.Font;
 import fr.itii.apiweb.domain.tools.ExceptionHandler;
 
 import java.sql.*;

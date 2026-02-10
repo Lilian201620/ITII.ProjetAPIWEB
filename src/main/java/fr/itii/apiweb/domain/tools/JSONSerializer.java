@@ -94,7 +94,7 @@ public class JSONSerializer {
 
         try {
             for (JsonNode node : json.path("results")) {
-                System.out.println("node: "+node);
+                //System.out.println("node: "+node);
                 Entreprise e = mapper.treeToValue(node, Entreprise.class);
                 entreprises.add(e);
             }
