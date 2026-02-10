@@ -1,6 +1,6 @@
 package fr.itii.apiweb.data.local;
 
-import fr.itii.apiweb.domain.models.enumlist.DBTable;
+import fr.itii.apiweb.domain.models.enums.DBTable;
 import fr.itii.apiweb.domain.models.objet.Commune;
 import fr.itii.apiweb.domain.models.objet.Etablissement;
 

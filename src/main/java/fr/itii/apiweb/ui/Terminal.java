@@ -1,7 +1,5 @@
 package fr.itii.apiweb.ui;
 
-import fr.itii.apiweb.domain.models.enumlist.Font;
-
 import java.util.List;
 import java.util.Scanner;
 
@@ -103,7 +101,7 @@ public class Terminal {
 
     public String showAction(String title, String msg){
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== "+ title + " ====" + Font.RESET);
-        System.out.println(Font.ITALIC + "" + Font.GREY + "Exemple de saisi: 1 4 7-10 => indice selectionne: 1,4,7,8,9,10" + Font.RESET);
+        System.out.println(Font.ITALIC + "" + Font.GREY + "Exemple de saisi: 1 4 7-10 => indices selectionnes: 1,4,7,8,9,10" + Font.RESET);
         System.out.print(msg);
 
         return sc.nextLine().trim();
@@ -131,7 +129,7 @@ public class Terminal {
             return;
         }
 
-        if(index > results.size()) {
+        if(index >= results.size()) {
             showList(results, index - PAGE_SIZE);
             return;
         }
@@ -140,8 +138,9 @@ public class Terminal {
         int end = Math.min(showIndex + PAGE_SIZE, results.size());
 
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats " + (showIndex + 1) + " à " + end + " / " + results.size() + " ====" + Font.RESET);
+        System.out.println(Header.COMMUNE);
         for (int i = showIndex; i < end; i++) {
-            System.out.println(String.format("#%-4s",(i + 1)) + " " + results.get(i));
+            System.out.println(String.format("%-4s",(i + 1)) + " " + results.get(i));
         }
 
         showIndex += PAGE_SIZE;

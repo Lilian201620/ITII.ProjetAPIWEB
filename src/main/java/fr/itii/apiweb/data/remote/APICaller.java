@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.itii.apiweb.domain.models.enumlist.APIField;
+import fr.itii.apiweb.domain.models.enums.APIField;
 import fr.itii.apiweb.domain.tools.ExceptionHandler;
 
 public class APICaller {
@@ -79,7 +79,8 @@ public class APICaller {
     // Construction de l'URL Entreprise
     public JsonNode getEntreprises(String code){
         String url = "https://recherche-entreprises.api.gouv.fr/search?"
-                + "code_commune=" + code;
+                + "&per_page=25"
+                + "&code_commune=" + code;
 
         return sendRequest(url);
     }

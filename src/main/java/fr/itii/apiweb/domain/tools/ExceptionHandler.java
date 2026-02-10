@@ -1,7 +1,7 @@
 package fr.itii.apiweb.domain.tools;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import fr.itii.apiweb.domain.models.enumlist.Font;
+import fr.itii.apiweb.ui.Font;
 
 import java.io.IOException;
 import java.sql.SQLException;
