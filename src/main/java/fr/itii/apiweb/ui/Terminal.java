@@ -117,11 +117,11 @@ public class Terminal {
         return scan();
     }
 
-    public <T> void showList(List<T> results) {
-        showList(results, 0);
+    public <T> void showList(List<T> results, Header objet) {
+        showList(results, objet,0);
     }
 
-    public <T> void showList(List<T> results, int index) {
+    public <T> void showList(List<T> results, Header objet, int index) {
         clear();
         if (results == null || results.isEmpty()) {
             System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats ====" + Font.RESET);
@@ -130,7 +130,7 @@ public class Terminal {
         }
 
         if(index >= results.size()) {
-            showList(results, index - PAGE_SIZE);
+            showList(results, objet, index - PAGE_SIZE);
             return;
         }
 
@@ -138,7 +138,7 @@ public class Terminal {
         int end = Math.min(showIndex + PAGE_SIZE, results.size());
 
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats " + (showIndex + 1) + " à " + end + " / " + results.size() + " ====" + Font.RESET);
-        System.out.println(Header.COMMUNE);
+        System.out.println(objet);
         for (int i = showIndex; i < end; i++) {
             System.out.println(String.format("%-4s",(i + 1)) + " " + results.get(i));
         }
