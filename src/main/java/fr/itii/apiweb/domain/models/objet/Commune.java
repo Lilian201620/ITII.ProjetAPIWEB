@@ -3,14 +3,15 @@ package fr.itii.apiweb.domain.models.objet;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Commune {
 
-    //Varaible
+    //Variable
+    private Integer id;
+
     @JsonProperty("nom")
     private String nom;
 
@@ -33,7 +34,10 @@ public class Commune {
     private Position coordonnees;
 
     //Constructeur
+    public Commune() {}
+
     public Commune(
+        Integer id,
         String nom,
         String code,
         Ressource departement,
@@ -42,6 +46,7 @@ public class Commune {
         Integer population,
         Position coordonnees
     ) {
+        this.id = id;
         this.nom = nom;
         this.code = code;
         this.departement = departement;
@@ -52,6 +57,7 @@ public class Commune {
     }
 
     public static class Builder {
+        Integer id;
         String nom;
         String code;
         Ressource departement;
@@ -59,6 +65,11 @@ public class Commune {
         List<String> codesPostaux;
         Integer population;
         Position coordonnees;
+
+        public Builder setId(Integer id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder setNom(String nom) {
             this.nom = nom;
@@ -80,6 +91,10 @@ public class Commune {
             this.codesPostaux = codesPostaux;
             return this;
         }
+        public Builder setCodePostal(String codePostal) {
+            this.codesPostaux.add(codePostal);
+            return this;
+        }
         public Builder setPopulation(Integer population) {
             this.population = population;
             return this;
@@ -90,7 +105,7 @@ public class Commune {
         }
 
         public Commune build(){
-            return new Commune(nom, code, departement, region, codesPostaux, population, coordonnees);
+            return new Commune(id, nom, code, departement, region, codesPostaux, population, coordonnees);
         }
     }
 
@@ -98,6 +113,9 @@ public class Commune {
 
 
     // Getters
+    public Integer getId() {
+        return this.id;
+    }
     public String getNom(){
         return this.nom;
     }
@@ -131,7 +149,7 @@ public class Commune {
     public Integer getPopulation(){
         return this.population;
     }
-    public List<Double> getCoordonnees(){
+    public List<Double>  getCoordonnees(){
         return coordonnees.value;
     }
     public Double getLongitude(){
@@ -143,13 +161,13 @@ public class Commune {
 
     @Override
     public String toString() {
-        return
-            "nom: " + getNom() +
-            ", \tdepartement: " + getDepartement() +
-            ", \tregion: " + getRegion() +
-            ", \tcodes postaux: " + getCodesPostaux() +
-            ", \tpopulation: " + getPopulation() +
-            ", \tcoordonnees: " + getCoordonnees();
+        return String.format("nom: %-40s departement: %-30s region: %-20s codes postaux: %-10s poupulation: %-10s",
+                getNom(),
+                getDepartement(),
+                getNomRegion(),
+                getCodesPostaux(),
+                getPopulation()
+        );
     }
 
     // Sous-Classes
@@ -159,6 +177,8 @@ public class Commune {
         public String code;
         @JsonProperty("nom")
         public String nom;
+
+        public Ressource(){}
 
         public Ressource(String code, String nom) {
             this.code = code;
@@ -175,8 +195,10 @@ public class Commune {
         @JsonProperty("coordinates")
         public List<Double> value;
 
+        public Position(){}
+
         public Position(double longitude, double latitude) {
-            this.value = new ArrayList<Double>();
+            this.value = new ArrayList<>();
             this.value.add(longitude);
             this.value.add(latitude);
         }

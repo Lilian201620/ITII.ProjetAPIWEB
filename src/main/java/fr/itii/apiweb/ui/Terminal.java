@@ -1,6 +1,6 @@
 package fr.itii.apiweb.ui;
 
-import fr.itii.apiweb.domain.models.enumlist.font.Font;
+import fr.itii.apiweb.domain.models.enumlist.Font;
 
 import java.util.List;
 import java.util.Scanner;
@@ -28,7 +28,8 @@ public class Terminal {
         System.out.println("1. " + Font.CYAN + "Appel API" + Font.RESET);
         System.out.println("2. " + Font.CYAN + "Lire la Database" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer une table" + Font.RESET);
-        System.out.println("4. " + Font.CYAN + "Afficher la meteo (en cours de configuration)" + Font.RESET);
+        System.out.println("4. " + Font.CYAN + "Afficher la meteo" + Font.RESET);
+        System.out.println("5. " + Font.CYAN + "Rechercher les entreprises d'une commune (en cours de configuration)" + Font.RESET);
         System.out.println("0. " + Font.CYAN + "Quitter" + Font.RESET);
         System.out.print(">");
 
@@ -41,7 +42,7 @@ public class Terminal {
         System.out.println("1. " + Font.CYAN + "Commune par nom" + Font.RESET);  //Page suivante
         System.out.println("2. " + Font.CYAN + "Commune par code postal" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Commune par departement" + Font.RESET);
-        System.out.println("4. " + Font.CYAN + "Etablissement par nom de commune" + Font.RESET);
+        System.out.println("4. " + Font.CYAN + "Etablissement par code postal" + Font.RESET);
         System.out.println("5. " + Font.CYAN + "Etablissement par departement" + Font.RESET);
         System.out.print(">");
 

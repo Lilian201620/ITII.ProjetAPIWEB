@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.objet.Entreprise;
 import fr.itii.apiweb.domain.models.objet.Etablissement;
 
 public class JSONSerializer {
@@ -20,14 +21,25 @@ public class JSONSerializer {
 
         try {
             for (JsonNode node : json) {
+                //System.out.println(node.toString());
                 Commune commune = mapper.treeToValue(node, Commune.class);
                 communes.add(commune);
             }
             return communes;
 
         } catch (JsonProcessingException e) {
-            ExceptionHandler.handleException(e);
+            //ExceptionHandler.handleException(e);
+            System.out.println(e.getMessage());
             return Collections.emptyList();
+        }
+    }
+
+    public String toString(JsonNode json)  {
+        try {
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+        } catch (JsonProcessingException e) {
+            ExceptionHandler.handleException(e);
+            return "";
         }
     }
 
@@ -37,7 +49,7 @@ public class JSONSerializer {
         List<Etablissement> etablissements = new ArrayList<>();
 
         try {
-            for (JsonNode node : json) {
+            for (JsonNode node : json.path("results")) {
                 Etablissement etablissement = mapper.treeToValue(node, Etablissement.class);
                 etablissements.add(etablissement);
             }
@@ -75,4 +87,23 @@ public class JSONSerializer {
         }
         return newList;
     }
+
+    //Entreprise
+    public List<Entreprise> toEntreprises(JsonNode json) {
+        List<Entreprise> entreprises = new ArrayList<>();
+
+        try {
+            for (JsonNode node : json.path("results")) {
+                System.out.println("node: "+node);
+                Entreprise e = mapper.treeToValue(node, Entreprise.class);
+                entreprises.add(e);
+            }
+            return entreprises;
+
+        } catch (JsonProcessingException e) {
+            ExceptionHandler.handleException(e);
+            return Collections.emptyList();
+        }
+    }
+
 }

@@ -1,7 +1,9 @@
 package fr.itii.apiweb.ui;
 
 import fr.itii.apiweb.domain.models.objet.Commune;
+import fr.itii.apiweb.domain.models.objet.Entreprise;
 import fr.itii.apiweb.domain.models.objet.Etablissement;
+import fr.itii.apiweb.domain.models.objet.Meteo;
 import fr.itii.apiweb.domain.tools.Backend;
 
 import java.util.List;
@@ -33,6 +35,16 @@ public class Controller {
                     delete();
                 }
 
+                //Meteo
+                case "4" -> {
+                    meteo();
+                }
+
+                //Entreprise
+                case "5" -> {
+                    entreprise();
+                }
+
                 //Quitter
                 case "0" -> {
                     System.exit(0);
@@ -41,7 +53,6 @@ public class Controller {
                 default -> {}
             }
         }
-
     }
 
     // ==========================================================
@@ -58,6 +69,8 @@ public class Controller {
                 t.showList(res);
                 call(res);
             }
+
+
 
             //Commune par code postal
             case "2" -> {
@@ -77,10 +90,10 @@ public class Controller {
                 call(res);
             }
 
-            //Etablissement par nom de la commune
+            //Etablissement par code postal
             case "4" -> {
-                List<Etablissement> res = b.searchEtablissementFromAPIByNomCommune(
-                        t.showConfig("Recherche etablissement dans API", "Nom de la commune: ")
+                List<Etablissement> res = b.searchEtablissementFromAPIByCodePostal(
+                        t.showConfig("Recherche etablissement dans API", "Numero du code postal: ")
                 );
                 t.showList(res);
                 call(res);
@@ -88,7 +101,7 @@ public class Controller {
 
             //Etablissement par departement
             case "5" -> {
-                List<Etablissement> res = b.searchEtablissementFromAPIByNomCommune(
+                List<Etablissement> res = b.searchEtablissementFromAPIByDepartement(
                         t.showConfig("Recherche etablissement dans API", "Numero de departement: ")
                 );
                 t.showList(res);
@@ -193,7 +206,7 @@ public class Controller {
             }
             //Commune par departement
             case "3" -> {
-                String value = t.showConfig("Recherche commune dans DB", "Numero de departement: ");
+                String value = t.showConfig("Recherche commune dans DB", "Numero ou nom du departement: ");
                 List<Commune> res = b.searchCommuneFromDBByDepartement(value);
                 t.showList(res);
                 read(res, b.searchCommuneFromDBByDepartement, value);
@@ -201,7 +214,7 @@ public class Controller {
 
             //Commune par region
             case "4" -> {
-                String value = t.showConfig("Recherche commune dans DB", "Numero de region: ");
+                String value = t.showConfig("Recherche commune dans DB", "Numero ou nom de la region: ");
                 List<Commune> res = b.searchCommuneFromDBByRegion(value);
                 t.showList(res);
                 read(res, b.searchCommuneFromDBByRegion, value);
@@ -355,5 +368,21 @@ public class Controller {
                 default -> {}
             }
         }
+    }
+
+    private void meteo(){
+        String value = t.showConfig("Meteo", "Nom de la commune inscrite dans la DB: ");
+        List<Meteo> liste = b.searchMeteoFromAPIByDBNomCommune(value);
+        t.showList(liste);
+        t.scan();
+        open();
+    }
+
+    private void entreprise(){
+        String value = t.showConfig("Entreprise", "Nom de la commune inscrite dans la DB: ");
+        List<Entreprise> liste = b.searchEntrepriseFromAPIByDBNomCommune(value);
+        t.showList(liste);
+        t.scan();
+        open();
     }
 }
