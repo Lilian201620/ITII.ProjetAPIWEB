@@ -59,8 +59,7 @@ public class Etablissement {
         this.id = id;
     }
 
-    public Etablissement() {
-    }
+    public Etablissement() {}
 
     // ===== Builder =====
     public static class Builder {
@@ -182,13 +181,13 @@ public class Etablissement {
     @Override
     public String toString() {
         return String.format(
-                "établissement: %-30s type: %-15s commune: %-20s code: %-6s statut: %-10s mail: %s",
+                "nom: %-50s type: %-10s commune: %-25s code: %-10s mail: %-30s statut: %-10s",
                 getNomEtablissement(),
                 getTypeEtablissement(),
                 getNomCommune(),
                 getCodeCommune(),
-                getStatutPublicPrive(),
-                getMail()
+                getMail(),
+                getStatutPublicPrive()
         );
     }
 }
