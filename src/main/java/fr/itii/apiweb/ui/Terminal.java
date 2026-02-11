@@ -11,7 +11,7 @@ public class Terminal {
     private Integer showIndex = 0;
 
     public void clear(){
-        for(int i = 0; i < 1; i++){
+        for(int i = 0; i < 0; i++){
             System.out.println();
         }
     }
@@ -27,7 +27,7 @@ public class Terminal {
         System.out.println("2. " + Font.CYAN + "Lire la Database" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer une table" + Font.RESET);
         System.out.println("4. " + Font.CYAN + "Afficher la meteo" + Font.RESET);
-        System.out.println("5. " + Font.CYAN + "Rechercher les entreprises d'une commune (en cours de configuration)" + Font.RESET);
+        System.out.println("5. " + Font.CYAN + "Rechercher les entreprises d'une commune" + Font.RESET);
         System.out.println("0. " + Font.CYAN + "Quitter" + Font.RESET);
         System.out.print(">");
 
@@ -117,11 +117,24 @@ public class Terminal {
         return scan();
     }
 
-    public <T> void showList(List<T> results, Header objet) {
-        showList(results, objet,0);
+    public <T> void showList(List<T> results, Header header) {
+        clear();
+        if (results == null || results.isEmpty()) {
+            System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats ====" + Font.RESET);
+            System.out.println("Aucun resultat...");
+            return;
+        }
+
+        System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats " + (showIndex + 1) + " à " + results.size() + " ====" + Font.RESET);
+        System.out.println(Font.CYAN + String.format("%-6s","#") + header.toString() + Font.RESET);
+        for (int i = 0; i < results.size(); i++) {
+            System.out.println(String.format("%-6s",(i + 1)) + " " + results.get(i));
+        }
+
+        showIndex += PAGE_SIZE;
     }
 
-    public <T> void showList(List<T> results, Header objet, int index) {
+    public <T> void showList(List<T> results, Header header, int index) {
         clear();
         if (results == null || results.isEmpty()) {
             System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats ====" + Font.RESET);
@@ -130,7 +143,7 @@ public class Terminal {
         }
 
         if(index >= results.size()) {
-            showList(results, objet, index - PAGE_SIZE);
+            showList(results, header, index - PAGE_SIZE);
             return;
         }
 
@@ -138,9 +151,9 @@ public class Terminal {
         int end = Math.min(showIndex + PAGE_SIZE, results.size());
 
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats " + (showIndex + 1) + " à " + end + " / " + results.size() + " ====" + Font.RESET);
-        System.out.println(objet);
+        System.out.println(Font.CYAN + String.format("%-6s ","#") + header.toString() + Font.RESET);
         for (int i = showIndex; i < end; i++) {
-            System.out.println(String.format("%-4s",(i + 1)) + " " + results.get(i));
+            System.out.println(String.format("%-6s ",(i + 1)) + results.get(i));
         }
 
         showIndex += PAGE_SIZE;

@@ -2,6 +2,7 @@ package fr.itii.apiweb.domain.models.objet;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.itii.apiweb.ui.Header;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Etablissement {
@@ -180,8 +181,7 @@ public class Etablissement {
     // ===== Affichage =====
     @Override
     public String toString() {
-        return String.format(
-                "nom: %-50s type: %-10s commune: %-25s code: %-10s mail: %-30s statut: %-10s",
+        return String.format(Header.ETABLISSEMENT.format,
                 getNomEtablissement(),
                 getTypeEtablissement(),
                 getNomCommune(),
