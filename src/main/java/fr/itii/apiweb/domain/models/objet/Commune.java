@@ -2,6 +2,7 @@ package fr.itii.apiweb.domain.models.objet;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.itii.apiweb.ui.Header;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +162,7 @@ public class Commune {
 
     @Override
     public String toString() {
-        return String.format("%-40s %-30s %-30s %-30s %-10s",
+        return String.format(Header.COMMUNE.format,
                 getNom(),
                 getDepartement(),
                 getNomRegion(),

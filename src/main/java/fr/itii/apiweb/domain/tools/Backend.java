@@ -37,12 +37,12 @@ public class Backend {
     // ==================================================
 
     public List<Commune> searchCommuneFromAPIByNom(String value){
-        JsonNode json = api.getCommunes(APIField.Commune.NOM, value, 100);
+        JsonNode json = api.getCommunes(APIField.Commune.NOM, value, 1000);
         return serializer.toCommunes(json);
     }
 
     public List<Commune> searchCommuneFromAPIByCodePostal(String value){
-        JsonNode json = api.getCommunes(APIField.Commune.CODE_POSTAL, value, 100);
+        JsonNode json = api.getCommunes(APIField.Commune.CODE_POSTAL, value, 1000);
         return serializer.toCommunes(json);
     }
 
@@ -239,15 +239,15 @@ public class Backend {
         List<Entreprise> entreprises = new ArrayList<>();
 
         for(Commune c : communes) {
-            System.out.println(c.getCodeCommune());
+            //System.out.println(c.getCodeCommune());
             JsonNode json = api.getEntreprises(c.getCodeCommune());
-            System.out.println(json);
+            //System.out.println(json);
             List<Entreprise> ent = serializer.toEntreprises(json);
             entreprises.addAll(ent);
         }
 
         for(Entreprise e : entreprises){
-            System.out.println(e.getNom());
+            //System.out.println(e.getNom());
         }
 
         return entreprises;

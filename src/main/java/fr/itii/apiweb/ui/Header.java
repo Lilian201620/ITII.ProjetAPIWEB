@@ -2,45 +2,47 @@ package fr.itii.apiweb.ui;
 
 public enum Header {
 
-    COMMUNE(String.format("%-4s %-40s %-30s %-30s %-30s %-10s",
-        "#",
-        "Nom de la commune",
-        "Departement",
-        "Region",
-        "Codes Postaux",
-        "Population"
-    )),
+    COMMUNE(
+            "%-40s %-30s %-30s %-30s %-10s",
+            new String[]{
+                    "Nom de la commune",
+                    "Departement",
+                    "Region",
+                    "Codes Postaux",
+                    "Population"
+            }
+    ),
+    ETABLISSEMENT(
+            "%-40s %-25s %-30s %-10s %-35s %-10s",
+            new String[]{
+                    "Nom de l'etablissement",
+                    "Type",
+                    "Nom de la commune",
+                    "Code commune",
+                    "mail",
+                    "statut"
+            }
+    ),
+    METEO(
+            "%-40s %-10s",
+            new String[]{"Nom de la commune", "Température"}
+    ),
+    ENTREPRISE(
+            "%-50s %-40s",
+            new String[]{"Nom de l'entreprise", "Adresse"}
+    );
 
-    ETABLISSEMENT(String.format("%-4s %-50s %-10s %-25s %-10s %-30s %-10s",
-        "#",
-        "Nom de l'etablissement",
-        "Type",
-        "Nom de la Commune",
-        "Code de la commune",
-        "mail",
-        "statut"
-    )),
+    public final String format;
+    public final String[] titles;
 
-    METEO(String.format("%-4s %-40s %-30s",
-        "#",
-        "Nom de la commune",
-        "Temperature"
-    )),
-
-    ENTREPRISE(String.format("%-4s %-50s %-40s",
-        "#",
-        "Nom de l'entreprise",
-        "Adresse"
-    ));
-
-    public final String header;
-
-    Header(String header) {
-        this.header = header;
+    Header(String format, String[] titles) {
+        this.format = format;
+        this.titles = titles;
     }
 
+    // Affiche l'en-tête formaté
     @Override
     public String toString() {
-        return header;
+        return String.format(format, (Object[]) titles);
     }
 }

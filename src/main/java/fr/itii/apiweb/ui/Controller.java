@@ -66,7 +66,7 @@ public class Controller {
                 List<Commune> res = b.searchCommuneFromAPIByNom(
                         t.showConfig("Recherche commune dans API", "Nom de la commune: ")
                 );
-                t.showList(res, Header.COMMUNE);
+                t.showList(res, Header.COMMUNE, 0);
                 call(res, Header.COMMUNE);
             }
 
@@ -77,7 +77,7 @@ public class Controller {
                 List<Commune> res = b.searchCommuneFromAPIByCodePostal(
                         t.showConfig("Recherche commune dans API", "Numero du code postal: ")
                 );
-                t.showList(res, Header.COMMUNE);
+                t.showList(res, Header.COMMUNE, 0);
                 call(res, Header.COMMUNE);
             }
 
@@ -86,7 +86,7 @@ public class Controller {
                 List<Commune> res = b.searchCommuneFromAPIByDepartement(
                         t.showConfig("Recherche commune dans API", "Numero de departement: ")
                 );
-                t.showList(res, Header.COMMUNE);
+                t.showList(res, Header.COMMUNE, 0);
                 call(res, Header.COMMUNE);
             }
 
@@ -95,7 +95,7 @@ public class Controller {
                 List<Etablissement> res = b.searchEtablissementFromAPIByCodePostal(
                         t.showConfig("Recherche etablissement dans API", "Numero du code postal: ")
                 );
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 call(res, Header.ETABLISSEMENT);
             }
 
@@ -104,7 +104,7 @@ public class Controller {
                 List<Etablissement> res = b.searchEtablissementFromAPIByDepartement(
                         t.showConfig("Recherche etablissement dans API", "Numero de departement: ")
                 );
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 call(res, Header.ETABLISSEMENT);
             }
 
@@ -147,7 +147,7 @@ public class Controller {
                             b.saveEtablissement((List<Etablissement>) liste, param);
                         }
                     }
-                    t.showList(liste, header);
+                    t.showList(liste, header, 0);
                     call(liste, header);
                 }
 
@@ -162,7 +162,7 @@ public class Controller {
                             b.saveEtablissement((List<Etablissement>) liste);
                         }
                     }
-                    t.showList(liste, header);
+                    t.showList(liste, header, 0);
                     call(liste, header);
                 }
 
@@ -193,7 +193,7 @@ public class Controller {
             case "1" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Nom de la commune: ");
                 List<Commune> res = b.searchCommuneFromDBByNom(value);
-                t.showList(res,  Header.COMMUNE);
+                t.showList(res,  Header.COMMUNE, 0);
                 read(res,Header.COMMUNE, b.searchCommuneFromDBByNom, value);
             }
 
@@ -201,14 +201,14 @@ public class Controller {
             case "2" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero du code postal: ");
                 List<Commune> res = b.searchCommuneFromDBByCodePostal(value);
-                t.showList(res,   Header.COMMUNE);
+                t.showList(res,   Header.COMMUNE, 0);
                 read(res, Header.COMMUNE, b.searchCommuneFromDBByCodePostal, value);
             }
             //Commune par departement
             case "3" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero ou nom du departement: ");
                 List<Commune> res = b.searchCommuneFromDBByDepartement(value);
-                t.showList(res, Header.COMMUNE);
+                t.showList(res, Header.COMMUNE, 0);
                 read(res, Header.COMMUNE, b.searchCommuneFromDBByDepartement, value);
             }
 
@@ -216,7 +216,7 @@ public class Controller {
             case "4" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero ou nom de la region: ");
                 List<Commune> res = b.searchCommuneFromDBByRegion(value);
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 read(res, Header.ETABLISSEMENT, b.searchCommuneFromDBByRegion, value);
             }
 
@@ -224,7 +224,7 @@ public class Controller {
             case "5" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Nom de l'etablissement: ");
                 List<Etablissement> res = b.searchEtablissementFromDBByNom(value);
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByNom,  value);
 
             }
@@ -232,7 +232,7 @@ public class Controller {
             case "6" -> {
                 String value = t.showConfig("Recherche etablissement dans DB","Type d'etablissement: ");
                 List<Etablissement> res = b.searchEtablissementFromDBByType(value);
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByType, value);
 
             }
@@ -240,7 +240,7 @@ public class Controller {
             case "7" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Nom de la commune: ");
                 List<Etablissement> res = b.searchEtablissementFromDBByNomCommune(value);
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByNomCommune, value);
             }
 
@@ -248,7 +248,7 @@ public class Controller {
             case "8" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero du code postal: ");
                 List<Etablissement> res = b.searchEtablissementFromAPIByCodePostal(value);
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 read(res, Header.ETABLISSEMENT, b.searchEtablissementFromAPIByCodePostal, value);
             }
 
@@ -256,7 +256,7 @@ public class Controller {
             case "9" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero de departement: ");
                 List<Etablissement> res = b.searchEtablissementFromDBByDepartement(value);
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByDepartement, value);
             }
 
@@ -264,7 +264,7 @@ public class Controller {
             case "10" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero de region: ");
                 List<Etablissement> res = b.searchEtablissementFromDBByRegion(value);
-                t.showList(res, Header.ETABLISSEMENT);
+                t.showList(res, Header.ETABLISSEMENT, 0);
                 read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByRegion, value);
             }
 
@@ -307,7 +307,7 @@ public class Controller {
                         }
 
                         List<T> newListe = callback.apply(value);
-                        t.showList(newListe, header);
+                        t.showList(newListe, header, 0);
                         read(newListe, header, callback, value);
 
                     } else {
@@ -327,7 +327,7 @@ public class Controller {
                         }
                     }
                     List<T> newListe = callback.apply(value);
-                    t.showList(newListe, header);
+                    t.showList(newListe, header, 0);
                     read(newListe, header, callback, value);
                 }
 
