@@ -134,34 +134,17 @@ public class Controller {
 
                 //Save par indice
                 case "3" -> {
-                    String param = t.showSelect(
+                    b.saveList(liste, t.showSelect(
                             "Sauvegarde",
                             "Liste des indices: "
-                    );
-                    if (!liste.isEmpty()) {
-                        Object first = liste.getFirst();
-
-                        if (first instanceof Commune) {
-                            b.saveCommune((List<Commune>) liste, param);
-                        } else if (first instanceof Etablissement) {
-                            b.saveEtablissement((List<Etablissement>) liste, param);
-                        }
-                    }
+                    ));
                     t.showList(liste, header, 0);
                     call(liste, header);
                 }
 
                 //Save tout
                 case "4" -> {
-                    if (!liste.isEmpty()) {
-                        Object first = liste.getFirst();
-
-                        if (first instanceof Commune) {
-                            b.saveCommune((List<Commune>) liste);
-                        } else if (first instanceof Etablissement) {
-                            b.saveEtablissement((List<Etablissement>) liste);
-                        }
-                    }
+                    b.saveList(liste);
                     t.showList(liste, header, 0);
                     call(liste, header);
                 }
