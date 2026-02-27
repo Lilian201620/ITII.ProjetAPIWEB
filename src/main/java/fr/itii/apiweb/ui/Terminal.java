@@ -11,7 +11,7 @@ public class Terminal {
     private Integer showIndex = 0;
 
     public void clear(){
-        for(int i = 0; i < 0; i++){
+        for(int i = 0; i < 1; i++){
             System.out.println();
         }
     }
@@ -48,6 +48,7 @@ public class Terminal {
     }
 
     public String showMenuAPI() {
+        clear();
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Action API ====" + Font.RESET);
         System.out.println("1. " + Font.CYAN + "Page precedente" + Font.RESET);
         System.out.println("2. " + Font.CYAN + "Page suivante" + Font.RESET);

@@ -5,6 +5,7 @@ import fr.itii.apiweb.domain.models.objet.Entreprise;
 import fr.itii.apiweb.domain.models.objet.Etablissement;
 import fr.itii.apiweb.domain.models.objet.Meteo;
 import fr.itii.apiweb.domain.tools.Backend;
+import fr.itii.apiweb.domain.tools.Queryable;
 
 import java.util.List;
 import java.util.function.Function;
@@ -187,85 +188,215 @@ public class Controller {
     //  DATABASE
     //  =========================================================
 
-    private void read() {
+    private <T> void read() {
         switch (t.showMenuSearchDB()) {
             //Commune par nom
             case "1" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Nom de la commune: ");
-                List<Commune> res = b.searchCommuneFromDBByNom(value);
-                t.showList(res,  Header.COMMUNE, 0);
-                read(res,Header.COMMUNE, b.searchCommuneFromDBByNom, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchCommuneFromDBByNom(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.COMMUNE;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
             }
 
             //Commune par code postal
             case "2" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero du code postal: ");
                 List<Commune> res = b.searchCommuneFromDBByCodePostal(value);
-                t.showList(res,   Header.COMMUNE, 0);
-                read(res, Header.COMMUNE, b.searchCommuneFromDBByCodePostal, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchCommuneFromDBByNom(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.COMMUNE;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
             }
             //Commune par departement
             case "3" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero ou nom du departement: ");
-                List<Commune> res = b.searchCommuneFromDBByDepartement(value);
-                t.showList(res, Header.COMMUNE, 0);
-                read(res, Header.COMMUNE, b.searchCommuneFromDBByDepartement, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchCommuneFromDBByDepartement(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.COMMUNE;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
             }
 
             //Commune par region
             case "4" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero ou nom de la region: ");
-                List<Commune> res = b.searchCommuneFromDBByRegion(value);
-                t.showList(res, Header.ETABLISSEMENT, 0);
-                read(res, Header.ETABLISSEMENT, b.searchCommuneFromDBByRegion, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchCommuneFromDBByRegion(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.COMMUNE;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
             }
 
             //Etablissement par nom
             case "5" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Nom de l'etablissement: ");
-                List<Etablissement> res = b.searchEtablissementFromDBByNom(value);
-                t.showList(res, Header.ETABLISSEMENT, 0);
-                read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByNom,  value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchEtablissementFromDBByNom(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.ETABLISSEMENT;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
 
             }
             //Etablissement par type
             case "6" -> {
                 String value = t.showConfig("Recherche etablissement dans DB","Type d'etablissement: ");
-                List<Etablissement> res = b.searchEtablissementFromDBByType(value);
-                t.showList(res, Header.ETABLISSEMENT, 0);
-                read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByType, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchEtablissementFromDBByType(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.ETABLISSEMENT;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
 
             }
             //Etablissement par nom de commune
             case "7" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Nom de la commune: ");
-                List<Etablissement> res = b.searchEtablissementFromDBByNomCommune(value);
-                t.showList(res, Header.ETABLISSEMENT, 0);
-                read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByNomCommune, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchEtablissementFromDBByNomCommune(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.ETABLISSEMENT;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
             }
 
             //Etablissment par code postal
             case "8" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero du code postal: ");
-                List<Etablissement> res = b.searchEtablissementFromAPIByCodePostal(value);
-                t.showList(res, Header.ETABLISSEMENT, 0);
-                read(res, Header.ETABLISSEMENT, b.searchEtablissementFromAPIByCodePostal, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchEtablissementFromAPIByCodePostal(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.ETABLISSEMENT;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
             }
 
             //Etablissement par departement
             case "9" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero de departement: ");
-                List<Etablissement> res = b.searchEtablissementFromDBByDepartement(value);
-                t.showList(res, Header.ETABLISSEMENT, 0);
-                read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByDepartement, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchEtablissementFromDBByDepartement(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.ETABLISSEMENT;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
             }
 
             //Etablissement par region
             case "10" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero de region: ");
-                List<Etablissement> res = b.searchEtablissementFromDBByRegion(value);
-                t.showList(res, Header.ETABLISSEMENT, 0);
-                read(res, Header.ETABLISSEMENT, b.searchEtablissementFromDBByRegion, value);
+
+                Queryable q = new Queryable() {
+                    @Override
+                    public <T> List<T> search() {
+                        return (List<T>) b.searchEtablissementFromDBByRegion(value);
+                    }
+
+                    @Override
+                    public Header add() {
+                        return Header.ETABLISSEMENT;
+                    }
+                };
+
+                t.showList(q.search(),  q.add(), 0);
+                read(q);
+
             }
 
             //Retour
@@ -277,58 +408,36 @@ public class Controller {
     //  DATABASE
     //  =========================================================
 
-    private <T> void read(List<T> liste, Header header, Function<String, List<T>> callback, String value) {
+    private <T> void read(Queryable q) {
         while (true) {
             switch (t.showMenuDB()) {
                 //Page précédente
                 case "1" -> {
-                    t.showList(liste, header, t.getIndex() - 20);
-                    read(liste, header, callback, value);
+                    t.showList(q.search(), q.add(), t.getIndex() - 20);
+                    read(q);
                 }
                 //Page suivante
                 case "2" -> {
-                    t.showList(liste, header, t.getIndex());
-                    read(liste, header, callback, value);
+                    t.showList(q.search(), q.add(), t.getIndex());
+                    read(q);
                 }
 
                 //Delete par indice
                 case "3" -> {
-                    String index = t.showAction(
+
+                    b.deleteList(q.search(), t.showAction(
                             "Supprimer",
                             "Liste des indices: "
-                    );
-                    if (!liste.isEmpty()) {
-                        Object first = liste.getFirst();
-
-                        if (first instanceof Commune) {
-                            b.deleteCommune((List<Commune>) liste, index);
-                        } else if (first instanceof Etablissement) {
-                            b.deleteEtablissement((List<Etablissement>) liste, index);
-                        }
-
-                        List<T> newListe = callback.apply(value);
-                        t.showList(newListe, header, 0);
-                        read(newListe, header, callback, value);
-
-                    } else {
-                        read(liste, header, callback, value);
-                    }
+                    ));
+                    t.showList(q.search(), q.add(), 0);
+                    read(q);
                 }
 
                 //Delete tout
                 case "4" -> {
-                    if (!liste.isEmpty()) {
-                        Object first = liste.getFirst();
-
-                        if (first instanceof Commune) {
-                            b.deleteCommune((List<Commune>) liste);
-                        } else if (first instanceof Etablissement) {
-                            b.deleteEtablissement((List<Etablissement>) liste);
-                        }
-                    }
-                    List<T> newListe = callback.apply(value);
-                    t.showList(newListe, header, 0);
-                    read(newListe, header, callback, value);
+                    b.deleteList(q.search());
+                    t.showList(q.search(), q.add(), 0);
+                    read(q);
                 }
 
                 // nouvelle recherche
