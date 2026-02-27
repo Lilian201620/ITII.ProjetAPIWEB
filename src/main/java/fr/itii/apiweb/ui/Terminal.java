@@ -11,7 +11,7 @@ public class Terminal {
     private Integer showIndex = 0;
 
     public void clear(){
-        for(int i = 0; i < 1; i++){
+        for(int i = 0; i < 20; i++){
             System.out.println();
         }
     }
@@ -100,7 +100,7 @@ public class Terminal {
         return scan();
     }
 
-    public String showAction(String title, String msg){
+    public String showSelect (String title, String msg){
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== "+ title + " ====" + Font.RESET);
         System.out.println(Font.ITALIC + "" + Font.GREY + "Exemple de saisi: 1 4 7-10 => indices selectionnes: 1,4,7,8,9,10" + Font.RESET);
         System.out.print(msg);
