@@ -21,17 +21,6 @@ public class Backend {
     private final DBManager db = DBManager.getInstance();
     private final JSONSerializer serializer = new JSONSerializer();
 
-    public Function<String, List<Commune>> searchCommuneFromDBByNom = this::searchCommuneFromDBByNom;
-    public Function<String, List<Commune>> searchCommuneFromDBByCodePostal =  this::searchCommuneFromDBByCodePostal;
-    public Function<String, List<Commune>> searchCommuneFromDBByDepartement = this::searchCommuneFromDBByDepartement;
-    public Function<String, List<Commune>> searchCommuneFromDBByRegion =  this::searchCommuneFromDBByRegion;
-    public Function<String, List<Etablissement>> searchEtablissementFromDBByNom = this::searchEtablissementFromDBByNom;
-    public Function<String, List<Etablissement>> searchEtablissementFromDBByType = this::searchEtablissementFromDBByType;
-    public Function<String, List<Etablissement>> searchEtablissementFromDBByNomCommune =  this::searchEtablissementFromDBByNomCommune;
-    public Function<String, List<Etablissement>> searchEtablissementFromAPIByCodePostal = this::searchEtablissementFromAPIByCodePostal;
-    public Function<String, List<Etablissement>> searchEtablissementFromDBByDepartement = this::searchEtablissementFromDBByDepartement;
-    public Function<String, List<Etablissement>> searchEtablissementFromDBByRegion = this::searchEtablissementFromDBByRegion;
-
     // ==================================================
     //  Commune call API
     // ==================================================
@@ -81,14 +70,18 @@ public class Backend {
     //  Commune save DB
     // ==================================================
 
-    public void saveCommune(List<Commune> listeCommune){
-        db.saveCommunes(listeCommune);
+    private void saveCommune(List<Commune> liste){
+        db.saveCommunes(liste);
     }
 
-    public void saveCommune(List<Commune> listeCommune, String select){
-        if (!listeCommune.isEmpty()){
-            saveCommune(serializer.toLists(listeCommune, select));
+    private void saveCommune(List<Commune> liste, String select){
+        if (!liste.isEmpty()){
+            saveCommune(serializer.toLists(liste, select));
         }
+    }
+
+    public <T> void saveList(List<T> liste) {
+
     }
 
     // ==================================================
@@ -99,15 +92,33 @@ public class Backend {
         db.deleteCommunes();
     }
 
-    public void deleteCommune(List<Commune> listeCommune){
-        for(Commune c : listeCommune){
+    private void deleteCommune(List<Commune> liste){
+        for(Commune c : liste){
             db.deleteCommunes(DBTable.Commune.CODE_COMMUNE, c.getCodeCommune(), true);
         }
     }
 
-    public void deleteCommune(List<Commune> listeCommune, String select){
-        if (!listeCommune.isEmpty()){
-            deleteCommune(serializer.toLists(listeCommune, select));
+    public <T> void deleteList(List<T> liste){
+        if (!liste.isEmpty()) {
+            Object first = liste.getFirst();
+
+            if (first instanceof Commune) {
+                deleteCommune((List<Commune>) liste);
+            } else if (first instanceof Etablissement) {
+                deleteEtablissement((List<Etablissement>) liste);
+            }
+        }
+    }
+
+    public <T> void deleteList(List<T> liste, String select){
+        if (!liste.isEmpty()) {
+            Object first = liste.getFirst();
+
+            if (first instanceof Commune) {
+                deleteCommune(serializer.toLists((List<Commune>) liste, select));
+            } else if (first instanceof Etablissement) {
+                deleteEtablissement(serializer.toLists((List<Etablissement>)liste, select));
+            }
         }
     }
 
@@ -201,11 +212,6 @@ public class Backend {
             db.deleteEtablissements(DBTable.Etablissement.ID, etab.getId());
         }
     }
-
-    public void deleteEtablissement(List<Etablissement> listeEtablissement, String select){
-        deleteEtablissement(serializer.toLists(listeEtablissement, select));
-    }
-
 
     // ==================================================
     //  Meteo
