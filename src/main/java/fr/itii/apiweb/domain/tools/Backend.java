@@ -74,14 +74,28 @@ public class Backend {
         db.saveCommunes(liste);
     }
 
-    private void saveCommune(List<Commune> liste, String select){
-        if (!liste.isEmpty()){
-            saveCommune(serializer.toLists(liste, select));
+    public <T> void saveList(List<T> liste) {
+        if (!liste.isEmpty()) {
+            Object first = liste.getFirst();
+
+            if (first instanceof Commune) {
+                saveCommune((List<Commune>) liste);
+            } else if (first instanceof Etablissement) {
+                saveEtablissement((List<Etablissement>) liste);
+            }
         }
     }
 
-    public <T> void saveList(List<T> liste) {
+    public <T> void saveList(List<T> liste, String select){
+        if (!liste.isEmpty()) {
+            Object first = liste.getFirst();
 
+            if (first instanceof Commune) {
+                saveCommune(serializer.toLists((List<Commune>) liste, select));
+            } else if (first instanceof Etablissement) {
+                saveEtablissement(serializer.toLists((List<Etablissement>)liste, select));
+            }
+        }
     }
 
     // ==================================================
@@ -191,12 +205,6 @@ public class Backend {
         }
         db.saveCommunes(_listCommune);
         db.saveEtablissements(etablissements);
-    }
-
-    public void saveEtablissement(List<Etablissement> listeEtablissement, String select){
-        if (!listeEtablissement.isEmpty()){
-            saveEtablissement(serializer.toLists(listeEtablissement, select));
-        }
     }
 
     // ==================================================
