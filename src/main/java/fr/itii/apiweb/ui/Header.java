@@ -13,7 +13,7 @@ public enum Header {
             }
     ),
     ETABLISSEMENT(
-            "%-40s %-25s %-30s %-10s %-35s %-10s",
+            "%-60s %-25s %-30s %-15s %-35s %-10s",
             new String[]{
                     "Nom de l'etablissement",
                     "Type",
