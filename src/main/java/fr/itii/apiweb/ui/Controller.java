@@ -1,14 +1,13 @@
 package fr.itii.apiweb.ui;
 
-import fr.itii.apiweb.domain.models.objet.Commune;
-import fr.itii.apiweb.domain.models.objet.Entreprise;
-import fr.itii.apiweb.domain.models.objet.Etablissement;
-import fr.itii.apiweb.domain.models.objet.Meteo;
+import fr.itii.apiweb.domain.models.objets.Commune;
+import fr.itii.apiweb.domain.models.objets.Entreprise;
+import fr.itii.apiweb.domain.models.objets.Etablissement;
+import fr.itii.apiweb.domain.models.objets.Meteo;
 import fr.itii.apiweb.domain.tools.Backend;
 import fr.itii.apiweb.domain.tools.Queryable;
 
 import java.util.List;
-import java.util.function.Function;
 
 public class Controller {
     private final Terminal t = new Terminal();
@@ -135,7 +134,7 @@ public class Controller {
 
                 //Save par indice
                 case "3" -> {
-                    String param = t.showAction(
+                    String param = t.showSelect(
                             "Sauvegarde",
                             "Liste des indices: "
                     );
@@ -425,7 +424,7 @@ public class Controller {
                 //Delete par indice
                 case "3" -> {
 
-                    b.deleteList(q.search(), t.showAction(
+                    b.deleteList(q.search(), t.showSelect(
                             "Supprimer",
                             "Liste des indices: "
                     ));

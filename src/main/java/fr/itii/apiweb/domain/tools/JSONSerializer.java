@@ -7,9 +7,9 @@ import java.util.List;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.itii.apiweb.domain.models.objet.Commune;
-import fr.itii.apiweb.domain.models.objet.Entreprise;
-import fr.itii.apiweb.domain.models.objet.Etablissement;
+import fr.itii.apiweb.domain.models.objets.Commune;
+import fr.itii.apiweb.domain.models.objets.Entreprise;
+import fr.itii.apiweb.domain.models.objets.Etablissement;
 
 public class JSONSerializer {
 

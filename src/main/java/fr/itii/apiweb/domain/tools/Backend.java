@@ -6,14 +6,13 @@ import fr.itii.apiweb.data.remote.APICaller;
 import fr.itii.apiweb.domain.models.enums.APIField;
 import fr.itii.apiweb.domain.models.enums.DBTable;
 import fr.itii.apiweb.ui.Font;
-import fr.itii.apiweb.domain.models.objet.Commune;
-import fr.itii.apiweb.domain.models.objet.Entreprise;
-import fr.itii.apiweb.domain.models.objet.Etablissement;
-import fr.itii.apiweb.domain.models.objet.Meteo;
+import fr.itii.apiweb.domain.models.objets.Commune;
+import fr.itii.apiweb.domain.models.objets.Entreprise;
+import fr.itii.apiweb.domain.models.objets.Etablissement;
+import fr.itii.apiweb.domain.models.objets.Meteo;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class Backend {
 
