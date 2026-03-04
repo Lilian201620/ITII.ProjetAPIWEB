@@ -59,7 +59,6 @@ public class DBManager implements DataRepository {
     /**
      * Cette méthode coupe la connexion mentionnée à la BDD.
      *
-     * param con Connexion à fermer
      */
     private void disconnect(Connection con) throws SQLException {
         if (con != null) {
@@ -131,60 +130,66 @@ public class DBManager implements DataRepository {
      * Méthode générale Deleters
      */
     private void deleteString(DBTable table, Enum col, String critere, boolean onlyExplicit) {
-        String req = "DELETE FROM " + table.toString() + " WHERE " + col.toString() + " ILIKE ?";
-        try {
-            Connection con = _instance.connect();
-            if (con != null) {
-                PreparedStatement stmt = con.prepareStatement(req);
-                if (critere.isEmpty()) {
-                    stmt = con.prepareStatement("DELETE FROM " + table + ";");
-                } else if (onlyExplicit) {
-                    stmt.setString(1, critere);
-                } else {
-                    stmt.setString(1, "%" + critere + "%");
+        dbExecutor.submit(() -> {
+            String req = "DELETE FROM " + table.toString() + " WHERE " + col.toString() + " ILIKE ?";
+            try {
+                Connection con = _instance.connect();
+                if (con != null) {
+                    PreparedStatement stmt = con.prepareStatement(req);
+                    if (critere.isEmpty()) {
+                        stmt = con.prepareStatement("DELETE FROM " + table + ";");
+                    } else if (onlyExplicit) {
+                        stmt.setString(1, critere);
+                    } else {
+                        stmt.setString(1, "%" + critere + "%");
+                    }
+                    stmt.executeUpdate();
+                    this.disconnect(con);
                 }
-                stmt.executeUpdate();
-                this.disconnect(con);
+            } catch (Exception e) {
+                ExceptionHandler.handleException(new SQLException());
             }
-        } catch (Exception e) {
-            ExceptionHandler.handleException(new SQLException());
-        }
+        });
     }
 
     private void deleteInt(DBTable table, Enum col, int critere) {
-        String req = "DELETE FROM " + table.toString() + " WHERE " + col.toString() + " = ?";
-        try {
-            Connection con = _instance.connect();
-            if (con != null) {
-                PreparedStatement stmt = con.prepareStatement(req);
-                stmt.setInt(1, critere);
-                stmt.executeUpdate();
-                this.disconnect(con);
+        dbExecutor.submit(() -> {
+            String req = "DELETE FROM " + table.toString() + " WHERE " + col.toString() + " = ?";
+            try {
+                Connection con = _instance.connect();
+                if (con != null) {
+                    PreparedStatement stmt = con.prepareStatement(req);
+                    stmt.setInt(1, critere);
+                    stmt.executeUpdate();
+                    this.disconnect(con);
+                }
+            } catch (Exception e) {
+                ExceptionHandler.handleException(new SQLException());
             }
-        } catch (Exception e) {
-            ExceptionHandler.handleException(new SQLException());
-        }
+        });
     }
 
     private void deleteString(DBTable table, Enum col, String critere) {
-        String req = "DELETE FROM " + table.toString() + " WHERE ? = ANY(" + col.toString() + ")";
+        dbExecutor.submit(() -> {
+            String req = "DELETE FROM " + table.toString() + " WHERE ? = ANY(" + col.toString() + ")";
 
-        try (Connection con = _instance.connect()) {
-            if (con != null) {
-                try (PreparedStatement stmt = con.prepareStatement(req)) {
-                    if (critere != null && !critere.isEmpty()) {
-                        // On injecte le nombre en String ("75000")
-                        stmt.setString(1, critere);
+            try (Connection con = _instance.connect()) {
+                if (con != null) {
+                    try (PreparedStatement stmt = con.prepareStatement(req)) {
+                        if (critere != null && !critere.isEmpty()) {
+                            // On injecte le nombre en String ("75000")
+                            stmt.setString(1, critere);
+                        }
+
+                        int rowsDeleted = stmt.executeUpdate();
+                        System.out.println(rowsDeleted + " ligne(s) supprimée(s).");
                     }
-
-                    int rowsDeleted = stmt.executeUpdate();
-                    System.out.println(rowsDeleted + " ligne(s) supprimée(s).");
+                    this.disconnect(con);
                 }
-                this.disconnect(con);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     /**
