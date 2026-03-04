@@ -2,8 +2,7 @@ package fr.itii.apiweb.ui;
 
 public enum Header {
 
-    COMMUNE(
-            "%-40s %-30s %-30s %-30s %-10s",
+    COMMUNE("%-40s %-30s %-30s %-30s %-10s",
             new String[]{
                     "Nom de la commune",
                     "Departement",
@@ -12,8 +11,7 @@ public enum Header {
                     "Population"
             }
     ),
-    ETABLISSEMENT(
-            "%-60s %-25s %-30s %-15s %-35s %-10s",
+    ETABLISSEMENT("%-60s %-25s %-30s %-15s %-35s %-10s",
             new String[]{
                     "Nom de l'etablissement",
                     "Type",
@@ -23,12 +21,10 @@ public enum Header {
                     "statut"
             }
     ),
-    METEO(
-            "%-40s %-10s",
+    METEO("%-40s %-10s",
             new String[]{"Nom de la commune", "Température"}
     ),
-    ENTREPRISE(
-            "%-50s %-40s",
+    ENTREPRISE("%-50s %-40s",
             new String[]{"Nom de l'entreprise", "Adresse"}
     );
 

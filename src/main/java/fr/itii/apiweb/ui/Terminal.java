@@ -126,13 +126,11 @@ public class Terminal {
             return;
         }
 
-        System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats " + (showIndex + 1) + " à " + results.size() + " ====" + Font.RESET);
+        System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Resultats 1 à " + results.size() + " ====" + Font.RESET);
         System.out.println(Font.CYAN + String.format("%-6s","#") + header.toString() + Font.RESET);
         for (int i = 0; i < results.size(); i++) {
-            System.out.println(String.format("%-6s",(i + 1)) + " " + results.get(i));
+            System.out.println(String.format("%-6s",(i + 1)) + results.get(i));
         }
-
-        showIndex += PAGE_SIZE;
     }
 
     public <T> void showList(List<T> results, Header header, int index) {
