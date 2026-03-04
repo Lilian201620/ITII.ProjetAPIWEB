@@ -8,12 +8,15 @@ import fr.itii.apiweb.domain.tools.ExceptionHandler;
 
 import java.sql.*;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DBManager implements DataRepository {
     private final String _dbHost = System.getenv().getOrDefault("DB_HOST", "localhost");
     private final String _url = "jdbc:postgresql://" + _dbHost + ":5432/ApiWebToolDB";
     private static final String _username = "apiwebtoolUser";
     private static final String _password = "RVomy#$@CE76#t!yNkPr";
+    ExecutorService dbExecutor = Executors.newSingleThreadExecutor();
 
     private static DBManager _instance;
     private static boolean _isInit = false;
@@ -242,46 +245,48 @@ public class DBManager implements DataRepository {
      */
     @Override
     public void saveCommunes(List<Commune> communes) {
-        try {
-            Connection con = _instance.connect();
-            PreparedStatement stmt;
-            for (Commune c : communes) {
-                try {
-                    String req = "INSERT INTO " + DBTable.COMMUNES + String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?,?,?,?,?)",
-                            DBTable.Commune.NOM,
-                            DBTable.Commune.CODE_COMMUNE,
-                            DBTable.Commune.CODE_DEPARTEMENT,
-                            DBTable.Commune.NOM_DEPARTEMENT,
-                            DBTable.Commune.CODE_REGION,
-                            DBTable.Commune.NOM_REGION,
-                            DBTable.Commune.CODES_POSTAUX,
-                            DBTable.Commune.POPULATION,
-                            DBTable.Commune.LONGITUDE,
-                            DBTable.Commune.LATITUDE
-                    );
+        dbExecutor.submit(() -> {
+            try {
+                Connection con = _instance.connect();
+                PreparedStatement stmt;
+                for (Commune c : communes) {
+                    try {
+                        String req = "INSERT INTO " + DBTable.COMMUNES + String.format("(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                                DBTable.Commune.NOM,
+                                DBTable.Commune.CODE_COMMUNE,
+                                DBTable.Commune.CODE_DEPARTEMENT,
+                                DBTable.Commune.NOM_DEPARTEMENT,
+                                DBTable.Commune.CODE_REGION,
+                                DBTable.Commune.NOM_REGION,
+                                DBTable.Commune.CODES_POSTAUX,
+                                DBTable.Commune.POPULATION,
+                                DBTable.Commune.LONGITUDE,
+                                DBTable.Commune.LATITUDE
+                        );
 
-                    stmt = con.prepareStatement(req);
-                    stmt.setString(1, c.getNom());
-                    stmt.setString(2, c.getCodeCommune());
-                    stmt.setString(3, c.getCodeDepartement());
-                    stmt.setString(4, c.getNomDepartement());
-                    stmt.setString(5, c.getCodeRegion());
-                    stmt.setString(6, c.getNomRegion());
-                    stmt.setArray(7, con.createArrayOf("varchar", c.getCodesPostaux().toArray()));
-                    stmt.setInt(8, c.getPopulation());
-                    stmt.setDouble(9, c.getLongitude());
-                    stmt.setDouble(10, c.getLatitude());
-                    stmt.execute();
+                        stmt = con.prepareStatement(req);
+                        stmt.setString(1, c.getNom());
+                        stmt.setString(2, c.getCodeCommune());
+                        stmt.setString(3, c.getCodeDepartement());
+                        stmt.setString(4, c.getNomDepartement());
+                        stmt.setString(5, c.getCodeRegion());
+                        stmt.setString(6, c.getNomRegion());
+                        stmt.setArray(7, con.createArrayOf("varchar", c.getCodesPostaux().toArray()));
+                        stmt.setInt(8, c.getPopulation());
+                        stmt.setDouble(9, c.getLongitude());
+                        stmt.setDouble(10, c.getLatitude());
+                        stmt.execute();
 
-                } catch (Exception e) {
-                    System.out.println(Font.ITALIC + "" + Font.GREY + c.getNom() + " est déjà présente dans la base de donnée." + Font.RESET);
+                    } catch (Exception e) {
+                        System.out.println(Font.ITALIC + "" + Font.GREY + c.getNom() + " est déjà présente dans la base de donnée." + Font.RESET);
+                    }
                 }
+                con.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                ExceptionHandler.handleException(new SQLException());
             }
-            con.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            ExceptionHandler.handleException(new SQLException());
-        }
+        });
     }
 
     private List<Commune> getCommunes(ResultSet results) {
@@ -361,32 +366,34 @@ public class DBManager implements DataRepository {
      */
     @Override
     public void saveEtablissements(List<Etablissement> Etablissements) {
-        try {
-            Connection con = _instance.connect();
-            PreparedStatement stmt;
-            for (Etablissement e : Etablissements) {
-                String req = "INSERT INTO " + DBTable.ETABLISSEMENTS+ String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)",
-                    DBTable.Etablissement.NOM,
-                    DBTable.Etablissement.TYPE,
-                    DBTable.Etablissement.MAIL,
-                    DBTable.Etablissement.STATUT,
-                    DBTable.Etablissement.CODE_COMMUNE,
-                    DBTable.Etablissement.NOM_COMMUNE
-                );
-                stmt = con.prepareStatement(req);
-                stmt.setString(1, e.getNomEtablissement());
-                stmt.setString(2, e.getTypeEtablissement());
-                stmt.setString(3, e.getMail());
-                stmt.setString(4, e.getStatutPublicPrive());
-                stmt.setString(5, e.getCodeCommune());
-                stmt.setString(6, e.getNomCommune());
-                stmt.execute();
-            }
-            this.disconnect(con);
+        dbExecutor.submit(() -> {
+            try {
+                Connection con = _instance.connect();
+                PreparedStatement stmt;
+                for (Etablissement e : Etablissements) {
+                    String req = "INSERT INTO " + DBTable.ETABLISSEMENTS+ String.format("(%s,%s,%s,%s,%s,%s) VALUES (?,?,?,?,?,?)",
+                            DBTable.Etablissement.NOM,
+                            DBTable.Etablissement.TYPE,
+                            DBTable.Etablissement.MAIL,
+                            DBTable.Etablissement.STATUT,
+                            DBTable.Etablissement.CODE_COMMUNE,
+                            DBTable.Etablissement.NOM_COMMUNE
+                    );
+                    stmt = con.prepareStatement(req);
+                    stmt.setString(1, e.getNomEtablissement());
+                    stmt.setString(2, e.getTypeEtablissement());
+                    stmt.setString(3, e.getMail());
+                    stmt.setString(4, e.getStatutPublicPrive());
+                    stmt.setString(5, e.getCodeCommune());
+                    stmt.setString(6, e.getNomCommune());
+                    stmt.execute();
+                }
+                this.disconnect(con);
 
-        } catch (Exception e) {
-            ExceptionHandler.handleException(new SQLException());
-        }
+            } catch (Exception e) {
+                ExceptionHandler.handleException(new SQLException());
+            }
+        });
     }
 
     private List<Etablissement> getEtablissements(ResultSet results) {
