@@ -2,6 +2,9 @@ name: '[CD] Push docker image'
 
 on:
   workflow_dispatch: 
+
+permissions:
+  contents: write
       
 jobs:
   build:
