@@ -31,8 +31,9 @@ public class Terminal {
         System.out.println("Version:                1.0.0-STABLE");
         System.out.println("Authors:                Enzo, Lilian, Nathan, Nicolas");
         System.out.println("Status API:             Connected [✓]");
+        System.out.println("Port:                   Listening on 80");
         System.out.println("Status Database:        Connected [✓]");
-        System.out.println("Port:                   Listening on 8080");
+        System.out.println("Port:                   Listening on 5432");
         System.out.println("OS:                     " + System.getProperty("os.name"));
         System.out.println("Java:                   " + System.getProperty("java.version"));
         System.out.println("--------------------------------------------------------");
