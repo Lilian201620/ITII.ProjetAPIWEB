@@ -13,11 +13,16 @@ public class Controller {
     private final Terminal t = new Terminal();
     private final Backend b = new Backend();
 
+    public void init() {
+        t.init();
+        this.open();
+    }
+
     // =========================================================
     //  PRINCIPAL
     //  =========================================================
 
-    public void open() {
+    private void open() {
         while (true) {
             switch (t.showMenu()) {
                 //Recherche API
