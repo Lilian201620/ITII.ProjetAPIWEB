@@ -20,6 +20,11 @@ public class Terminal {
         return sc.nextLine().trim();
     }
 
+    public void init() {
+
+
+    }
+
     public String showMenu() {
         clear();
         System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== Menu Principal ====" + Font.RESET);
