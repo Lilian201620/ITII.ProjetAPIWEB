@@ -76,7 +76,7 @@ public class Commune {
             this.nom = nom;
             return this;
         }
-        public Builder setCode(String code) {
+        public Builder setCodeCommune(String code) {
             this.code = code;
             return this;
         }
