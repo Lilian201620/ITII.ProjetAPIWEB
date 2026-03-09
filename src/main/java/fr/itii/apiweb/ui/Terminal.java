@@ -21,11 +21,22 @@ public class Terminal {
     }
 
     public void init() {
-        System.out.println("   ______                                  ___      ");
-        System.out.println("  / ____/   _______   __  __  ___  ___    /  /     ( )  _______   ______    ");
-        System.out.println(" / / ___   /  __  /  / / / /  | | /  /   /  /     / /  /  ____/  /  __  \\  ");
-        System.out.println("/ /_/  /  /  /_/ /  / /_/ /   | |/  /   /  /__   / /  /  ____/  /  /  /  /  ");
-        System.out.println("\\____/  \\_____/  \\__,_/    |____/   /_____/  /_/  /______/  /__/  /__/   ");
+        System.out.println(Font.PINK + "   _______                                     ___      ");
+        System.out.println("  /  ____/   ________   ___  ___   ___  ___   /  /      ___   _______   _______    ");
+        System.out.println(" /  / ___   /  __   /  /  / /  /  |  | /  /  /  /      /  /  /  ____/  /  __   \\  ");
+        System.out.println("/  /_/  /  /  /_/  /  /  /_/  /   |  |/  /  /  /___   /  /  /  ____/  /  /  /  /  ");
+        System.out.println("\\______/   \\______/   \\___,__/    |_____/  /______/  /__/  /______/  /__/  /__/   " + Font.RESET);
+        System.out.println("\n" + Font.PINK + "         ==== SYSTEM INFORMATION ====" + Font.RESET);
+        System.out.println("--------------------------------------------------------");
+        System.out.println("Version:                1.0.0-STABLE");
+        System.out.println("Authors:                Enzo, Lilian, Nathan, Nicolas");
+        System.out.println("Status API:             Connected [✓]");
+        System.out.println("Status Database:        Connected [✓]");
+        System.out.println("Port:                   Listening on 8080");
+        System.out.println("OS:                     " + System.getProperty("os.name"));
+        System.out.println("Java:                   " + System.getProperty("java.version"));
+        System.out.println("--------------------------------------------------------");
+        System.out.println(Font.PINK + "GouvLien est prêt à l'emploi.\n" + Font.RESET);
     }
 
     public String showMenu() {
