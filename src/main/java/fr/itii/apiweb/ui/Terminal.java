@@ -21,8 +21,11 @@ public class Terminal {
     }
 
     public void init() {
-
-
+        System.out.println("   ______                                  ___      ");
+        System.out.println("  / ____/   _______   __  __  ___  ___    /  /     ( )  _______   ______    ");
+        System.out.println(" / / ___   /  __  /  / / / /  | | /  /   /  /     / /  /  ____/  /  __  \\  ");
+        System.out.println("/ /_/  /  /  /_/ /  / /_/ /   | |/  /   /  /__   / /  /  ____/  /  /  /  /  ");
+        System.out.println("\\____/  \\_____/  \\__,_/    |____/   /_____/  /_/  /______/  /__/  /__/   ");
     }
 
     public String showMenu() {
