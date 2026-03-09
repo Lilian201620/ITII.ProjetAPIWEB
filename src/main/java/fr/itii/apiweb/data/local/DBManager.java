@@ -294,7 +294,7 @@ public class DBManager implements DataRepository {
                 Commune c = new Commune.Builder()
                     .setId(results.getInt(DBTable.Commune.ID.toString()))
                     .setNom(results.getString(DBTable.Commune.NOM.toString()))
-                    .setCode(results.getString(DBTable.Commune.CODE_COMMUNE.toString()))
+                    .setCodeCommune(results.getString(DBTable.Commune.CODE_COMMUNE.toString()))
                     .setDepartement(
                             results.getString(DBTable.Commune.CODE_DEPARTEMENT.toString()),
                             results.getString(DBTable.Commune.NOM_DEPARTEMENT.toString())
