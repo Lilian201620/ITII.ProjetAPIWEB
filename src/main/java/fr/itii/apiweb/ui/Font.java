@@ -8,7 +8,8 @@ public enum Font {
     GREEN( "\u001B[32m"),
     YELLOW( "\u001B[33m"),
     RED("\u001B[31m"),
-    GREY("\u001B[90m");
+    GREY("\u001B[90m"),
+    PINK("\u001B[35;1m");
 
     private final String font;
 
