@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class JSONSerializerTest2 {
+public class JSONSerializerTest {
 
     APICaller api = new APICaller();
 
