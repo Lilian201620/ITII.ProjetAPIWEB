@@ -1,7 +1,8 @@
-package fr.itii.apiweb.domain.models.objet;
+package fr.itii.apiweb.domain.models.objets;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fr.itii.apiweb.ui.Header;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Etablissement {
@@ -59,8 +60,7 @@ public class Etablissement {
         this.id = id;
     }
 
-    public Etablissement() {
-    }
+    public Etablissement() {}
 
     // ===== Builder =====
     public static class Builder {
@@ -181,14 +181,13 @@ public class Etablissement {
     // ===== Affichage =====
     @Override
     public String toString() {
-        return String.format(
-                "établissement: %-30s type: %-15s commune: %-20s code: %-6s statut: %-10s mail: %s",
+        return String.format(Header.ETABLISSEMENT.format,
                 getNomEtablissement(),
                 getTypeEtablissement(),
                 getNomCommune(),
                 getCodeCommune(),
-                getStatutPublicPrive(),
-                getMail()
+                getMail(),
+                getStatutPublicPrive()
         );
     }
 }
