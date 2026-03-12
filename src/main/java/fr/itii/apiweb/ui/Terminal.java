@@ -37,7 +37,7 @@ public class Terminal {
         System.out.println("OS:                     " + System.getProperty("os.name"));
         System.out.println("Java:                   " + System.getProperty("java.version"));
         System.out.println("--------------------------------------------------------");
-        System.out.println(Font.PINK + "GouvLien est prêt à l'emploi.\n" + Font.RESET);
+        System.out.println(Font.PINK + "GouvLien est prêt à l'emploi." + Font.RESET);
     }
 
     public String showMenu() {
