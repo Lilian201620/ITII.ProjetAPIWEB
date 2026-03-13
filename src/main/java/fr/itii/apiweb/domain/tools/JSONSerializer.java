@@ -15,7 +15,7 @@ public class JSONSerializer {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    //Commune
+    //Json Commune
     public List<Commune> toCommunes(JsonNode json) {
         List<Commune> communes = new ArrayList<>();
 
@@ -44,7 +44,7 @@ public class JSONSerializer {
     }
 
 
-    //Etablissements
+    //Json Etablissements
     public List<Etablissement> toEtablissements(JsonNode json) {
         List<Etablissement> etablissements = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class JSONSerializer {
         }
     }
 
-    //Listes
+    //Filtrer une liste sur les choix indexs
     public <T> List toLists(List<T> liste, String indexs){
         if(indexs.equals("*")){
             return liste;
@@ -88,7 +88,7 @@ public class JSONSerializer {
         return newList;
     }
 
-    //Entreprise
+    //Json Entreprise
     public List<Entreprise> toEntreprises(JsonNode json) {
         List<Entreprise> entreprises = new ArrayList<>();
 
