@@ -40,7 +40,6 @@ public class Terminal {
         System.out.println("OS:                     " + System.getProperty("os.name"));
         System.out.println("Java:                   " + System.getProperty("java.version"));
         System.out.println("-----------------------------------------------------");
-        System.out.println((DBManager.getInstance().isConnected() ? Font.GREEN + "GouvLien est prêt à l'emploi." : "") + Font.RESET);
     }
 
     //Afficher le menu principal
@@ -51,7 +50,7 @@ public class Terminal {
         System.out.println("2. " + Font.CYAN + "Lire la Database" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer une table" + Font.RESET);
         System.out.println("4. " + Font.CYAN + "Afficher la meteo" + Font.RESET);
-        //System.out.println("5. " + Font.CYAN + "Rechercher les entreprises d'une commune" + Font.RESET);
+        System.out.println("5. " + Font.CYAN + "Rechercher les entreprises d'une commune" + Font.RESET);
         System.out.println("0. " + Font.CYAN + "Quitter" + Font.RESET);
         System.out.print(">");
 
