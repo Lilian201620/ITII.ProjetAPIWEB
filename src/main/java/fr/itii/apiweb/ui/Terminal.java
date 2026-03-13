@@ -1,5 +1,7 @@
 package fr.itii.apiweb.ui;
 
+import fr.itii.apiweb.data.local.DBManager;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -26,18 +28,18 @@ public class Terminal {
         System.out.println(" /  / ___   /  __   /  /  / /  /  |  | /  /  /  /      /  /  /  ____/  /  __   \\  ");
         System.out.println("/  /_/  /  /  /_/  /  /  /_/  /   |  |/  /  /  /___   /  /  /  ____/  /  /  /  /  ");
         System.out.println("\\______/   \\______/   \\___,__/    |_____/  /______/  /__/  /______/  /__/  /__/   " + Font.RESET);
-        System.out.println("\n" + Font.PINK + "         ==== SYSTEM INFORMATION ====" + Font.RESET);
-        System.out.println("--------------------------------------------------------");
+        System.out.println("\n" + Font.PINK + "     ========== SYSTEM INFORMATION ==========" + Font.RESET);
+        System.out.println("-----------------------------------------------------");
         System.out.println("Version:                1.0.0-STABLE");
         System.out.println("Authors:                Enzo, Lilian, Nathan, Nicolas");
-        System.out.println("Status API:             Connected [✓]");
+        System.out.println("Status API:             "+ Font.GREEN + "Connected [✓]"  + Font.RESET);
         System.out.println("Port:                   Listening on 80");
-        System.out.println("Status Database:        Connected [✓]");
+        System.out.println("Status Database:        " + (DBManager.getInstance().isConnected() ? Font.GREEN + "Connected [✓]" : Font.RED + "Not connected [x]") + Font.RESET);
         System.out.println("Port:                   Listening on 5432");
         System.out.println("OS:                     " + System.getProperty("os.name"));
         System.out.println("Java:                   " + System.getProperty("java.version"));
-        System.out.println("--------------------------------------------------------");
-        System.out.println(Font.PINK + "GouvLien est prêt à l'emploi." + Font.RESET);
+        System.out.println("-----------------------------------------------------");
+        System.out.println((DBManager.getInstance().isConnected() ? Font.GREEN + "GouvLien est prêt à l'emploi." : "") + Font.RESET);
     }
 
     public String showMenu() {
@@ -47,7 +49,7 @@ public class Terminal {
         System.out.println("2. " + Font.CYAN + "Lire la Database" + Font.RESET);
         System.out.println("3. " + Font.CYAN + "Supprimer une table" + Font.RESET);
         System.out.println("4. " + Font.CYAN + "Afficher la meteo" + Font.RESET);
-        System.out.println("5. " + Font.CYAN + "Rechercher les entreprises d'une commune" + Font.RESET);
+        //System.out.println("5. " + Font.CYAN + "Rechercher les entreprises d'une commune" + Font.RESET);
         System.out.println("0. " + Font.CYAN + "Quitter" + Font.RESET);
         System.out.print(">");
 

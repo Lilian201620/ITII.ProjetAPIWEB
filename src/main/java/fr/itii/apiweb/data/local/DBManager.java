@@ -66,6 +66,10 @@ public class DBManager implements DataRepository {
         }
     }
 
+    public boolean isConnected() {
+        return _isInit;
+    }
+
     // — Méthodes privées pour l'exécution des méthodes publiques
     //  PRIVATE | Only used in DBManager
     // ----------------------------------------------------------
@@ -241,7 +245,7 @@ public class DBManager implements DataRepository {
                 _isInit = true;
             }
         } catch (Exception e) {
-            ExceptionHandler.handleException(new SQLException());
+            //ExceptionHandler.handleException(new SQLException());
         }
     }
 
