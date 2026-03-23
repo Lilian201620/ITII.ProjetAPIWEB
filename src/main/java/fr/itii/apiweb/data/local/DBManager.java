@@ -91,7 +91,8 @@ public class DBManager implements DataRepository {
                 return stmt.executeQuery();
             }
         } catch (Exception e) {
-            ExceptionHandler.handleException(new SQLException());
+            // ExceptionHandler.handleException(new SQLException());
+            throw new RuntimeException("Erreur sql");
         }
         return null;
     }

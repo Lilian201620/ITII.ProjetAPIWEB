@@ -93,6 +93,9 @@ public class Commune {
             return this;
         }
         public Builder setCodePostal(String codePostal) {
+            if(this.codesPostaux == null) {
+                this.codesPostaux = new ArrayList<String>();
+            }
             this.codesPostaux.add(codePostal);
             return this;
         }
