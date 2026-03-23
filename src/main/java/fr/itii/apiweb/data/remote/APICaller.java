@@ -19,7 +19,7 @@ public class APICaller {
 
     public APICaller() {}
 
-    // Envoi de la requête a l'api
+
     private JsonNode sendRequest(String url){
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -36,12 +36,12 @@ public class APICaller {
         }
     }
 
-    // Construction de l'URL Commune
+
     public JsonNode getCommunes(APIField.Commune field, String query, Integer limit){
         String encodedField = URLEncoder.encode(field.toString(), StandardCharsets.UTF_8);
         String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
 
-        //"https://geo.api.gouv.fr/communes?fields=nom,code,departement,region,codesPostaux,population,centre&limit=10&nom=beauvais
+
         String url =
                 "https://geo.api.gouv.fr/communes?" +
                 "fields=nom,code,departement,region,codesPostaux,population,centre" +
@@ -51,12 +51,12 @@ public class APICaller {
         return sendRequest(url);
     }
 
-    // Construction de l'URL Etablissement
+
     public JsonNode getEtablissements(APIField.Etablissement field, String query, Integer limit){
         String encodedField = URLEncoder.encode(field.toString(), StandardCharsets.UTF_8);
         String encodedQuery = URLEncoder.encode(query, StandardCharsets.UTF_8);
 
-        //https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-annuaire-education/records?select=nom_etablissement,type_etablissement,code_commune,nom_commune,mail,statut_public_prive&limit=10&where=_commune=76312
+
         String url =
                 "https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-annuaire-education/records?" +
                 "select=nom_etablissement,type_etablissement,code_commune,nom_commune,mail,statut_public_prive" +
@@ -66,7 +66,7 @@ public class APICaller {
         return sendRequest(url);
     }
 
-    // Construction de l'URL Meteo
+
     public JsonNode getMeteo(double longitude, double latitude){
         String url = "https://api.open-meteo.com/v1/forecast"
                 + "?latitude=" + latitude
@@ -76,7 +76,7 @@ public class APICaller {
         return sendRequest(url);
     }
 
-    // Construction de l'URL Entreprise
+
     public JsonNode getEntreprises(String code){
         String url = "https://recherche-entreprises.api.gouv.fr/search?"
                 + "&per_page=25"

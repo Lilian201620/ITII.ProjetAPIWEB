@@ -18,35 +18,33 @@ public class Controller {
         this.open();
     }
 
-    // =========================================================
-    //  PRINCIPAL
-    //  =========================================================
 
-    //Choix du menu principal
+
+
     private void open() {
         while (true) {
             switch (t.showMenu()) {
-                //Recherche API
+
                 case "1" -> {
                     call();
                 }
 
-                //Recherche DB
+
                 case "2" -> {
                     read();
                 }
 
-                //Delete DB
+
                 case "3" -> {
                     delete();
                 }
 
-                //Meteo
+
                 case "4" -> {
                     meteo();
                 }
 
-                //Entreprise
+
                 case "5" -> {
                     entreprise();
                 }
@@ -61,14 +59,10 @@ public class Controller {
         }
     }
 
-    // ==========================================================
-    //  API
-    //  =========================================================
 
-    //choix de la recherche API
     private void call() {
         switch (t.showMenuSearchAPI()) {
-            //Commune par nom
+
             case "1" -> {
                 List<Commune> res = b.searchCommuneFromAPIByNom(
                         t.showConfig("Recherche commune dans API", "Nom de la commune: ")
@@ -79,7 +73,7 @@ public class Controller {
 
 
 
-            //Commune par code postal
+
             case "2" -> {
                 List<Commune> res = b.searchCommuneFromAPIByCodePostal(
                         t.showConfig("Recherche commune dans API", "Numero du code postal: ")
@@ -88,7 +82,7 @@ public class Controller {
                 call(res, Header.COMMUNE);
             }
 
-            //Commune par departement
+
             case "3" -> {
                 List<Commune> res = b.searchCommuneFromAPIByDepartement(
                         t.showConfig("Recherche commune dans API", "Numero de departement: ")
@@ -97,7 +91,7 @@ public class Controller {
                 call(res, Header.COMMUNE);
             }
 
-            //Etablissement par code postal
+
             case "4" -> {
                 List<Etablissement> res = b.searchEtablissementFromAPIByCodePostal(
                         t.showConfig("Recherche etablissement dans API", "Numero du code postal: ")
@@ -106,7 +100,7 @@ public class Controller {
                 call(res, Header.ETABLISSEMENT);
             }
 
-            //Etablissement par departement
+
             case "5" -> {
                 List<Etablissement> res = b.searchEtablissementFromAPIByDepartement(
                         t.showConfig("Recherche etablissement dans API", "Numero de departement: ")
@@ -115,28 +109,28 @@ public class Controller {
                 call(res, Header.ETABLISSEMENT);
             }
 
-            //Retour
+
             default -> { open();}
         }
     }
 
-    //action sur les données recu par API
+
     private <T> void call(List<T> liste, Header header) {
         while (true) {
             switch (t.showMenuAPI()) {
-                //Page précédente
+
                 case "1" -> {
                     t.showList(liste, header, t.getIndex() - 20);
                     call(liste, header);
                 }
 
-                //Page suivante
+
                 case "2" -> {
                     t.showList(liste, header, t.getIndex());
                     call(liste, header);
                 }
 
-                //Save par indice
+
                 case "3" -> {
                     b.saveList(liste, t.showSelect(
                             "Sauvegarde",
@@ -146,19 +140,19 @@ public class Controller {
                     call(liste, header);
                 }
 
-                //Save tout
+
                 case "4" -> {
                     b.saveList(liste);
                     t.showList(liste, header, 0);
                     call(liste, header);
                 }
 
-                // nouvelle recherche
+
                 case "5" -> {
                     call();
                 }
 
-                // retour menu principal
+
                 case "6" -> {
                     open();
                 }
@@ -170,14 +164,10 @@ public class Controller {
 
 
 
-    // ==========================================================
-    //  DATABASE
-    //  =========================================================
 
-    //choix de la recherche sur la DB
     private <T> void read() {
         switch (t.showMenuSearchDB()) {
-            //Commune par nom
+
             case "1" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Nom de la commune: ");
 
@@ -197,7 +187,7 @@ public class Controller {
                 read(q);
             }
 
-            //Commune par code postal
+
             case "2" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero du code postal: ");
 
@@ -217,7 +207,7 @@ public class Controller {
                 read(q);
             }
 
-            //Commune par departement
+
             case "3" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero ou nom du departement: ");
 
@@ -237,7 +227,7 @@ public class Controller {
                 read(q);
             }
 
-            //Commune par region
+
             case "4" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero ou nom de la region: ");
 
@@ -257,7 +247,7 @@ public class Controller {
                 read(q);
             }
 
-            //Etablissement par nom
+
             case "5" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Nom de l'etablissement: ");
 
@@ -277,7 +267,7 @@ public class Controller {
                 read(q);
             }
 
-            //Etablissement par type
+
             case "6" -> {
                 String value = t.showConfig("Recherche etablissement dans DB","Type d'etablissement: ");
 
@@ -297,7 +287,7 @@ public class Controller {
                 read(q);
             }
 
-            //Etablissement par nom de commune
+
             case "7" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Nom de la commune: ");
 
@@ -317,7 +307,7 @@ public class Controller {
                 read(q);
             }
 
-            //Etablissement par code postal
+
             case "8" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero du code postal: ");
 
@@ -337,7 +327,7 @@ public class Controller {
                 read(q);
             }
 
-            //Etablissement par departement
+
             case "9" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero de departement: ");
 
@@ -357,7 +347,7 @@ public class Controller {
                 read(q);
             }
 
-            //Etablissement par region
+
             case "10" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero de region: ");
 
@@ -377,27 +367,27 @@ public class Controller {
                 read(q);
             }
 
-            //Retour
+
             default -> open();
         }
     }
 
-    //Action sur les données recu par la DB
+
     private <T> void read(Queryable q) {
         while (true) {
             switch (t.showMenuDB()) {
-                //Page précédente
+
                 case "1" -> {
                     t.showList(q.search(), q.add(), t.getIndex() - 20);
                     read(q);
                 }
-                //Page suivante
+
                 case "2" -> {
                     t.showList(q.search(), q.add(), t.getIndex());
                     read(q);
                 }
 
-                //Delete par indice
+
                 case "3" -> {
 
                     b.deleteList(q.search(), t.showSelect(
@@ -408,18 +398,18 @@ public class Controller {
                     read(q);
                 }
 
-                //Delete tout
+
                 case "4" -> {
                     b.deleteList(q.search());
                     t.showList(q.search(), q.add(), 0);
                     read(q);
                 }
 
-                // nouvelle recherche
+
                 case "5" -> {
                     read();
                 }
-                // retour menu principal
+
                 case "6" -> {
                     open();
                 }
@@ -432,19 +422,19 @@ public class Controller {
     private void delete() {
         while (true) {
             switch (t.showMenuDeleteDB()) {
-                //Supprimer commune
+
                 case "1" -> {
                     b.deleteCommune();
                     delete();
                 }
 
-                //Supprimer etablissment
+
                 case "2" -> {
                     b.deleteEtablissement();
                     delete();
                 }
 
-                //Retour
+
                 case "3" -> {
                     open();
                 }

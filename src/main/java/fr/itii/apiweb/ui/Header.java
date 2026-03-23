@@ -36,7 +36,7 @@ public enum Header {
         this.titles = titles;
     }
 
-    // Affiche l'en-tête formaté
+
     @Override
     public String toString() {
         return String.format(format, (Object[]) titles);

@@ -15,20 +15,20 @@ public class JSONSerializer {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    //Json Commune
+
     public List<Commune> toCommunes(JsonNode json) {
         List<Commune> communes = new ArrayList<>();
 
         try {
             for (JsonNode node : json) {
-                //System.out.println(node.toString());
+
                 Commune commune = mapper.treeToValue(node, Commune.class);
                 communes.add(commune);
             }
             return communes;
 
         } catch (JsonProcessingException e) {
-            //ExceptionHandler.handleException(e);
+
             System.out.println(e.getMessage());
             return Collections.emptyList();
         }
@@ -44,7 +44,7 @@ public class JSONSerializer {
     }
 
 
-    //Json Etablissements
+
     public List<Etablissement> toEtablissements(JsonNode json) {
         List<Etablissement> etablissements = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class JSONSerializer {
         }
     }
 
-    //Filtrer une liste sur les choix indexs
+
     public <T> List toLists(List<T> liste, String indexs){
         if(indexs.equals("*")){
             return liste;
@@ -88,13 +88,12 @@ public class JSONSerializer {
         return newList;
     }
 
-    //Json Entreprise
+
     public List<Entreprise> toEntreprises(JsonNode json) {
         List<Entreprise> entreprises = new ArrayList<>();
 
         try {
             for (JsonNode node : json.path("results")) {
-                //System.out.println("node: "+node);
                 Entreprise e = mapper.treeToValue(node, Entreprise.class);
                 entreprises.add(e);
             }

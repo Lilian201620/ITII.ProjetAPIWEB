@@ -34,7 +34,7 @@ public class Commune {
     @JsonProperty("centre")
     private Position coordonnees;
 
-    //Constructeur
+
     public Commune() {}
 
     public Commune(
@@ -113,10 +113,10 @@ public class Commune {
         }
     }
 
-    //Setters
 
 
-    // Getters
+
+
     public Integer getId() {
         return this.id;
     }

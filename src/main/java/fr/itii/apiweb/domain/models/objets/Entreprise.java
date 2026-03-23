@@ -11,11 +11,11 @@ public class Entreprise {
     @JsonProperty("nom_raison_sociale")
     private String nom;
 
-    // Option A : L'adresse du siège social
+
     @JsonProperty("siege")
     private Siege siege;
 
-    // Option B : La liste des établissements correspondants (votre recherche actuelle)
+
     @JsonProperty("matching_etablissements")
     private List<Etablissement> matchingEtablissements;
 
@@ -57,9 +57,7 @@ public class Entreprise {
         }
     }
 
-    // --- Méthodes pour récupérer l'adresse ---
 
-    // Récupère l'adresse du premier établissement trouvé (ex: Gournay-en-Bray)
     public String getAdresseMatching() {
         if (matchingEtablissements != null && !matchingEtablissements.isEmpty()) {
             return matchingEtablissements.get(0).getAdresse();
@@ -67,7 +65,6 @@ public class Entreprise {
         return "Aucune adresse correspondante";
     }
 
-    // Récupère l'adresse du siège social (ex: Paris 15)
     public String getAdresseSiege() {
         return (siege != null) ? siege.getAdresse() : "Siège non trouvé";
     }

@@ -21,9 +21,7 @@ public class DBManager implements DataRepository {
     private static DBManager _instance;
     private static boolean _isInit = false;
 
-    /**
-     * Constructeur privé pour réalisation d'un singleton
-     */
+
     private DBManager() {
         try {
             String driverName = "org.postgresql.Driver";
@@ -33,9 +31,7 @@ public class DBManager implements DataRepository {
         }
     }
 
-    /**
-     * Récupérer l'instance du singleton DBManager
-     */
+
     public static DBManager getInstance() {
         if (_instance == null) {
             _instance = new DBManager();
@@ -44,11 +40,7 @@ public class DBManager implements DataRepository {
         return _instance;
     }
 
-    /**
-     * Méthode de connexion à la BDD.
-     *
-     * @return Connexion à la base de données
-     */
+
     private Connection connect() throws SQLException {
         if (!_isInit) {
             this.initTables();
@@ -56,10 +48,7 @@ public class DBManager implements DataRepository {
         return DriverManager.getConnection(_url, _username, _password);
     }
 
-    /**
-     * Cette méthode coupe la connexion mentionnée à la BDD.
-     *
-     */
+
     private void disconnect(Connection con) throws SQLException {
         if (con != null) {
             con.close();
@@ -70,13 +59,7 @@ public class DBManager implements DataRepository {
         return _isInit;
     }
 
-    // — Méthodes privées pour l'exécution des méthodes publiques
-    //  PRIVATE | Only used in DBManager
-    // ----------------------------------------------------------
 
-    /**
-     * Méthode générale getter
-     */
     private ResultSet getString(DBTable table, Enum col, String critere, boolean onlyExplicit) {
         String req = "SELECT * FROM " + table.toString() + " WHERE " + col.toString() + " ILIKE ?";
         try {
@@ -119,8 +102,6 @@ public class DBManager implements DataRepository {
             Connection con = _instance.connect();
             if (con != null) {
                 PreparedStatement stmt = con.prepareStatement(req);
-
-                // On passe le critère exact (ex: "75000")
                 stmt.setString(1, critere);
 
                 return stmt.executeQuery();
@@ -131,9 +112,7 @@ public class DBManager implements DataRepository {
         return null;
     }
 
-    /**
-     * Méthode générale Deleters
-     */
+
     private void deleteString(DBTable table, Enum col, String critere, boolean onlyExplicit) {
         dbExecutor.submit(() -> {
             String req = "DELETE FROM " + table.toString() + " WHERE " + col.toString() + " ILIKE ?";
@@ -197,9 +176,7 @@ public class DBManager implements DataRepository {
         });
     }
 
-    /**
-     * Cette méthode instancie les tables SQL nécessaires si elles n'existent pas dans la BDD.
-     */
+
     private void initTables() {
         try {
             Connection con = DriverManager.getConnection(_url, _username, _password);
@@ -250,9 +227,7 @@ public class DBManager implements DataRepository {
         }
     }
 
-    /**
-     * Communes
-     */
+
     @Override
     public void saveCommunes(List<Commune> communes) {
         dbExecutor.submit(() -> {
@@ -371,9 +346,7 @@ public class DBManager implements DataRepository {
         deleteString(DBTable.COMMUNES, DBTable.Commune.ID, "", false);
     }
 
-    /**
-     * Etablissements
-     */
+
     @Override
     public void saveEtablissements(List<Etablissement> Etablissements) {
         dbExecutor.submit(() -> {

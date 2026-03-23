@@ -20,9 +20,7 @@ public class Backend {
     private final DBManager db = DBManager.getInstance();
     private final JSONSerializer serializer = new JSONSerializer();
 
-    // ==================================================
-    //  Commune call API
-    // ==================================================
+
 
     public List<Commune> searchCommuneFromAPIByNom(String value){
         JsonNode json = api.getCommunes(APIField.Commune.NOM, value, 1000);
@@ -39,9 +37,7 @@ public class Backend {
         return serializer.toCommunes(json);
     }
 
-    // ==================================================
-    //  Commune read DB
-    // ==================================================
+
 
     public List<Commune> searchCommuneFromDBByNom(String value){
         return db.getCommunes(DBTable.Commune.NOM, value, false);
@@ -65,9 +61,7 @@ public class Backend {
         return liste1;
     }
 
-    // ==================================================
-    //  Commune save DB
-    // ==================================================
+
 
     private void saveCommune(List<Commune> liste){
         db.saveCommunes(liste);
@@ -97,9 +91,7 @@ public class Backend {
         }
     }
 
-    // ==================================================
-    //  Commune delete DB
-    // ==================================================
+
 
     public void deleteCommune(){
         db.deleteCommunes();
@@ -135,9 +127,7 @@ public class Backend {
         }
     }
 
-    // ==================================================
-    //  Etablissement call API
-    // ==================================================
+
 
     public List<Etablissement> searchEtablissementFromAPIByDepartement(String value){
         JsonNode json = api.getEtablissements(APIField.Etablissement.CODE_DEPARTEMENT,  "0" + value, 100);
@@ -149,9 +139,7 @@ public class Backend {
         return serializer.toEtablissements(json);
     }
 
-    // ==================================================
-    //  Etablissement read DB
-    // ==================================================
+
 
     public List<Etablissement> searchEtablissementFromDBByNom(String value){
         return db.getEtablissements(DBTable.Etablissement.NOM, value, false);
@@ -183,9 +171,7 @@ public class Backend {
         return liste1;
     }
 
-    // ==================================================
-    //  Etablissement save DB
-    // ==================================================
+
 
     public void saveEtablissement(List<Etablissement> etablissements){
         List<String> _listCodeCommunes = new ArrayList<>();
@@ -206,9 +192,7 @@ public class Backend {
         db.saveEtablissements(etablissements);
     }
 
-    // ==================================================
-    //  Etablissement delete DB
-    // ==================================================
+
 
     public void deleteEtablissement(){
         db.deleteEtablissements();
@@ -220,9 +204,7 @@ public class Backend {
         }
     }
 
-    // ==================================================
-    //  Meteo
-    // ==================================================
+
 
     public List<Meteo> searchMeteoFromAPIByDBNomCommune(String value){
         List<Commune> communes = db.getCommunes(DBTable.Commune.NOM, value, false);
@@ -240,27 +222,18 @@ public class Backend {
         return meteos;
     }
 
-    // ==================================================
-    //  Entreprise
-    // ==================================================
+
 
     public List<Entreprise> searchEntrepriseFromAPIByDBNomCommune(String value){
         List<Commune> communes = db.getCommunes(DBTable.Commune.NOM, value, false);
 
-        //System.out.println("communes: " + communes);
-
         List<Entreprise> entreprises = new ArrayList<>();
 
         for(Commune c : communes) {
-            //System.out.println(c.getCodeCommune());
             JsonNode json = api.getEntreprises(c.getCodeCommune());
-            //System.out.println(json);
+
             List<Entreprise> ent = serializer.toEntreprises(json);
             entreprises.addAll(ent);
-        }
-
-        for(Entreprise e : entreprises){
-            //System.out.println(e.getNom());
         }
 
         return entreprises;

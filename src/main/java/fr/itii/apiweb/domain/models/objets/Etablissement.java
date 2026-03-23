@@ -7,19 +7,7 @@ import fr.itii.apiweb.ui.Header;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Etablissement {
 
-    /*
-    Exemple JSON attendu :
-    {
-        "nom_etablissement": "Lycée Jean Moulin",
-        "type_etablissement": "Lycée",
-        "code_commune": "60057",
-        "nom_commune": "Beauvais",
-        "mail": "contact@lycee.fr",
-        "statut_public_prive": "Public"
-    }
-    */
 
-    // ===== Variables JSON =====
     @JsonProperty("nom_etablissement")
     private String nomEtablissement;
 
@@ -38,10 +26,10 @@ public class Etablissement {
     @JsonProperty("statut_public_prive")
     private String statutPublicPrive;
 
-    // ===== Autres variables =====
+
     private Integer id;
 
-    // ===== Constructeurs =====
+
     public Etablissement(
             String nomEtablissement,
             String typeEtablissement,
@@ -62,7 +50,7 @@ public class Etablissement {
 
     public Etablissement() {}
 
-    // ===== Builder =====
+
     public static class Builder {
         private String nomEtablissement;
         private String typeEtablissement;
@@ -120,7 +108,7 @@ public class Etablissement {
         }
     }
 
-    // ===== Setters =====
+
     public void setNomEtablissement(String nomEtablissement) {
         this.nomEtablissement = nomEtablissement;
     }
@@ -178,7 +166,7 @@ public class Etablissement {
         return id;
     }
 
-    // ===== Affichage =====
+
     @Override
     public String toString() {
         return String.format(Header.ETABLISSEMENT.format,
