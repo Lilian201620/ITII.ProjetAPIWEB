@@ -245,7 +245,7 @@ public class DBManager implements DataRepository {
                 _isInit = true;
             }
         } catch (Exception e) {
-            //ExceptionHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
     }
 
