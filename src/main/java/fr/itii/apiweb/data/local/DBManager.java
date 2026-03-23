@@ -91,7 +91,8 @@ public class DBManager implements DataRepository {
                 return stmt.executeQuery();
             }
         } catch (Exception e) {
-            ExceptionHandler.handleException(new SQLException());
+            // ExceptionHandler.handleException(new SQLException());
+            throw new RuntimeException("Erreur sql");
         }
         return null;
     }
@@ -245,7 +246,7 @@ public class DBManager implements DataRepository {
                 _isInit = true;
             }
         } catch (Exception e) {
-            //ExceptionHandler.handleException(new SQLException());
+            ExceptionHandler.handleException(new SQLException());
         }
     }
 
@@ -429,13 +430,13 @@ public class DBManager implements DataRepository {
 
     @Override
     public List<Etablissement> getEtablissements(DBTable.Etablissement col, String critere, boolean explicit) {
-        ResultSet results = getString(DBTable.COMMUNES, col, critere, explicit);
+        ResultSet results = getString(DBTable.ETABLISSEMENTS, col, critere, explicit);
         return getEtablissements(results);
     }
 
     @Override
     public List<Etablissement> getEtablissements(DBTable.Etablissement col, int critere) {
-        ResultSet results = getInt(DBTable.COMMUNES, col, critere);
+        ResultSet results = getInt(DBTable.ETABLISSEMENTS, col, critere);
         return getEtablissements(results);
     }
 
