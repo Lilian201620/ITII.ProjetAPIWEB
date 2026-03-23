@@ -67,7 +67,7 @@ public class APICallerTest {
 
     @Test
     public void testGetEtablissementsCodeDepartement3Numbers(){
-        JsonNode response = api.getEtablissements(APIField.Etablissement.CODE_DEPARTEMENT, "60", 100);
+        JsonNode response = api.getEtablissements(APIField.Etablissement.CODE_DEPARTEMENT, "060", 100);
         assertEquals(80, response.size());
         System.out.println(response);
     }
