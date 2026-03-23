@@ -27,7 +27,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByNameExpectsEmpty() {
         JsonNode response = api.getCommunes(APIField.Commune.NOM,"zzz", 100);
-        assertNotEquals(0, response.size());
+        assertEquals(0, response.size());
         System.out.println(response);
     }
 
@@ -42,7 +42,7 @@ public class APICallerTest {
     @Test
     public void testApiCallByCodePostalExpectsEmpty() {
         JsonNode response = api.getCommunes(APIField.Commune.CODE_POSTAL, "00", 100);
-        assertNotEquals(0, response.size());
+        assertEquals(0, response.size());
         System.out.println(response);
     }
 

@@ -17,10 +17,10 @@ public class CommuneTest {
                 .build();
 
         assertEquals("Beauvais", c.getNom());
-        assertEquals("0", c.getCodeCommune());
+        assertEquals("60125", c.getCodeCommune());
         assertEquals("60", c.getCodeDepartement());
         assertEquals("Oise", c.getNomDepartement());
         assertEquals("60000", c.getCodePostal());
-        assertEquals(55000, c.getPopulation());
+        assertEquals(30000, c.getPopulation());
     }
 }
