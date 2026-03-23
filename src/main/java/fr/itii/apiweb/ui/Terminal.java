@@ -1,5 +1,7 @@
 package fr.itii.apiweb.ui;
 
+import fr.itii.apiweb.data.local.DBManager;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,26 +22,27 @@ public class Terminal {
         return sc.nextLine().trim();
     }
 
+    //Initialisation de l'application
     public void init() {
         System.out.println(Font.PINK + "   _______                                     ___      ");
         System.out.println("  /  ____/   ________   ___  ___   ___  ___   /  /      ___   _______   _______    ");
         System.out.println(" /  / ___   /  __   /  /  / /  /  |  | /  /  /  /      /  /  /  ____/  /  __   \\  ");
         System.out.println("/  /_/  /  /  /_/  /  /  /_/  /   |  |/  /  /  /___   /  /  /  ____/  /  /  /  /  ");
         System.out.println("\\______/   \\______/   \\___,__/    |_____/  /______/  /__/  /______/  /__/  /__/   " + Font.RESET);
-        System.out.println("\n" + Font.PINK + "         ==== SYSTEM INFORMATION ====" + Font.RESET);
-        System.out.println("--------------------------------------------------------");
+        System.out.println("\n" + Font.PINK + "     ========== SYSTEM INFORMATION ==========" + Font.RESET);
+        System.out.println("-----------------------------------------------------");
         System.out.println("Version:                1.0.0-STABLE");
         System.out.println("Authors:                Enzo, Lilian, Nathan, Nicolas");
-        System.out.println("Status API:             Connected [✓]");
+        System.out.println("Status API:             "+ Font.GREEN + "Connected [✓]"  + Font.RESET);
         System.out.println("Port:                   Listening on 80");
-        System.out.println("Status Database:        Connected [✓]");
+        System.out.println("Status Database:        " + (DBManager.getInstance().isConnected() ? Font.GREEN + "Connected [✓]" : Font.RED + "Not connected [x]") + Font.RESET);
         System.out.println("Port:                   Listening on 5432");
         System.out.println("OS:                     " + System.getProperty("os.name"));
         System.out.println("Java:                   " + System.getProperty("java.version"));
-        System.out.println("--------------------------------------------------------");
-        System.out.println(Font.PINK + "GouvLien est prêt à l'emploi." + Font.RESET);
+        System.out.println("-----------------------------------------------------");
     }
 
+    //Afficher le menu principal
     public String showMenu() {
         clear();
         System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== Menu Principal ====" + Font.RESET);
@@ -54,6 +57,7 @@ public class Terminal {
         return scan();
     }
 
+    //Afficher le menu pour une recherche dans API
     public String showMenuSearchAPI() {
         clear();
         System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== Appel API ====" + Font.RESET);
@@ -67,6 +71,7 @@ public class Terminal {
         return scan();
     }
 
+    //Afficher le menu pour naviguer dans les données recu par API
     public String showMenuAPI() {
         clear();
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Action API ====" + Font.RESET);
@@ -81,6 +86,7 @@ public class Terminal {
         return scan();
     }
 
+    //Chercher des données dans la DB
     public String showMenuSearchDB(){
         clear();
         System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== Lire la Database ====" + Font.RESET);
@@ -98,6 +104,7 @@ public class Terminal {
         return scan();
     }
 
+    //Naviguer dans les donnees de la DB
     public String showMenuDB() {
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== Action sur la DB ====" + Font.RESET);
         System.out.println("1. " + Font.CYAN + "Page precedente" + Font.RESET);
@@ -112,6 +119,7 @@ public class Terminal {
         return scan();
     }
 
+    //Demande les parametres pour recherche la meteo
     public String showConfig(String title, String msg){
         clear();
         System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== "+ title + " ====" + Font.RESET);
@@ -120,6 +128,7 @@ public class Terminal {
         return scan();
     }
 
+    //Demander la valeur sur le critere de recherche
     public String showSelect (String title, String msg){
         System.out.println("\n" + Font.BOLD + Font.GREEN + "==== "+ title + " ====" + Font.RESET);
         System.out.println(Font.ITALIC + "" + Font.GREY + "Exemple de saisi: 1 4 7-10 => indices selectionnes: 1,4,7,8,9,10" + Font.RESET);
@@ -128,6 +137,7 @@ public class Terminal {
         return sc.nextLine().trim();
     }
 
+    //Menu de suppression d'une table
     public String showMenuDeleteDB(){
         clear();
         System.out.println("\n" + Font.BOLD + Font.YELLOW + "==== Table ====" + Font.RESET);
@@ -138,6 +148,7 @@ public class Terminal {
         return scan();
     }
 
+    //Afficher les resultats de la meteo
     public <T> void showList(List<T> results, Header header) {
         clear();
         if (results == null || results.isEmpty()) {
@@ -153,6 +164,7 @@ public class Terminal {
         }
     }
 
+    //Afficher les resultats par page de 10 instances
     public <T> void showList(List<T> results, Header header, int index) {
         clear();
         if (results == null || results.isEmpty()) {
@@ -177,7 +189,7 @@ public class Terminal {
 
         showIndex += PAGE_SIZE;
     }
-
+    //getters
     public Integer getIndex(){
         return showIndex;
     }

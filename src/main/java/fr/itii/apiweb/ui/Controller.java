@@ -22,6 +22,7 @@ public class Controller {
     //  PRINCIPAL
     //  =========================================================
 
+    //Choix du menu principal
     private void open() {
         while (true) {
             switch (t.showMenu()) {
@@ -64,6 +65,7 @@ public class Controller {
     //  API
     //  =========================================================
 
+    //choix de la recherche API
     private void call() {
         switch (t.showMenuSearchAPI()) {
             //Commune par nom
@@ -118,10 +120,7 @@ public class Controller {
         }
     }
 
-    // ==========================================================
-    //  API2
-    //  =========================================================
-
+    //action sur les données recu par API
     private <T> void call(List<T> liste, Header header) {
         while (true) {
             switch (t.showMenuAPI()) {
@@ -175,6 +174,7 @@ public class Controller {
     //  DATABASE
     //  =========================================================
 
+    //choix de la recherche sur la DB
     private <T> void read() {
         switch (t.showMenuSearchDB()) {
             //Commune par nom
@@ -200,12 +200,11 @@ public class Controller {
             //Commune par code postal
             case "2" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero du code postal: ");
-                List<Commune> res = b.searchCommuneFromDBByCodePostal(value);
 
                 Queryable q = new Queryable() {
                     @Override
                     public <T> List<T> search() {
-                        return (List<T>) b.searchCommuneFromDBByNom(value);
+                        return (List<T>) b.searchCommuneFromDBByCodePostal(value);
                     }
 
                     @Override
@@ -216,8 +215,8 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
             }
+
             //Commune par departement
             case "3" -> {
                 String value = t.showConfig("Recherche commune dans DB", "Numero ou nom du departement: ");
@@ -236,7 +235,6 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
             }
 
             //Commune par region
@@ -257,7 +255,6 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
             }
 
             //Etablissement par nom
@@ -278,9 +275,8 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
-
             }
+
             //Etablissement par type
             case "6" -> {
                 String value = t.showConfig("Recherche etablissement dans DB","Type d'etablissement: ");
@@ -299,9 +295,8 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
-
             }
+
             //Etablissement par nom de commune
             case "7" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Nom de la commune: ");
@@ -320,10 +315,9 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
             }
 
-            //Etablissment par code postal
+            //Etablissement par code postal
             case "8" -> {
                 String value = t.showConfig("Recherche etablissement dans DB", "Numero du code postal: ");
 
@@ -341,7 +335,6 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
             }
 
             //Etablissement par departement
@@ -362,7 +355,6 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
             }
 
             //Etablissement par region
@@ -383,7 +375,6 @@ public class Controller {
 
                 t.showList(q.search(),  q.add(), 0);
                 read(q);
-
             }
 
             //Retour
@@ -391,10 +382,7 @@ public class Controller {
         }
     }
 
-    // ==========================================================
-    //  DATABASE
-    //  =========================================================
-
+    //Action sur les données recu par la DB
     private <T> void read(Queryable q) {
         while (true) {
             switch (t.showMenuDB()) {
