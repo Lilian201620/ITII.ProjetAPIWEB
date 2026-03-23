@@ -127,7 +127,31 @@ public class DBManagerTest {
                 .build();
 
         dbManager.saveEtablissements(List.of(etablissement));
-        Thread.sleep(1000);
+
+        boolean lineFound = false;
+        int attempts = 0;
+
+        while (!lineFound && attempts < 20) {
+            try (Connection connection = openConnection();
+                 PreparedStatement statement = connection.prepareStatement(
+                         "SELECT COUNT(*) FROM etablissements WHERE nom = ?")) {
+
+                statement.setString(1, "Lycee Test");
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next() && resultSet.getInt(1) == 1) {
+                        lineFound = true;
+                    }
+                }
+            }
+
+            if (!lineFound) {
+                Thread.sleep(200);
+            }
+            attempts++;
+        }
+
+        assertTrue(lineFound);
 
         List<Etablissement> etablissements = dbManager.getEtablissements(DBTable.Etablissement.NOM, "Lycee Test", true);
 
