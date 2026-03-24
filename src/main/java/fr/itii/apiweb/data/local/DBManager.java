@@ -153,30 +153,6 @@ public class DBManager implements DataRepository {
         });
     }
 
-    private void deleteString(DBTable table, Enum col, String critere) {
-        dbExecutor.submit(() -> {
-            String req = "DELETE FROM " + table.toString() + " WHERE ? = ANY(" + col.toString() + ")";
-
-            try (Connection con = _instance.connect()) {
-                if (con != null) {
-                    try (PreparedStatement stmt = con.prepareStatement(req)) {
-                        if (critere != null && !critere.isEmpty()) {
-                            // On injecte le nombre en String ("75000")
-                            stmt.setString(1, critere);
-                        }
-
-                        int rowsDeleted = stmt.executeUpdate();
-                        System.out.println(rowsDeleted + " ligne(s) supprimée(s).");
-                    }
-                    this.disconnect(con);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-
     private void initTables() {
         try {
             Connection con = DriverManager.getConnection(_url, _username, _password);
@@ -226,7 +202,6 @@ public class DBManager implements DataRepository {
             ExceptionHandler.handleException(new SQLException());
         }
     }
-
 
     @Override
     public void saveCommunes(List<Commune> communes) {
@@ -319,11 +294,6 @@ public class DBManager implements DataRepository {
     public List<Commune> getCommunes(DBTable.Commune col, int critere) {
         ResultSet results = getInt(DBTable.COMMUNES, col, critere);
         return getCommunes(results);
-    }
-
-    @Override
-    public List<Commune> getCommunes() {
-        return null;
     }
 
     public List<Commune> getCommunes(DBTable.Commune col, String critere) {
