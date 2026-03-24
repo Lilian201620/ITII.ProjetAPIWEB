@@ -235,7 +235,7 @@ public class DBManager implements DataRepository {
                         stmt.setInt(8, c.getPopulation());
                         stmt.setDouble(9, c.getLongitude());
                         stmt.setDouble(10, c.getLatitude());
-                        stmt.execute();
+                        stmt.executeUpdate();
 
                     } catch (Exception e) {
                         System.out.println(Font.ITALIC + "" + Font.GREY + c.getNom() + " est déjà présente dans la base de donnée." + Font.RESET);
@@ -339,7 +339,7 @@ public class DBManager implements DataRepository {
                     stmt.setString(4, e.getStatutPublicPrive());
                     stmt.setString(5, e.getCodeCommune());
                     stmt.setString(6, e.getNomCommune());
-                    stmt.execute();
+                    stmt.executeUpdate();
                 }
                 this.disconnect(con);
 
