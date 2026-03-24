@@ -19,7 +19,6 @@ public interface DataRepository {
     // getters
     List<Commune> getCommunes(DBTable.Commune col, String Name, boolean OnlyExplicitCaracters);
     List<Commune> getCommunes(DBTable.Commune col, int critere);
-    List<Commune> getCommunes();
     List<Etablissement> getEtablissements(DBTable.Etablissement col, String Name, boolean OnlyExplicitCaracters);
     List<Etablissement> getEtablissements(DBTable.Etablissement col, int critere);
     List<Etablissement> getEtablissements();
